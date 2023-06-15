@@ -38,6 +38,10 @@ jobs:
       - run: bundle install
         if: ${{ steps.release.outputs.release_created }}
 
+      # run the linter
+      - name: Run standard linter
+        run: bundle exec standardrb
+
       # run the tests
       - name: Run rspec test suite
         if: ${{ steps.release.outputs.release_created }}
