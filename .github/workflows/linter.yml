@@ -1,4 +1,4 @@
-name: Specs
+name: Linter
 
 on:
   push:
@@ -21,6 +21,6 @@ jobs:
       # Bundle install
       - run: bundle install
 
-      # run the tests
-      - name: Run rspec test suite
-        run: bundle exec rspec
+      # run the linter
+      - name: Run standard linter
+        run: bundle exec standardrb
