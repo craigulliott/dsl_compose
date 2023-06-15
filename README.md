@@ -2,6 +2,9 @@
 
 Ruby gem to add dynamic DSLs to classes
 
+[![Gem Version](https://badge.fury.io/rb/dsl_compose.svg)](https://badge.fury.io/rb/dsl_compose)
+[![Specs](https://github.com/craigulliott/dsl_compose/actions/workflows/specs.yml/badge.svg)](https://github.com/craigulliott/dsl_compose/actions/workflows/specs.yml)
+
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:
