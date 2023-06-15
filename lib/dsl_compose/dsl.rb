@@ -2,7 +2,7 @@
 
 module DSLCompose
   class DSL
-    def initialize name, &block
+    def initialize name, klass, &block
       @methods = {}
       @description = nil
 
@@ -11,6 +11,8 @@ module DSLCompose
       else
         raise Errors::InvalidName.new name
       end
+
+      @klass = klass
 
       if block
         instance_eval(&block)
@@ -21,6 +23,10 @@ module DSLCompose
 
     def get_name
       @name
+    end
+
+    def get_klass
+      @klass
     end
 
     def get_description

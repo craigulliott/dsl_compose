@@ -11,7 +11,7 @@ module DSLCompose
         raise Errors::DSLAlreadyExists.new name
       end
 
-      @dsls[klass][name] = DSLCompose::DSL.new(name, &block)
+      @dsls[klass][name] = DSLCompose::DSL.new(name, self, &block)
     end
 
     def self.dsls
