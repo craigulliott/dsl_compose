@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-module DslCompose
+module DSLCompose
   VERSION = "0.0.0"
 end

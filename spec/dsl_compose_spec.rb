@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe DslCompose do
+RSpec.describe DSLCompose do
   it "has a version number" do
-    expect(DslCompose::VERSION).not_to be nil
+    expect(DSLCompose::VERSION).not_to be nil
   end
 
 end

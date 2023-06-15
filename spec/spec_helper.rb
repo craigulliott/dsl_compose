@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'byebug'
 require "dsl_compose"
 
 RSpec.configure do |config|
@@ -12,4 +13,10 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  # before each spec, clear all the DSLs so that we can start fresh each time
+  config.before(:each) do
+    DSLCompose::DSLs.reset
+  end
+
 end

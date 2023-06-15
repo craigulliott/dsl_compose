@@ -4,7 +4,7 @@ require_relative "lib/dsl_compose/version"
 
 Gem::Specification.new do |spec|
   spec.name = "dsl_compose"
-  spec.version = DslCompose::VERSION
+  spec.version = DSLCompose::VERSION
   spec.authors = ["Craig Ulliott"]
   spec.email = ["craigulliott@gmail.com"]
 
@@ -19,4 +19,5 @@ Gem::Specification.new do |spec|
   spec.files = ["README.md", "LICENSE.txt", "CHANGELOG.md", "CODE_OF_CONDUCT.md"] + Dir["lib/**/*"]
 
   spec.require_paths = ["lib"]
+
 end
