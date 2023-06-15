@@ -3,34 +3,85 @@
 module DSLCompose
   class DSL
     class DSLMethod
+
+      class InvalidNameError < StandardError
+        def message
+          "The method #{method_name} is invalid, it must be of type symbol"
+        end
+      end
+
+      class InvalidDescriptionError < StandardError
+        def message
+          "The DSL method description is invalid, it must be of type string and have length greater than 0"
+        end
+      end
+
+      class DescriptionAlreadyExistsError < StandardError
+        def message
+          "The description has already been set"
+        end
+      end
+
+      class ArgumentOrderingError < StandardError
+        def message
+          "Required arguments can not be added after optional ones"
+        end
+      end
+
+      class ArgumentAlreadyExistsError < StandardError
+        def message
+          "An argument with this name already exists for this DSL method"
+        end
+      end
+
+      attr_reader :name
+      attr_reader :unique
+      attr_reader :required
+      attr_reader :description
+
       def initialize name, unique, required, &block
-        @options = {}
-        @description = nil
+        @arguments = {}
 
         if name.is_a? Symbol
           @name = name
         else
-          raise Errors::InvalidName.new name
+          raise InvalidNameError
         end
 
         @unique = unique ? true : false
         @required = required ? true : false
 
         if block
-          instance_eval(&block)
+          Interpreter.new(self).instance_eval(&block)
         end
       end
 
-      def get_name
-        @name
+      def set_description description
+        unless description.is_a?(String) && description.length > 0
+          raise InvalidDescriptionError
+        end
+
+        if has_description?
+          raise DescriptionAlreadyExistsError
+        end
+
+        @description = description
       end
 
-      def get_description
-        @description
+      def arguments
+        @arguments.values
       end
 
-      def get_options
-        @options.values
+      def optional_arguments
+        arguments.filter(&:optional?)
+      end
+
+      def required_arguments
+        arguments.filter(&:required?)
+      end
+
+      def has_description?
+        @description.nil? == false
       end
 
       def unique?
@@ -41,39 +92,21 @@ module DSLCompose
         @required == true
       end
 
-      private
-
-      def description description
-        unless description.is_a?(String) && description.length > 0
-          raise Errors::InvalidDescription.new(description)
-        end
-
-        unless @description.nil?
-          raise Errors::DescriptionAlreadyExists
-        end
-
-        @description = description
+      def optional?
+        @required == false
       end
 
-      def optional name, type, &block
-        option false, name, type, &block
-      end
-
-      def requires name, type, &block
-        # required options may not come after optional ones
-        if @options.values.any?(&:optional?)
-          raise Errors::OptionOrdering
+      def add_argument name, required, type, &block
+        if @arguments.key? name
+          raise ArgumentAlreadyExistsError
         end
 
-        option true, name, type, &block
-      end
-
-      def option required, name, type, &block
-        if @options.key? name
-          raise Errors::OptionAlreadyExists.new(name)
+        # required arguments may not come after optional ones
+        if required && optional_arguments.any?
+          raise ArgumentOrderingError
         end
 
-        @options[name] = Option.new(name, required, type, &block)
+        @arguments[name] = Argument.new(name, required, type, &block)
       end
     end
   end

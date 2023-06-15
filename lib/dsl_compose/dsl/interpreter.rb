@@ -5,34 +5,20 @@ module DSLCompose
     class Interpreter
       def initialize dsl
         @dsl = dsl
-        # the result of executing the DSL
-        @result = Result.new
       end
 
-      # catch and process any method calls within the DSL block
-      def method_missing name, *args, &block
-        dsl_method = @dsl.get_dsl_method name
-        if dsl_method
-          method_name = dsl_method.get_name
+      private
 
-          # if the method is unique, then it can only be called once per DSL
-          if dsl_method.unique? && @result.method_called?(method_name)
-            raise Errors::MethodIsUnique.new method_name
-          end
-
-          @result.add_method_call method_name
-
-        else
-          raise Errors::MethodDoesNotExist.new name
-        end
+      def description description
+        @dsl.set_description description
       end
 
-      def respond_to_missing?(method_name, *args)
-        @dsl.has_dsl_method? name
+      def add_method name, required: nil, &block
+        @dsl.add_method name, false, required, &block
       end
 
-      def get_results
-        @result
+      def add_unique_method name, required: nil, &block
+        @dsl.add_method name, true, required, &block
       end
     end
   end
