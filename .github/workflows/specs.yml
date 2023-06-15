@@ -6,7 +6,7 @@ on:
       - "*"
 
 jobs:
-  release-please:
+  specs:
     runs-on: ubuntu-latest
     steps:
 

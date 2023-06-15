@@ -6,7 +6,7 @@ on:
       - "*"
 
 jobs:
-  release-please:
+  lint:
     runs-on: ubuntu-latest
     steps:
 
