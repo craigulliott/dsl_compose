@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe DSLCompose::DSL do
-
   it "creates a new DSL within the class" do
     klass = Class.new do
       include DSLCompose::Composer
@@ -14,7 +13,6 @@ RSpec.describe DSLCompose::DSL do
   end
 
   describe "the DSL name" do
-
     it "returns the dsl name when requested" do
       klass = Class.new do
         include DSLCompose::Composer
@@ -51,12 +49,9 @@ RSpec.describe DSLCompose::DSL do
         end
       }.to raise_error(DSLCompose::DSLs::Errors::DSLAlreadyExists)
     end
-
   end
 
-
   describe "the DSL description" do
-
     it "accepts and returns a dsl description when requested" do
       klass = Class.new do
         include DSLCompose::Composer
@@ -70,7 +65,7 @@ RSpec.describe DSLCompose::DSL do
 
     it "raises an error if you try and set the dsl description multiple times" do
       expect {
-        klass = Class.new do
+        Class.new do
           include DSLCompose::Composer
           define_dsl :dsl_name do
             description "This is a description"
@@ -82,7 +77,7 @@ RSpec.describe DSLCompose::DSL do
 
     it "raises an error if you provide a symbol for the DSL description" do
       expect {
-        klass = Class.new do
+        Class.new do
           include DSLCompose::Composer
           define_dsl :dsl_name do
             description :invalid_description
@@ -93,7 +88,7 @@ RSpec.describe DSLCompose::DSL do
 
     it "raises an error if you provide an unexpected type for the DSL description" do
       expect {
-        klass = Class.new do
+        Class.new do
           include DSLCompose::Composer
           define_dsl :dsl_name do
             description 123
@@ -101,7 +96,5 @@ RSpec.describe DSLCompose::DSL do
         end
       }.to raise_error(DSLCompose::DSL::Errors::InvalidDescription)
     end
-
   end
-
 end

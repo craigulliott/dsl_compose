@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe DSLCompose::DSL::DSLMethod::Option do
-
   it "creates a new DSL with methods and a required option within the class" do
     klass = Class.new do
       include DSLCompose::Composer
@@ -113,6 +112,4 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Option do
       end
     }.to raise_error(DSLCompose::DSL::DSLMethod::Option::Errors::ValidationIncompatible)
   end
-
-
 end

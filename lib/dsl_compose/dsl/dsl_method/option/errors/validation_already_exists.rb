@@ -5,13 +5,11 @@ module DSLCompose
     class DSLMethod
       class Option
         module Errors
-
           class ValidationAlreadyExists < StandardError
             def initialize validation_name
               "The validation #{validation_name} has already been applied to this method option."
             end
           end
-
         end
       end
     end

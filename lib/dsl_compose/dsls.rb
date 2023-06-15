@@ -29,6 +29,5 @@ module DSLCompose
     def self.reset
       @dsls = {}
     end
-
   end
 end

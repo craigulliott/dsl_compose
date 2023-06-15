@@ -5,10 +5,8 @@ module DSLCompose
     class DSLMethod
       class Option
         module Errors
-
           class ValidationInvalidOption < StandardError
           end
-
         end
       end
     end

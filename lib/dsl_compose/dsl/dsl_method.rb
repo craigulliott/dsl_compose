@@ -3,12 +3,11 @@
 module DSLCompose
   class DSL
     class DSLMethod
-
       def initialize name, unique, required, &block
         @options = {}
         @description = nil
 
-        if name.kind_of? Symbol
+        if name.is_a? Symbol
           @name = name
         else
           raise Errors::InvalidName.new name
@@ -17,8 +16,8 @@ module DSLCompose
         @unique = unique ? true : false
         @required = required ? true : false
 
-        if block_given?
-          self.instance_eval &block
+        if block
+          instance_eval(&block)
         end
       end
 
@@ -42,42 +41,40 @@ module DSLCompose
         @required == true
       end
 
-
       private
 
-        def description description
-          unless description.kind_of?(String) && description.length > 0
-            raise Errors::InvalidDescription.new(description)
-          end
-
-          unless @description.nil?
-            raise Errors::DescriptionAlreadyExists
-          end
-
-          @description = description
+      def description description
+        unless description.is_a?(String) && description.length > 0
+          raise Errors::InvalidDescription.new(description)
         end
 
-        def optional name, type, &block
-          option false, name, type, &block
+        unless @description.nil?
+          raise Errors::DescriptionAlreadyExists
         end
 
-        def requires name, type, &block
-          # required options may not come after optional ones
-          if @options.values.any?(&:optional?)
-            raise Errors::OptionOrdering
-          end
+        @description = description
+      end
 
-          option true, name, type, &block
+      def optional name, type, &block
+        option false, name, type, &block
+      end
+
+      def requires name, type, &block
+        # required options may not come after optional ones
+        if @options.values.any?(&:optional?)
+          raise Errors::OptionOrdering
         end
 
-        def option required, name, type, &block
-          if @options.key? name
-            raise Errors::OptionAlreadyExists.new(name)
-          end
+        option true, name, type, &block
+      end
 
-          @options[name] = Option.new(name, required, type, &block)
+      def option required, name, type, &block
+        if @options.key? name
+          raise Errors::OptionAlreadyExists.new(name)
         end
 
+        @options[name] = Option.new(name, required, type, &block)
+      end
     end
   end
 end

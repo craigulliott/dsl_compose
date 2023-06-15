@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe DSLCompose::DSL::Interpreter do
-
   it "allows use of the DSL within the same class without raising any errors" do
     klass = Class.new do
       include DSLCompose::Composer
@@ -27,7 +26,7 @@ RSpec.describe DSLCompose::DSL::Interpreter do
       end
     end
 
-    child_klass = Class.new(klass) do
+    Class.new(klass) do
       dsl_name do
         method_name
       end
@@ -43,7 +42,7 @@ RSpec.describe DSLCompose::DSL::Interpreter do
         end
       end
 
-      child_klass = Class.new(klass) do
+      Class.new(klass) do
         dsl_name do
           unexpected_method_name
         end
@@ -59,7 +58,7 @@ RSpec.describe DSLCompose::DSL::Interpreter do
       end
     end
 
-    child_klass = Class.new(klass) do
+    Class.new(klass) do
       dsl_name do
         method_name
         method_name
@@ -76,7 +75,7 @@ RSpec.describe DSLCompose::DSL::Interpreter do
         end
       end
 
-      child_klass = Class.new(klass) do
+      Class.new(klass) do
         dsl_name do
           unique_method
           unique_method
@@ -84,6 +83,4 @@ RSpec.describe DSLCompose::DSL::Interpreter do
       end
     }.to raise_error(DSLCompose::DSL::Interpreter::Errors::MethodIsUnique)
   end
-
-
 end

@@ -2,19 +2,18 @@
 
 module DSLCompose
   class DSL
-
     def initialize name, &block
       @methods = {}
       @description = nil
 
-      if name.kind_of? Symbol
+      if name.is_a? Symbol
         @name = name
       else
         raise Errors::InvalidName.new name
       end
 
-      if block_given?
-        self.instance_eval &block
+      if block
+        instance_eval(&block)
       else
         warn "warning, no dsl block was provided for DSL #{name}"
       end
@@ -36,35 +35,38 @@ module DSLCompose
       @methods[name]
     end
 
+    def has_dsl_method? name
+      @methods.key? name
+    end
+
     private
 
-      def description description
-        unless description.kind_of?(String) && description.length > 0
-          raise Errors::InvalidDescription.new(description)
-        end
-
-        unless @description.nil?
-          raise Errors::DescriptionAlreadyExists
-        end
-
-        @description = description
+    def description description
+      unless description.is_a?(String) && description.length > 0
+        raise Errors::InvalidDescription.new(description)
       end
 
-      def add_method name, required: nil, &block
-        if @methods.key? name
-          raise Errors::MethodAlreadyExists.new(name)
-        end
-
-        @methods[name] = DSLMethod.new(name, false, required, &block)
+      unless @description.nil?
+        raise Errors::DescriptionAlreadyExists
       end
 
-      def add_unique_method name, required: nil, &block
-        if @methods.key? name
-          raise Errors::MethodAlreadyExists.new(name)
-        end
+      @description = description
+    end
 
-        @methods[name] = DSLMethod.new(name, true, required, &block)
+    def add_method name, required: nil, &block
+      if @methods.key? name
+        raise Errors::MethodAlreadyExists.new(name)
       end
 
+      @methods[name] = DSLMethod.new(name, false, required, &block)
+    end
+
+    def add_unique_method name, required: nil, &block
+      if @methods.key? name
+        raise Errors::MethodAlreadyExists.new(name)
+      end
+
+      @methods[name] = DSLMethod.new(name, true, required, &block)
+    end
   end
 end

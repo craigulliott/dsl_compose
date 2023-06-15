@@ -4,7 +4,6 @@ module DSLCompose
   class DSL
     class Interpreter
       class Result
-
         def initialize
           @result = {}
         end
@@ -16,8 +15,6 @@ module DSLCompose
         def add_method_call name
           @result[name] = true
         end
-
-
       end
     end
   end

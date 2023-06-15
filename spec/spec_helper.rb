@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'byebug'
+require "byebug"
 require "dsl_compose"
 
 RSpec.configure do |config|
@@ -18,5 +18,4 @@ RSpec.configure do |config|
   config.before(:each) do
     DSLCompose::DSLs.reset
   end
-
 end

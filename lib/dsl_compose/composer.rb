@@ -2,7 +2,6 @@
 
 module DSLCompose
   module Composer
-
     def self.included klass
       if (klass.private_methods + klass.methods).include? :define_dsl
         raise Errors::ComposerAlreadyInstalled
@@ -20,43 +19,35 @@ module DSLCompose
       klass.define_singleton_method :get_dsl do |name|
         DSLCompose::DSLs.get_class_dsl klass, name
       end
-
     end
 
     module ClassMethods
-
       def get_dsl name
         DSLCompose::DSLs.get_class_dsl self, name
       end
 
-
       private
 
-        def define_dsl name, &block
-          # create the DSL object
-          dsl = DSLCompose::DSLs.create_dsl self, name, &block
+      def define_dsl name, &block
+        # create the DSL object
+        dsl = DSLCompose::DSLs.create_dsl self, name, &block
 
-          # create an interpreter for this DSL
-          interpreter = DSLCompose::DSL::Interpreter.new dsl
+        # create an interpreter for this DSL
+        interpreter = DSLCompose::DSL::Interpreter.new dsl
 
-          # define a singleton method on the class to access this DSL
-          define_singleton_method name do |*args, &block|
+        # define a singleton method on the class to access this DSL
+        define_singleton_method name do |*args, &block|
+          # dynamically process the DSL with the interpreter
+          interpreter.instance_eval(&block)
 
-            # dynamically process the DSL with the interpreter
-            interpreter.instance_eval &block
-
-            # assert that all required methods have been called at least once
-            dsl.get_dsl_methods.filter(&:required?).each do |dsl_method|
-              unless dsl.get_results.method_called? dsl_method.get_name
-                raise Errors::RequiredMethodNotCalled.new dsl_method.get_name
-              end
+          # assert that all required methods have been called at least once
+          dsl.get_dsl_methods.filter(&:required?).each do |dsl_method|
+            unless dsl.get_results.method_called? dsl_method.get_name
+              raise Errors::RequiredMethodNotCalled.new dsl_method.get_name
             end
-
           end
-
         end
-
+      end
     end
-
   end
 end

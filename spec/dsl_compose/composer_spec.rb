@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe DSLCompose::Composer do
-
   it "can be included into a class without raising any errors" do
     expect {
       Class.new do
@@ -20,5 +19,4 @@ RSpec.describe DSLCompose::Composer do
       end
     }.to raise_error(DSLCompose::Composer::Errors::ComposerAlreadyInstalled)
   end
-
 end

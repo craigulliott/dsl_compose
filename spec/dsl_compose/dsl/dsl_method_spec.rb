@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe DSLCompose::DSL::DSLMethod do
-
   it "creates a new DSL with a method" do
     klass = Class.new do
       include DSLCompose::Composer
@@ -27,7 +26,6 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
   end
 
   describe "required method" do
-
     it "creates a new DSL with a method" do
       klass = Class.new do
         include DSLCompose::Composer
@@ -49,11 +47,9 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
 
       expect(klass.get_dsl(:dsl_name).get_dsl_methods.count).to eq(1)
     end
-
   end
 
   describe "the method name" do
-
     it "raises an error if using a string instead of a symbol for the DSL method name" do
       expect {
         Class.new do
@@ -76,11 +72,9 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
         end
       }.to raise_error(DSLCompose::DSL::Errors::MethodAlreadyExists)
     end
-
   end
 
   describe "the DSL description" do
-
     it "accepts and returns a description when requested" do
       klass = Class.new do
         include DSLCompose::Composer
@@ -96,7 +90,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
 
     it "raises an error if you try and set the dsl description multiple times" do
       expect {
-        klass = Class.new do
+        Class.new do
           include DSLCompose::Composer
           define_dsl :dsl_name do
             add_method :method_name do
@@ -110,7 +104,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
 
     it "raises an error if you provide a symbol for the method description" do
       expect {
-        klass = Class.new do
+        Class.new do
           include DSLCompose::Composer
           define_dsl :dsl_name do
             add_method :method_name do
@@ -123,7 +117,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
 
     it "raises an error if you provide an unexpected type for the method description" do
       expect {
-        klass = Class.new do
+        Class.new do
           include DSLCompose::Composer
           define_dsl :dsl_name do
             add_method :method_name do
@@ -133,8 +127,5 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
         end
       }.to raise_error(DSLCompose::DSL::DSLMethod::Errors::InvalidDescription)
     end
-
-
   end
-
 end
