@@ -4,6 +4,7 @@ Ruby gem to add dynamic DSLs to classes
 
 [![Gem Version](https://badge.fury.io/rb/dsl_compose.svg)](https://badge.fury.io/rb/dsl_compose)
 [![Specs](https://github.com/craigulliott/dsl_compose/actions/workflows/specs.yml/badge.svg)](https://github.com/craigulliott/dsl_compose/actions/workflows/specs.yml)
+[![Types](https://github.com/craigulliott/dsl_compose/actions/workflows/types.yml/badge.svg)](https://github.com/craigulliott/dsl_compose/actions/workflows/types.yml)
 [![Coding Style](https://github.com/craigulliott/dsl_compose/actions/workflows/linter.yml/badge.svg)](https://github.com/craigulliott/dsl_compose/actions/workflows/linter.yml)
 
 ## Key Features
@@ -313,6 +314,8 @@ Code should be linted and formatted according to [Ruby Standard](https://github.
 Publishing is automated via github actions and Googles [Release Please](https://github.com/google-github-actions/release-please-action) github action
 
 We prefer using squash-merges when merging pull requests because it helps keep a linear git history and allows more fine grained control of commit messages which get sent to release-please and ultimately show up in the changelog.
+
+Type checking is enabled for this project. You can find the corresponding `rbs` files in the sig folder.
 
 ## Contributing
 

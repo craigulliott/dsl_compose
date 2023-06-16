@@ -42,6 +42,10 @@ jobs:
       - name: Run standard linter
         run: bundle exec standardrb
 
+      # run the type checker
+      - name: Run steep type checker
+        run: bundle exec steep check
+
       # run the tests
       - name: Run rspec test suite
         if: ${{ steps.release.outputs.release_created }}
