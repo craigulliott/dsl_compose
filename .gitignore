@@ -16,3 +16,7 @@
 dsl_compose.code-workspace
 
 .byebug_history
+
+.gem_rbs_collection
+
+.ruby-version

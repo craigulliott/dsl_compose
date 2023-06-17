@@ -2,22 +2,21 @@
 
 module DSLCompose
   module DSLs
-
     class ClassDSLDefinitionDoesNotExistError < StandardError
       def message
-        super "The requested DSL does not exist on this class"
+        "The requested DSL does not exist on this class"
       end
     end
 
     class DSLAlreadyExistsError < StandardError
       def message
-        super "A DSL with this name already exists"
+        "A DSL with this name already exists"
       end
     end
 
     class NoDSLDefinitionsForClassError < StandardError
       def message
-        super "No DSLs have been defined for this class"
+        "No DSLs have been defined for this class"
       end
     end
 

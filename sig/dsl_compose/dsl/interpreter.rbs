@@ -1,0 +1,16 @@
+# Classes
+module DSLCompose
+  class DSL
+    class Interpreter
+      @dsl: DSL
+
+      def initialize: (DSL dsl) -> void
+      def instance_eval: () -> void
+
+      private
+      def description: (String description) -> void
+      def add_method: (Symbol name, ?required: nil) -> void
+      def add_unique_method: (Symbol name, ?required: nil) -> void
+    end
+  end
+end

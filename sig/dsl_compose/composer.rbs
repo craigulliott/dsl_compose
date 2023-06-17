@@ -1,0 +1,16 @@
+# Classes
+module DSLCompose
+  module Composer
+    def self.included: (untyped klass) -> untyped
+
+    def self.get_dsls: () -> Array[DSL]
+
+    def self.get_dsl: () -> DSL
+
+    def self.define_dsl: (Symbol name) -> void
+
+    class ComposerAlreadyInstalled < StandardError
+      def message: -> String
+    end
+  end
+end

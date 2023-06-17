@@ -1,0 +1,15 @@
+# Classes
+module DSLCompose
+  class DSL
+    class DSLMethod
+      class Argument
+        class LessThanOrEqualToValidation
+          @value: Numeric
+
+          def initialize: (Numeric value) -> void
+          def validate: (Numeric value) -> bool
+        end
+      end
+    end
+  end
+end

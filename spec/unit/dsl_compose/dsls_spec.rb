@@ -60,7 +60,7 @@ RSpec.describe DSLCompose::DSLs do
       end
 
       it "returns an array of this classes DSLs" do
-        expect(DSLCompose::DSLs.class_dsls dummy_class).to be_kind_of Array
+        expect(DSLCompose::DSLs.class_dsls(dummy_class)).to be_kind_of Array
         expect(DSLCompose::DSLs.class_dsls(dummy_class).count).to eq(1)
         expect(DSLCompose::DSLs.class_dsls(dummy_class).first).to be(dsl)
       end
@@ -82,7 +82,7 @@ RSpec.describe DSLCompose::DSLs do
       end
 
       it "returns an array of this classes DSLs" do
-        expect(DSLCompose::DSLs.class_dsls dummy_class).to be_kind_of Array
+        expect(DSLCompose::DSLs.class_dsls(dummy_class)).to be_kind_of Array
         expect(DSLCompose::DSLs.class_dsls(dummy_class).count).to eq(1)
         expect(DSLCompose::DSLs.class_dsls(dummy_class).first).to be(dsl)
       end
@@ -90,7 +90,6 @@ RSpec.describe DSLCompose::DSLs do
   end
 
   describe :reset do
-
     describe "after a dsl has been added" do
       let(:dsl) { DSLCompose::DSLs.create_dsl dummy_class, :dsl_name }
 
@@ -99,7 +98,6 @@ RSpec.describe DSLCompose::DSLs do
       end
 
       describe "after reset has been called" do
-
         before(:each) do
           DSLCompose::DSLs.reset
         end

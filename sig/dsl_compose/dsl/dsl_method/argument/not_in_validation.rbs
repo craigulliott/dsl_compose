@@ -1,0 +1,15 @@
+# Classes
+module DSLCompose
+  class DSL
+    class DSLMethod
+      class Argument
+        class NotInValidation
+          @values: Array[Numeric | Symbol | String]
+
+          def initialize: (Array[Numeric | Symbol | String] values) -> void
+          def validate: (Numeric | Symbol | String value) -> untyped
+        end
+      end
+    end
+  end
+end

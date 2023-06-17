@@ -7,7 +7,7 @@ RSpec.describe DSLCompose::DSL do
   let(:dsl) { DSLCompose::DSL.new :dsl_name, dummy_class }
 
   describe :initialize do
-    it "instantiates a new DSL without raising any errors" do
+    it "initializes a new DSL without raising any errors" do
       klass = dummy_class
       DSLCompose::DSL.new :dsl_name, klass
     end
@@ -22,7 +22,7 @@ RSpec.describe DSLCompose::DSL do
     it "raises an error if passing an unexpected type for the DSL name" do
       klass = dummy_class
       expect {
-        DSLCompose::DSL.new "dsl_name", klass
+        DSLCompose::DSL.new 123, klass
       }.to raise_error(DSLCompose::DSL::InvalidNameError)
     end
   end

@@ -1,0 +1,24 @@
+# Classes
+module DSLCompose
+  module DSLs
+    self.@dsls: Hash[Object, Hash[Symbol, DSL]]
+
+    def self.create_dsl: (Object klass, Symbol name) -> DSL
+    def self.dsls: -> Hash[Object, Hash[Symbol, DSL]]
+    def self.class_dsls: (Object klass) -> Array[DSL]
+    def self.class_dsl: (Object klass, Symbol name) -> DSL
+    def self.reset: -> void
+
+    class ClassDSLDefinitionDoesNotExistError < StandardError
+      def message: -> String
+    end
+
+    class DSLAlreadyExistsError < StandardError
+      def message: -> String
+    end
+
+    class NoDSLDefinitionsForClassError < StandardError
+      def message: -> String
+    end
+  end
+end

@@ -4,6 +4,8 @@ module DSLCompose
   class Interpreter
     class Execution
       class MethodCalls
+        attr_reader :method_calls
+
         def initialize
           @method_calls = []
         end
@@ -13,7 +15,9 @@ module DSLCompose
         end
 
         def add_method_call dsl_method, *args, &block
-          @method_calls << MethodCall.new(dsl_method, *args, &block)
+          method_call = MethodCall.new(dsl_method, *args, &block)
+          @method_calls << method_call
+          method_call
         end
       end
     end

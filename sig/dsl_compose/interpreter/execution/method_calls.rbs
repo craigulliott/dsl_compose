@@ -1,0 +1,15 @@
+# Classes
+module DSLCompose
+  class Interpreter
+    class Execution
+      class MethodCalls
+        @method_calls: Array[MethodCall]
+
+        def initialize: -> void
+        def method_calls: () -> Array[MethodCall]
+        def method_called?: (Symbol method_name) -> bool
+        def add_method_call: (DSL::DSLMethod dsl_method, *untyped args) -> MethodCall
+      end
+    end
+  end
+end

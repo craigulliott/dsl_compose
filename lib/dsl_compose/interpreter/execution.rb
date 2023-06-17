@@ -3,16 +3,9 @@
 module DSLCompose
   class Interpreter
     class Execution
-
       class MethodIsUniqueError < StandardError
         def message
           "This method is unique and can only be called once within this DSL"
-        end
-      end
-
-      class MethodDoesNotExistError < StandardError
-        def message
-          "This method does not exist on this DSL"
         end
       end
 
@@ -39,19 +32,15 @@ module DSLCompose
 
       # catch and process any method calls within the DSL block
       def method_missing method_name, *args, &block
+        # if the method does not exist, then this will raise a MethodDoesNotExistError
         dsl_method = @dsl.dsl_method method_name
-        if dsl_method
 
-          # if the method is unique, then it can only be called once per DSL
-          if dsl_method.unique? && @method_calls.method_called?(method_name)
-            raise MethodIsUniqueError
-          end
-
-          @method_calls.add_method_call dsl_method, *args, &block
-
-        else
-          raise MethodDoesNotExistError
+        # if the method is unique, then it can only be called once per DSL
+        if dsl_method.unique? && @method_calls.method_called?(method_name)
+          raise MethodIsUniqueError
         end
+
+        @method_calls.add_method_call dsl_method, *args, &block
       end
 
       def respond_to_missing?(method_name, *args)

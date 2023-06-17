@@ -2,7 +2,6 @@
 
 module DSLCompose
   module Composer
-
     class ComposerAlreadyInstalled < StandardError
       def message
         "The define_dsl singleton method already exists for this class."

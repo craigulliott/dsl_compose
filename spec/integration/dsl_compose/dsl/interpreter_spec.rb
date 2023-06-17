@@ -47,7 +47,7 @@ RSpec.describe DSLCompose::Interpreter do
           unexpected_method_name
         end
       end
-    }.to raise_error(DSLCompose::Interpreter::Execution::MethodDoesNotExistError)
+    }.to raise_error(DSLCompose::DSL::MethodDoesNotExistError)
   end
 
   it "allows calling a method within a DSL twice" do

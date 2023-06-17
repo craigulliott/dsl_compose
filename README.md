@@ -317,6 +317,10 @@ We prefer using squash-merges when merging pull requests because it helps keep a
 
 Type checking is enabled for this project. You can find the corresponding `rbs` files in the sig folder.
 
+Install types for the packages used in development (such as `rspec`) by running
+
+    $ rbs collection install
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/craigulliott/dsl_compose. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/craigulliott/dsl_compose/blob/master/CODE_OF_CONDUCT.md).
