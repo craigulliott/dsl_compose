@@ -1,0 +1,39 @@
+# Classes
+module DSLCompose
+  class DSL
+    @dsl_methods: Hash[Symbol, DSLMethod]
+
+    attr_reader name: Symbol
+    attr_reader klass: Object
+    attr_reader description: String
+    def initialize: (Symbol name, Object klass) -> void
+    def set_description: (String description) -> String
+    def has_description?: -> bool
+    def add_method: (Symbol name, bool unique, bool required) -> DSLMethod
+    def dsl_methods: -> Array[DSLMethod]
+    def required_dsl_methods: -> Array[DSLMethod]
+    def optional_dsl_methods: -> Array[DSLMethod]
+    def dsl_method: (Symbol name) -> DSLMethod
+    def has_dsl_method?: (Symbol name) -> bool
+
+    class MethodDoesNotExistError < StandardError
+      def message: -> String
+    end
+
+    class MethodAlreadyExistsError < StandardError
+      def message: -> String
+    end
+
+    class InvalidNameError < StandardError
+      def message: -> String
+    end
+
+    class InvalidDescriptionError < StandardError
+      def message: -> String
+    end
+
+    class DescriptionAlreadyExistsError < StandardError
+      def message: -> String
+    end
+  end
+end

@@ -2,37 +2,50 @@
 
 module DSLCompose
   class DSL
+    # The class is reponsible for parsing and executing our internal DSL which is used to define
+    # a new dynamic DSL. This class is instantaited by the DSLCompose::DSL class and our internal
+    # DSL is evaluated by passing a block to `instance_eval` on this class.
+    #
+    # An example of our internal DSL:
+    #  define_dsl :my_dsl do
+    #    description "This is my DSL"
+    #    add_method :my_method do
+    #      # ...
+    #    end
+    #    add_unique_method :my_uniq_method do
+    #      # ...
+    #    end
+    #  end
     class Interpreter
       def initialize dsl
         @dsl = dsl
-        # the result of executing the DSL
-        @result = Result.new
       end
 
-      # catch and process any method calls within the DSL block
-      def method_missing name, *args, &block
-        dsl_method = @dsl.get_dsl_method name
-        if dsl_method
-          method_name = dsl_method.get_name
+      private
 
-          # if the method is unique, then it can only be called once per DSL
-          if dsl_method.unique? && @result.method_called?(method_name)
-            raise Errors::MethodIsUnique.new method_name
-          end
-
-          @result.add_method_call method_name
-
-        else
-          raise Errors::MethodDoesNotExist.new name
-        end
+      # sets the description of the DSL
+      def description description
+        @dsl.set_description description
       end
 
-      def respond_to_missing?(method_name, *args)
-        @dsl.has_dsl_method? name
+      # adds a new method to the DSL
+      #
+      # methods flagged as `required` will cause your DSLs to raise an error
+      # if they are not used at least once within your new DSLs
+      # `block` contains the method definition and will be evaluated seperately
+      # by the DSLMethod::Interpreter
+      def add_method name, required: nil, &block
+        @dsl.add_method name, false, required ? true : false, &block
       end
 
-      def get_results
-        @result
+      # adds a new unique method to the DSL
+      #
+      # methods flagged as `required` will cause your DSLs to raise an error
+      # if they are not used at least once within your new DSLs
+      # `block` contains the method definition and will be evaluated seperately
+      # by the DSLMethod::Interpreter
+      def add_unique_method name, required: nil, &block
+        @dsl.add_method name, true, required ? true : false, &block
       end
     end
   end

@@ -1,0 +1,9 @@
+# Classes
+module DSLCompose
+  class Interpreter
+    attr_reader executions: Hash[Object, Array[Execution]]
+    def initialize: -> void
+    def execute_dsl: (Object klass, DSL dsl) -> Execution
+    def class_executions: (Object klass) -> Array[Execution]
+  end
+end

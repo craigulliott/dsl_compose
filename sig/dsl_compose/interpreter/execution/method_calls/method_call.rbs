@@ -1,0 +1,16 @@
+# Classes
+module DSLCompose
+  class Interpreter
+    class Execution
+      class MethodCalls
+        class MethodCall
+          @dsl_method: DSL::DSLMethod
+          @arguments: Hash[Symbol, String | Symbol | bool | Numeric]
+
+          def initialize: (DSL::DSLMethod dsl_method, *untyped args) -> void
+          def method_name: -> Symbol
+        end
+      end
+    end
+  end
+end

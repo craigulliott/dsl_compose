@@ -2,50 +2,71 @@
 
 module DSLCompose
   module Composer
-    def self.included klass
-      if (klass.private_methods + klass.methods).include? :define_dsl
-        raise Errors::ComposerAlreadyInstalled
-      end
-      # install the ClassMethods module into the class which included this module, this will add any methods defined within
-      # ClassMethods into the class as singleton methods
-      klass.extend(ClassMethods)
-
-      # this method is defined here rather than in ClassMethods because it requires access to the klass variable
-      klass.define_singleton_method :get_dsls do
-        DSLCompose::DSLs.get_class_dsls klass
-      end
-
-      # this method is defined here rather than in ClassMethods because it requires access to the klass variable
-      klass.define_singleton_method :get_dsl do |name|
-        DSLCompose::DSLs.get_class_dsl klass, name
+    class ComposerAlreadyInstalledError < StandardError
+      def message
+        "This module has already been included or the define_dsl singleton method already exists for this class."
       end
     end
 
-    module ClassMethods
-      def get_dsl name
-        DSLCompose::DSLs.get_class_dsl self, name
+    class MethodAlreadyExistsWithThisDSLNameError < StandardError
+      def message
+        "The define_dsl singleton method already exists for this class."
+      end
+    end
+
+    class GetDSLExecutionResultsMethodAlreadyExistsError < StandardError
+      def message
+        "The dsl_interpreter singleton method already exists for this class."
+      end
+    end
+
+    def self.included klass
+      if (klass.private_methods + klass.methods).include? :define_dsl
+        raise ComposerAlreadyInstalledError
       end
 
-      private
+      # create an interpreter for this class which will be shared by all child classes and all
+      # the dynamicly defined DSLs in this class
+      interpreter = DSLCompose::Interpreter.new
 
-      def define_dsl name, &block
-        # create the DSL object
-        dsl = DSLCompose::DSLs.create_dsl self, name, &block
+      # return a specific DSL which is defined for this class
+      if klass.respond_to? :dsl_interpreter
+        raise GetDSLExecutionResultsMethodAlreadyExistsError
+      end
 
-        # create an interpreter for this DSL
-        interpreter = DSLCompose::DSL::Interpreter.new dsl
+      klass.define_singleton_method :dsl_interpreter do
+        interpreter
+      end
 
-        # define a singleton method on the class to access this DSL
-        define_singleton_method name do |*args, &block|
-          # dynamically process the DSL with the interpreter
-          interpreter.instance_eval(&block)
+      # return a specific DSL which is defined for this class
+      klass.define_singleton_method :define_dsl do |name, &block|
+        # Find or create a DSL with this name for the provided class. We allow an existing
+        # DSL to be accessed so that it can be be extended (have new methods added to it).
+        # `self` here is the class in which `define_dsl` is being called
+        if DSLCompose::DSLs.class_dsl_exists? self, name
+          # get the existing DSL
+          dsl = DSLCompose::DSLs.class_dsl self, name
 
-          # assert that all required methods have been called at least once
-          dsl.get_dsl_methods.filter(&:required?).each do |dsl_method|
-            unless dsl.get_results.method_called? dsl_method.get_name
-              raise Errors::RequiredMethodNotCalled.new dsl_method.get_name
-            end
+        else
+          dsl = DSLCompose::DSLs.create_dsl self, name
+
+          # ensure that creating this DSL will not override any existing methods on this class
+          if respond_to? name
+            raise MethodAlreadyExistsWithThisDSLNameError
           end
+
+          # add a singleton method with the name of this new DSL onto our class, this is how our new DSL will be accessed
+          define_singleton_method name do |&block|
+            # when it is called, we process this new dynamic DSL with the interpreter
+            # `self` here is the class in which the dsl is being used, not the class in which the DSL was defined
+            interpreter.execute_dsl self, dsl, &block
+          end
+
+        end
+
+        # evaluate the configuration block which uses our internal DSL to define this dynamic DSL
+        if block
+          dsl.evaluate_configuration_block(&block)
         end
       end
     end

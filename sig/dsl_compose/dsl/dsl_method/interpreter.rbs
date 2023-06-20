@@ -1,0 +1,18 @@
+# Classes
+module DSLCompose
+  class DSL
+    class DSLMethod
+      class Interpreter
+        @dsl_method: DSLMethod
+
+        def initialize: (DSLMethod dsl_method) -> void
+        def instance_eval: () -> void
+
+        private
+        def description: (String description) -> void
+        def optional: (Symbol name, argument_type `type`) -> void
+        def requires: (Symbol name, argument_type `type`) -> void
+      end
+    end
+  end
+end

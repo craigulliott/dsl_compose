@@ -1,0 +1,20 @@
+# Classes
+module DSLCompose
+  class Interpreter
+    class Execution
+      @method_calls: MethodCalls
+      @dsl: DSL
+
+      def initialize: (DSL dsl) -> void
+      def instance_eval: () -> void
+
+      private
+      def method_missing: (Symbol method_name, *untyped args) -> untyped
+      def respond_to_missing?: (Symbol method_name, *untyped args) -> untyped
+
+      class MethodIsUniqueError < StandardError
+        def message: -> String
+      end
+    end
+  end
+end

@@ -1,0 +1,26 @@
+name: Type Checker
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  type-checker:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Checkout code
+      - uses: actions/checkout@v3
+
+      # Setup ruby
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+
+      # Bundle install
+      - run: bundle install
+
+      # run the type checker
+      - name: Run steep type checker
+        run: bundle exec steep check

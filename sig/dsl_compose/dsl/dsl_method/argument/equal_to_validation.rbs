@@ -1,0 +1,17 @@
+# TypeProf 0.21.7
+
+# Classes
+module DSLCompose
+  class DSL
+    class DSLMethod
+      class Argument
+        class EqualToValidation
+          @value: Numeric | String | Symbol | bool
+
+          def initialize: (Numeric | String | Symbol | bool value) -> void
+          def validate!: (Numeric | String | Symbol | bool value) -> void
+        end
+      end
+    end
+  end
+end
