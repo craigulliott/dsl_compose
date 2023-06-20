@@ -9,10 +9,19 @@ module DSLCompose
         end
       end
 
+      class RequiredMethodNotCalledError < StandardError
+        def message
+          "This method is required, but was not called within this DSL"
+        end
+      end
+
+      attr_reader :dsl
+      attr_reader :method_calls
+
       # execute/process a dynamically defined DSL
       def initialize dsl, &block
-        @method_calls = MethodCalls.new
         @dsl = dsl
+        @method_calls = MethodCalls.new
 
         # dynamically process the DSL by calling the provided block
         # all methods executions will be caught and processed by the method_missing method below

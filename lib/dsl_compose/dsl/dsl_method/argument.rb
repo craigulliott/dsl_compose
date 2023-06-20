@@ -257,6 +257,42 @@ module DSLCompose
 
           @length_validation = LengthValidation.new(maximum: maximum, minimum: minimum, is: is)
         end
+
+        # returns true if every provided integer validation also returns true
+        def validate_integer! value
+          (greater_than_validation.nil? || greater_than_validation.validate!(value)) &&
+            (greater_than_or_equal_to_validation.nil? || greater_than_or_equal_to_validation.validate!(value)) &&
+            (less_than_validation.nil? || less_than_validation.validate!(value)) &&
+            (less_than_or_equal_to_validation.nil? || less_than_or_equal_to_validation.validate!(value)) &&
+            (format_validation.nil? || format_validation.validate!(value)) &&
+            (equal_to_validation.nil? || equal_to_validation.validate!(value)) &&
+            (in_validation.nil? || in_validation.validate!(value)) &&
+            (not_in_validation.nil? || not_in_validation.validate!(value)) &&
+            (length_validation.nil? || length_validation.validate!(value))
+        end
+
+        # returns true if every provided symbol validation also returns true
+        def validate_symbol! value
+          (format_validation.nil? || format_validation.validate!(value)) &&
+            (equal_to_validation.nil? || equal_to_validation.validate!(value)) &&
+            (in_validation.nil? || in_validation.validate!(value)) &&
+            (not_in_validation.nil? || not_in_validation.validate!(value)) &&
+            (length_validation.nil? || length_validation.validate!(value))
+        end
+
+        # returns true if every provided string validation also returns true
+        def validate_string! value
+          (format_validation.nil? || format_validation.validate!(value)) &&
+            (equal_to_validation.nil? || equal_to_validation.validate!(value)) &&
+            (in_validation.nil? || in_validation.validate!(value)) &&
+            (not_in_validation.nil? || not_in_validation.validate!(value)) &&
+            (length_validation.nil? || length_validation.validate!(value))
+        end
+
+        # returns true if every provided boolean validation also returns true
+        def validate_boolean! value
+          (equal_to_validation.nil? || equal_to_validation.validate!(value))
+        end
       end
     end
   end

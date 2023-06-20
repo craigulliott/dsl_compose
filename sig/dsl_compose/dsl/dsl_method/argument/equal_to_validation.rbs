@@ -9,7 +9,7 @@ module DSLCompose
           @value: Numeric | String | Symbol | bool
 
           def initialize: (Numeric | String | Symbol | bool value) -> void
-          def validate: (Numeric | String | Symbol | bool value) -> bool
+          def validate!: (Numeric | String | Symbol | bool value) -> void
         end
       end
     end

@@ -9,7 +9,7 @@ module DSLCompose
           @is: nil | Numeric
 
           def initialize: (?maximum: nil | Numeric, ?minimum: nil | Numeric, ?is: nil | Numeric) -> void
-          def validate: (String | Symbol value) -> bool
+          def validate!: (String | Symbol value) -> void
         end
       end
     end

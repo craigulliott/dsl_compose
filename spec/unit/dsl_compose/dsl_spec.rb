@@ -8,22 +8,35 @@ RSpec.describe DSLCompose::DSL do
 
   describe :initialize do
     it "initializes a new DSL without raising any errors" do
-      klass = dummy_class
-      DSLCompose::DSL.new :dsl_name, klass
+      expect {
+        DSLCompose::DSL.new :dsl_name, dummy_class
+      }.to_not raise_error
     end
 
     it "raises an error if using a string instead of a symbol for the DSL name" do
-      klass = dummy_class
       expect {
-        DSLCompose::DSL.new "dsl_name", klass
+        DSLCompose::DSL.new "dsl_name", dummy_class
       }.to raise_error(DSLCompose::DSL::InvalidNameError)
     end
 
     it "raises an error if passing an unexpected type for the DSL name" do
-      klass = dummy_class
       expect {
-        DSLCompose::DSL.new 123, klass
+        DSLCompose::DSL.new 123, dummy_class
       }.to raise_error(DSLCompose::DSL::InvalidNameError)
+    end
+  end
+
+  describe :evaluate_configuration_block do
+    it "accepts a block which will be evaluated by the DSL's interpreter" do
+      dsl.evaluate_configuration_block do
+        description "This is a description of the DSL"
+      end
+    end
+
+    it "raises an error if no block is provided" do
+      expect {
+        dsl.evaluate_configuration_block
+      }.to raise_error(DSLCompose::DSL::NoBlockProvidedError)
     end
   end
 

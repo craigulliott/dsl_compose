@@ -5,6 +5,5 @@ module DSLCompose
     def initialize: -> void
     def execute_dsl: (Object klass, DSL dsl) -> Execution
     def class_executions: (Object klass) -> Array[Execution]
-    def instance_eval: () -> void
   end
 end

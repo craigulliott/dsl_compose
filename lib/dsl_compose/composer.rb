@@ -2,9 +2,21 @@
 
 module DSLCompose
   module Composer
-    class ComposerAlreadyInstalled < StandardError
+    class ComposerAlreadyInstalledError < StandardError
+      def message
+        "This module has already been included or the define_dsl singleton method already exists for this class."
+      end
+    end
+
+    class MethodAlreadyExistsWithThisDSLNameError < StandardError
       def message
         "The define_dsl singleton method already exists for this class."
+      end
+    end
+
+    class GetDSLExecutionResultsMethodAlreadyExistsError < StandardError
+      def message
+        "The dsl_interpreter singleton method already exists for this class."
       end
     end
 
@@ -15,33 +27,46 @@ module DSLCompose
 
       # create an interpreter for this class which will be shared by all child classes and all
       # the dynamicly defined DSLs in this class
-      dsl_interpreter = DSLCompose::Interpreter.new
+      interpreter = DSLCompose::Interpreter.new
 
-      # return all the DSLs defined for this class
-      warn "WARNING: #{klass} already defines a method called get_dsls, this method will be overridden" if klass.respond_to? :get_dsls
-      klass.define_singleton_method :get_dsls do
-        DSLCompose::DSLs.class_dsls klass
+      # return a specific DSL which is defined for this class
+      if klass.respond_to? :dsl_interpreter
+        raise GetDSLExecutionResultsMethodAlreadyExistsError
+      end
+
+      klass.define_singleton_method :dsl_interpreter do
+        interpreter
       end
 
       # return a specific DSL which is defined for this class
-      warn "WARNING: #{klass} already defines a method called get_dsl, this method will be overridden" if klass.respond_to? :get_dsl
-      klass.define_singleton_method :get_dsl do |name|
-        DSLCompose::DSLs.class_dsl klass, name
-      end
-
-      # return a specific DSL which is defined for this class
-      warn "WARNING: #{klass} already defines a method called define_dsl, this method will be overridden" if klass.respond_to? :define_dsl
       klass.define_singleton_method :define_dsl do |name, &block|
-        # parse the internal DSL and create a dynamic DSL for use in our class
+        # Find or create a DSL with this name for the provided class. We allow an existing
+        # DSL to be accessed so that it can be be extended (have new methods added to it).
         # `self` here is the class in which `define_dsl` is being called
-        dsl = DSLCompose::DSLs.create_dsl self, name, &block
+        if DSLCompose::DSLs.class_dsl_exists? self, name
+          # get the existing DSL
+          dsl = DSLCompose::DSLs.class_dsl self, name
 
-        # add a singleton method witht the name of this new DSL onto our class, this is how our new DSL will be accessed
-        warn "WARNING: #{klass} already defines a method called #{name}, this method will be overridden" if klass.respond_to? name
-        define_singleton_method name do |&block|
-          # when it is called, we process this new dynamic DSL with the interpreter
-          # `self` here is the class in which the dsl is being used, not the class in which the DSL was defined
-          dsl_interpreter.execute_dsl self, dsl, &block
+        else
+          dsl = DSLCompose::DSLs.create_dsl self, name
+
+          # ensure that creating this DSL will not override any existing methods on this class
+          if respond_to? name
+            raise MethodAlreadyExistsWithThisDSLNameError
+          end
+
+          # add a singleton method with the name of this new DSL onto our class, this is how our new DSL will be accessed
+          define_singleton_method name do |&block|
+            # when it is called, we process this new dynamic DSL with the interpreter
+            # `self` here is the class in which the dsl is being used, not the class in which the DSL was defined
+            interpreter.execute_dsl self, dsl, &block
+          end
+
+        end
+
+        # evaluate the configuration block which uses our internal DSL to define this dynamic DSL
+        if block
+          dsl.evaluate_configuration_block(&block)
         end
       end
     end

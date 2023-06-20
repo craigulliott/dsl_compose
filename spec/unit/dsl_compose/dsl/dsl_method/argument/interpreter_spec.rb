@@ -10,7 +10,9 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::Interpreter do
 
   describe :initialize do
     it "initializes a new Interpreter without raising any errors" do
-      DSLCompose::DSL::DSLMethod::Argument::Interpreter.new integer_argument
+      expect {
+        DSLCompose::DSL::DSLMethod::Argument::Interpreter.new integer_argument
+      }.to_not raise_error
     end
   end
 

@@ -5,26 +5,32 @@ module DSLCompose
     class DSLMethod
       class Argument
         class LengthValidation
+          class ValidationFailedError < StandardError
+            def message
+              "The argument is invalid"
+            end
+          end
+
           def initialize maximum: nil, minimum: nil, is: nil
             @maximum = maximum
             @minimum = minimum
             @is = is
           end
 
-          def validate value
+          def validate! value
             maximum = @maximum
             unless maximum.nil?
-              return false unless value.length <= maximum
+              raise ValidationFailedError if value.length > maximum
             end
 
             minimum = @minimum
             unless minimum.nil?
-              return false unless value.length >= minimum
+              raise ValidationFailedError if value.length < minimum
             end
 
             is = @is
             unless is.nil?
-              return false unless value.length == is
+              raise ValidationFailedError if value.length != is
             end
 
             true

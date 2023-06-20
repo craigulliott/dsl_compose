@@ -8,7 +8,9 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
 
   describe :initialize do
     it "initializes a new DSLMethod without raising any errors" do
-      DSLCompose::DSL::DSLMethod::Argument.new :argument_name, true, :integer
+      expect {
+        DSLCompose::DSL::DSLMethod::Argument.new :argument_name, true, :integer
+      }.to_not raise_error
     end
 
     it "raises an error if using a string instead of a symbol for the DSLMethod name" do

@@ -7,7 +7,9 @@ RSpec.describe DSLCompose::DSLs do
 
   describe :create_dsl do
     it "creates a new DSL without raising any errors" do
-      DSLCompose::DSLs.create_dsl dummy_class, :dsl_name
+      expect {
+        DSLCompose::DSLs.create_dsl dummy_class, :dsl_name
+      }.to_not raise_error
     end
 
     describe "if a DSL with the same name has already been added for this class" do
@@ -19,6 +21,22 @@ RSpec.describe DSLCompose::DSLs do
         expect {
           DSLCompose::DSLs.create_dsl dummy_class, :dsl_name
         }.to raise_error(DSLCompose::DSLs::DSLAlreadyExistsError)
+      end
+    end
+  end
+
+  describe :class_dsl_exists? do
+    it "returns false" do
+      expect(DSLCompose::DSLs.class_dsl_exists?(dummy_class, :dsl_name)).to be false
+    end
+
+    describe "if a DSL with the same name has already been added for this class" do
+      before(:each) do
+        DSLCompose::DSLs.create_dsl dummy_class, :dsl_name
+      end
+
+      it "returns true" do
+        expect(DSLCompose::DSLs.class_dsl_exists?(dummy_class, :dsl_name)).to be true
       end
     end
   end

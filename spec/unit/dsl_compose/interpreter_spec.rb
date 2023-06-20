@@ -9,7 +9,9 @@ RSpec.describe DSLCompose::Interpreter do
 
   describe :initialize do
     it "initializes a new interpreter without raising any errors" do
-      DSLCompose::Interpreter.new
+      expect {
+        DSLCompose::Interpreter.new
+      }.to_not raise_error
     end
   end
 

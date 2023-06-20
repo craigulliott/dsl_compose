@@ -4,6 +4,7 @@ module DSLCompose
     self.@dsls: Hash[Object, Hash[Symbol, DSL]]
 
     def self.create_dsl: (Object klass, Symbol name) -> DSL
+    def self.class_dsl_exists?: (Object klass, Symbol name) -> bool
     def self.dsls: -> Hash[Object, Hash[Symbol, DSL]]
     def self.class_dsls: (Object klass) -> Array[DSL]
     def self.class_dsl: (Object klass, Symbol name) -> DSL

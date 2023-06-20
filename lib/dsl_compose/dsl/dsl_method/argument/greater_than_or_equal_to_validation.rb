@@ -11,6 +11,12 @@ module DSLCompose
             end
           end
 
+          class ValidationFailedError < StandardError
+            def message
+              "The argument is invalid"
+            end
+          end
+
           def initialize value
             unless value.is_a?(Numeric)
               raise InvalidValueError
@@ -19,8 +25,8 @@ module DSLCompose
             @value = value
           end
 
-          def validate value
-            value >= @value
+          def validate! value
+            raise ValidationFailedError unless value >= @value
           end
         end
       end

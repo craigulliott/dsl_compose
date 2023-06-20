@@ -26,19 +26,25 @@ module DSLCompose
 
     # create a new DSL definition for a class
     # `klass` here is the class in which `define_dsl` was called
-    def self.create_dsl klass, name, &block
+    def self.create_dsl klass, name
       @dsls[klass] ||= {}
 
       if @dsls[klass].key? name
         raise DSLAlreadyExistsError
       end
 
-      @dsls[klass][name] = DSLCompose::DSL.new(name, klass, &block)
+      @dsls[klass][name] = DSLCompose::DSL.new(name, klass)
     end
 
     # return all of the DSL definitions
     def self.dsls
       @dsls
+    end
+
+    # return a DSL with a provided name for the provided class, if the DSL doesn't
+    # exist then it will be automatically created
+    def self.class_dsl_exists? klass, name
+      @dsls.key?(klass) && @dsls[klass].key?(name)
     end
 
     # return an array of DSL definitions for a provided class, if no DSLs

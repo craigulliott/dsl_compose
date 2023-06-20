@@ -5,12 +5,18 @@ module DSLCompose
     class DSLMethod
       class Argument
         class FormatValidation
+          class ValidationFailedError < StandardError
+            def message
+              "The argument is invalid"
+            end
+          end
+
           def initialize regex
             @regex = regex
           end
 
-          def validate value
-            @regex.match(value).nil? == false
+          def validate! value
+            raise ValidationFailedError if @regex.match(value).nil?
           end
         end
       end

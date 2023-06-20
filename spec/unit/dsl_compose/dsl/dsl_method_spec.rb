@@ -7,13 +7,21 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
 
   describe :initialize do
     it "initializes a new DSLMethod without raising any errors" do
-      DSLCompose::DSL::DSLMethod.new :method_name, true, true
+      expect {
+        DSLCompose::DSL::DSLMethod.new :method_name, true, true
+      }.to_not raise_error
     end
 
     it "raises an error if using a string instead of a symbol for the DSLMethod name" do
       expect {
         DSLCompose::DSL::DSLMethod.new "method_name", true, true
       }.to raise_error(DSLCompose::DSL::DSLMethod::InvalidNameError)
+    end
+
+    it "raises an error if using a reserved name which would collide with internal methods" do
+      expect {
+        DSLCompose::DSL::DSLMethod.new :class, true, true
+      }.to raise_error(DSLCompose::DSL::DSLMethod::MethodNameIsReservedError)
     end
 
     it "raises an error if passing an unexpected type for the DSLMethod name" do

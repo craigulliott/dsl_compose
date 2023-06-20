@@ -36,6 +36,12 @@ module DSLCompose
       end
     end
 
+    class NoBlockProvidedError < StandardError
+      def message
+        "No block was provided for this DSL"
+      end
+    end
+
     # The name of this DSL.
     attr_reader :name
     # klass will be the class where `define_dsl` was called.
@@ -48,9 +54,7 @@ module DSLCompose
     #
     # `name` must be a symbol.
     # `klass` should be the class in which `define_dsl` is being called.
-    # `block` contains the DSL definition and will be evaluated to create
-    # the rest of the DSL.
-    def initialize name, klass, &block
+    def initialize name, klass
       @dsl_methods = {}
 
       if name.is_a? Symbol
@@ -60,16 +64,20 @@ module DSLCompose
       end
 
       @klass = klass
+    end
 
-      # If a block was provided, then we evaluate it using a seperate
-      # interpreter class. We do this because the interpreter class contains
-      # no other methods or variables, if it was evaluated in the context of
-      # this class then the block would have access to all of the methods defined
-      # in here.
+    # Evaluate the configuration block which defines our new DSL
+    # `block` contains the DSL definition and will be evaluated to create
+    # the rest of the DSL.
+    def evaluate_configuration_block &block
       if block
+        # We evaluate the internal DSL configuration blocks using a seperate interpreter
+        # class. We do this because the interpreter class contains no other methods or
+        # variables, if it was evaluated in the context of this class then the block
+        # would have access to all of the methods defined in here.
         Interpreter.new(self).instance_eval(&block)
       else
-        warn "warning, no dsl block was provided for DSL #{name}"
+        raise NoBlockProvidedError
       end
     end
 

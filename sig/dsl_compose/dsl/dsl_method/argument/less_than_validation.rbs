@@ -7,7 +7,7 @@ module DSLCompose
           @value: Numeric
 
           def initialize: (Numeric value) -> void
-          def validate: (Numeric value) -> bool
+          def validate!: (Numeric value) -> void
         end
       end
     end
