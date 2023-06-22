@@ -13,7 +13,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
 
     klass.dsl_name 123
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {
@@ -36,7 +36,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     klass.dsl_name 123 do
     end
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {
@@ -73,7 +73,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
 
       child_class_2.dsl_name 456
 
-      expect(base_class.dsl_interpreter.to_h(:dsl_name)).to eql(
+      expect(base_class.dsls.to_h(:dsl_name)).to eql(
         {
           child_class_1 => {
             arguments: {
@@ -103,7 +103,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
 
     klass.dsl_name :foo, optional_option_name: 456
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {

@@ -46,5 +46,23 @@ module DSLCompose
       end
       h
     end
+
+    def executions_by_class
+      h = {}
+      executions.each do |execution|
+        h[execution.klass] ||= {}
+        h[execution.klass][execution.dsl.name] ||= []
+        execution_h = {
+          arguments: execution.arguments.to_h,
+          method_calls: {}
+        }
+        execution.method_calls.method_calls.each do |method_call|
+          execution_h[:method_calls][method_call.method_name] ||= []
+          execution_h[:method_calls][method_call.method_name] << method_call.to_h
+        end
+        h[execution.klass][execution.dsl.name] << execution_h
+      end
+      h
+    end
   end
 end

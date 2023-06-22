@@ -17,7 +17,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
       method_name 123
     end
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {},
@@ -68,7 +68,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
         method_name 6
       end
 
-      expect(base_class.dsl_interpreter.to_h(:dsl_name)).to eql(
+      expect(base_class.dsls.to_h(:dsl_name)).to eql(
         {
           child_class_1 => {
             arguments: {},
@@ -124,7 +124,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
       method_name :foo, optional_option_name: 456
     end
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {},
