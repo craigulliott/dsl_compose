@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
+RSpec.describe DSLCompose::DSL::Arguments::Argument do
   let(:dummy_class) { Class.new { include DSLCompose::Composer } }
 
   it "accepts and returns a description when requested" do
@@ -17,7 +17,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       end
     end
 
-    expect(DSLCompose::DSLs.class_dsl(klass, :dsl_name).dsl_methods.first.arguments.first.description).to eq("This is an argument description")
+    expect(DSLCompose::DSLs.class_dsl(klass, :dsl_name).dsl_methods.first.arguments.arguments.first.description).to eq("This is an argument description")
   end
 
   it "raises an error if you try and set the DSL description multiple times" do
@@ -33,7 +33,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
           end
         end
       end
-    }.to raise_error(DSLCompose::DSL::DSLMethod::Argument::DescriptionAlreadyExistsError)
+    }.to raise_error(DSLCompose::DSL::Arguments::Argument::DescriptionAlreadyExistsError)
   end
 
   it "raises an error if you provide a symbol for the method description" do
@@ -48,7 +48,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
           end
         end
       end
-    }.to raise_error(DSLCompose::DSL::DSLMethod::Argument::InvalidDescriptionError)
+    }.to raise_error(DSLCompose::DSL::Arguments::Argument::InvalidDescriptionError)
   end
 
   it "raises an error if you provide an unexpected type for the method description" do
@@ -63,6 +63,6 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
           end
         end
       end
-    }.to raise_error(DSLCompose::DSL::DSLMethod::Argument::InvalidDescriptionError)
+    }.to raise_error(DSLCompose::DSL::Arguments::Argument::InvalidDescriptionError)
   end
 end

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DSLCompose::DSL::DSLMethod::Argument::GreaterThanValidation do
+RSpec.describe DSLCompose::DSL::Arguments::Argument::GreaterThanValidation do
   describe "for a DSL that has a a method which includes a validated argument" do
     let(:dummy_class) {
       Class.new do
@@ -22,16 +22,19 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::GreaterThanValidation do
         method_name 101
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(dummy_class)).to eql(
+      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
         {
-          dsl_name: {
-            method_name: [
-              {
-                arguments: {
-                  required_option_name: 101
+          dummy_class => {
+            arguments: {},
+            method_calls: {
+              method_name: [
+                {
+                  arguments: {
+                    required_option_name: 101
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       )
@@ -42,7 +45,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::GreaterThanValidation do
         dummy_class.dsl_name do
           method_name 99
         end
-      }.to raise_error DSLCompose::DSL::DSLMethod::Argument::GreaterThanValidation::ValidationFailedError
+      }.to raise_error DSLCompose::DSL::Arguments::Argument::GreaterThanValidation::ValidationFailedError
     end
   end
 end

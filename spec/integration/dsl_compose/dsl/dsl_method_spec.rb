@@ -17,14 +17,17 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       method_name
     end
 
-    expect(klass.dsl_interpreter.to_h(klass)).to eql(
+    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
       {
-        dsl_name: {
-          method_name: [
-            {
-              arguments: {}
-            }
-          ]
+        klass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {}
+              }
+            ]
+          }
         }
       }
     )
@@ -43,17 +46,20 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       method_name
     end
 
-    expect(klass.dsl_interpreter.to_h(klass)).to eql(
+    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
       {
-        dsl_name: {
-          method_name: [
-            {
-              arguments: {}
-            },
-            {
-              arguments: {}
-            }
-          ]
+        klass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {}
+              },
+              {
+                arguments: {}
+              }
+            ]
+          }
         }
       }
     )
@@ -71,14 +77,17 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       method_name
     end
 
-    expect(klass.dsl_interpreter.to_h(klass)).to eql(
+    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
       {
-        dsl_name: {
-          method_name: [
-            {
-              arguments: {}
-            }
-          ]
+        klass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {}
+              }
+            ]
+          }
         }
       }
     )
@@ -112,14 +121,17 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       method_name
     end
 
-    expect(klass.dsl_interpreter.to_h(klass)).to eql(
+    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
       {
-        dsl_name: {
-          method_name: [
-            {
-              arguments: {}
-            }
-          ]
+        klass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {}
+              }
+            ]
+          }
         }
       }
     )
@@ -158,14 +170,17 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
         method_name
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(dummy_class)).to eql(
+      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
         {
-          dsl_name: {
-            method_name: [
-              {
-                arguments: {}
-              }
-            ]
+          dummy_class => {
+            arguments: {},
+            method_calls: {
+              method_name: [
+                {
+                  arguments: {}
+                }
+              ]
+            }
           }
         }
       )
@@ -191,19 +206,22 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
         another_method_name
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(dummy_class)).to eql(
+      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
         {
-          dsl_name: {
-            method_name: [
-              {
-                arguments: {}
-              }
-            ],
-            another_method_name: [
-              {
-                arguments: {}
-              }
-            ]
+          dummy_class => {
+            arguments: {},
+            method_calls: {
+              method_name: [
+                {
+                  arguments: {}
+                }
+              ],
+              another_method_name: [
+                {
+                  arguments: {}
+                }
+              ]
+            }
           }
         }
       )

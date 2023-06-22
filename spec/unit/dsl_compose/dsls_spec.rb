@@ -25,22 +25,6 @@ RSpec.describe DSLCompose::DSLs do
     end
   end
 
-  describe :class_dsl_exists? do
-    it "returns false" do
-      expect(DSLCompose::DSLs.class_dsl_exists?(dummy_class, :dsl_name)).to be false
-    end
-
-    describe "if a DSL with the same name has already been added for this class" do
-      before(:each) do
-        DSLCompose::DSLs.create_dsl dummy_class, :dsl_name
-      end
-
-      it "returns true" do
-        expect(DSLCompose::DSLs.class_dsl_exists?(dummy_class, :dsl_name)).to be true
-      end
-    end
-  end
-
   describe :dsls do
     it "returns an empty object" do
       expect(DSLCompose::DSLs.dsls).to be_kind_of Hash
@@ -59,6 +43,22 @@ RSpec.describe DSLCompose::DSLs do
         expect(DSLCompose::DSLs.dsls).to have_key(dummy_class)
         expect(DSLCompose::DSLs.dsls[dummy_class]).to have_key(:dsl_name)
         expect(DSLCompose::DSLs.dsls[dummy_class][:dsl_name]).to be(dsl)
+      end
+    end
+  end
+
+  describe :class_dsl_exists? do
+    it "returns false" do
+      expect(DSLCompose::DSLs.class_dsl_exists?(dummy_class, :dsl_name)).to be false
+    end
+
+    describe "if a DSL with the same name has already been added for this class" do
+      before(:each) do
+        DSLCompose::DSLs.create_dsl dummy_class, :dsl_name
+      end
+
+      it "returns true" do
+        expect(DSLCompose::DSLs.class_dsl_exists?(dummy_class, :dsl_name)).to be true
       end
     end
   end

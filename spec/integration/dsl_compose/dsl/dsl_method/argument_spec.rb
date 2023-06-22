@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
+RSpec.describe DSLCompose::DSL::Arguments::Argument do
   it "successfully evaluates a DSL with a method which has a required argument" do
     klass = Class.new do
       include DSLCompose::Composer
@@ -17,16 +17,19 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       method_name 123
     end
 
-    expect(klass.dsl_interpreter.to_h(klass)).to eql(
+    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
       {
-        dsl_name: {
-          method_name: [
-            {
-              arguments: {
-                required_option_name: 123
+        klass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {
+                  required_option_name: 123
+                }
               }
-            }
-          ]
+            ]
+          }
         }
       }
     )
@@ -65,40 +68,41 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
         method_name 6
       end
 
-      expect(base_class.dsl_interpreter.to_h(child_class_1)).to eql(
+      expect(base_class.dsl_interpreter.to_h(:dsl_name)).to eql(
         {
-          dsl_name: {
-            method_name: [
-              {
-                arguments: {
-                  required_option_name: 123
+          child_class_1 => {
+            arguments: {},
+            method_calls: {
+              method_name: [
+                {
+                  arguments: {
+                    required_option_name: 123
+                  }
                 }
-              }
-            ]
-          }
-        }
-      )
-
-      expect(base_class.dsl_interpreter.to_h(child_class_2)).to eql(
-        {
-          dsl_name: {
-            method_name: [
-              {
-                arguments: {
-                  required_option_name: 4
+              ]
+            }
+          },
+          child_class_2 => {
+            arguments: {},
+            method_calls: {
+              method_name: [
+                {
+                  arguments: {
+                    required_option_name: 4
+                  }
+                },
+                {
+                  arguments: {
+                    required_option_name: 5
+                  }
+                },
+                {
+                  arguments: {
+                    required_option_name: 6
+                  }
                 }
-              },
-              {
-                arguments: {
-                  required_option_name: 5
-                }
-              },
-              {
-                arguments: {
-                  required_option_name: 6
-                }
-              }
-            ]
+              ]
+            }
           }
         }
       )
@@ -120,17 +124,20 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       method_name :foo, optional_option_name: 456
     end
 
-    expect(klass.dsl_interpreter.to_h(klass)).to eql(
+    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
       {
-        dsl_name: {
-          method_name: [
-            {
-              arguments: {
-                required_option_name: :foo,
-                optional_option_name: 456
+        klass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {
+                  required_option_name: :foo,
+                  optional_option_name: 456
+                }
               }
-            }
-          ]
+            ]
+          }
         }
       }
     )
@@ -150,7 +157,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       klass.dsl_name do
         method_name
       end
-    }.to raise_error DSLCompose::Interpreter::Execution::MethodCalls::MethodCall::MissingRequiredArgumentsError
+    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::MissingRequiredArgumentsError
   end
 
   it "raises an error if evaluating a DSL and passing more arguments than expected to a method" do
@@ -167,7 +174,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       klass.dsl_name do
         method_name :foo, :bar
       end
-    }.to raise_error DSLCompose::Interpreter::Execution::MethodCalls::MethodCall::TooManyArgumentsError
+    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::TooManyArgumentsError
   end
 
   it "raises an error if evaluating a DSL and passing an arguments of the wrong type" do
@@ -184,7 +191,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       klass.dsl_name do
         method_name 123
       end
-    }.to raise_error DSLCompose::Interpreter::Execution::MethodCalls::MethodCall::InvalidArgumentTypeError
+    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::InvalidArgumentTypeError
   end
 
   it "raises an error if evaluating a DSL and passing an optional argument where there are no optional arguments defined" do
@@ -201,7 +208,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       klass.dsl_name do
         method_name :foo, {hi: :there}
       end
-    }.to raise_error DSLCompose::Interpreter::Execution::MethodCalls::MethodCall::TooManyArgumentsError
+    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::TooManyArgumentsError
   end
 
   it "raises an error if evaluating a DSL and passing an optional argument which was not defined" do
@@ -219,7 +226,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       klass.dsl_name do
         method_name :my_required_arg, {different_optional_arg_name: :val}
       end
-    }.to raise_error DSLCompose::DSL::DSLMethod::ArgumentDoesNotExistError
+    }.to raise_error DSLCompose::DSL::Arguments::ArgumentDoesNotExistError
   end
 
   it "raises an error if evaluating a DSL and passing an optional argument of an unexpected type" do
@@ -237,6 +244,6 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument do
       klass.dsl_name do
         method_name :my_required_arg, {optional_arg: 123}
       end
-    }.to raise_error DSLCompose::Interpreter::Execution::MethodCalls::MethodCall::InvalidArgumentTypeError
+    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::InvalidArgumentTypeError
   end
 end

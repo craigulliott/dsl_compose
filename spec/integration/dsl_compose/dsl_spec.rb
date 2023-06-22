@@ -21,7 +21,7 @@ RSpec.describe DSLCompose::DSL do
     klass.dsl_name do
     end
 
-    expect(klass.dsl_interpreter.to_h(klass).count).to eq(1)
+    expect(klass.dsl_interpreter.to_h(:dsl_name).count).to eq(1)
   end
 
   it "allows calling the same DSL twice for a class, because DSL definitions can be extended/combined" do
@@ -46,9 +46,12 @@ RSpec.describe DSLCompose::DSL do
     klass.dsl_name do
     end
 
-    expect(klass.dsl_interpreter.to_h(klass)).to eql(
+    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
       {
-        dsl_name: {}
+        klass => {
+          arguments: {},
+          method_calls: {}
+        }
       }
     )
   end

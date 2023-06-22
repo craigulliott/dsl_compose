@@ -49,6 +49,8 @@ module DSLCompose
     # An otional description of this DSL, if provided then it must be a string.
     # The description accepts markdown and is used when generating documentation.
     attr_reader :description
+    # an object which represents the argument configuration
+    attr_reader :arguments
 
     # Create a new DSL object with the provided name and class.
     #
@@ -56,6 +58,8 @@ module DSLCompose
     # `klass` should be the class in which `define_dsl` is being called.
     def initialize name, klass
       @dsl_methods = {}
+
+      @arguments = Arguments.new
 
       if name.is_a? Symbol
         @name = name

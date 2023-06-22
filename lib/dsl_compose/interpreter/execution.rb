@@ -16,12 +16,16 @@ module DSLCompose
       end
 
       attr_reader :dsl
+      attr_reader :klass
       attr_reader :method_calls
+      attr_reader :arguments
 
       # execute/process a dynamically defined DSL
-      def initialize dsl, &block
+      def initialize klass, dsl, *args, &block
+        @klass = klass
         @dsl = dsl
         @method_calls = MethodCalls.new
+        @arguments = Arguments.new(dsl.arguments, *args)
 
         # dynamically process the DSL by calling the provided block
         # all methods executions will be caught and processed by the method_missing method below

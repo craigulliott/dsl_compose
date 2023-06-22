@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DSLCompose::DSL::DSLMethod::Argument::LengthValidation do
+RSpec.describe DSLCompose::DSL::Arguments::Argument::LengthValidation do
   describe "for a DSL that has a a method which includes a validated argument" do
     let(:dummy_class) {
       Class.new do
@@ -22,16 +22,19 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::LengthValidation do
         method_name "abcdefghij"
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(dummy_class)).to eql(
+      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
         {
-          dsl_name: {
-            method_name: [
-              {
-                arguments: {
-                  required_option_name: "abcdefghij"
+          dummy_class => {
+            arguments: {},
+            method_calls: {
+              method_name: [
+                {
+                  arguments: {
+                    required_option_name: "abcdefghij"
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       )
@@ -42,7 +45,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::LengthValidation do
         dummy_class.dsl_name do
           method_name "abc"
         end
-      }.to raise_error DSLCompose::DSL::DSLMethod::Argument::LengthValidation::ValidationFailedError
+      }.to raise_error DSLCompose::DSL::Arguments::Argument::LengthValidation::ValidationFailedError
     end
   end
 end

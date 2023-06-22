@@ -10,31 +10,38 @@ module DSLCompose
     attr_reader :executions
 
     def initialize
-      @executions = {}
+      @executions = []
     end
 
     # Execute/process a dynamically defined DSL on a class.
     # `klass` is the class in which the DSL is being used, not
     # the class in which the DSL was defined.
-    def execute_dsl klass, dsl, &block
-      @executions[klass] ||= []
-      execution = Execution.new(dsl, &block)
-      @executions[klass] << execution
+    def execute_dsl klass, dsl, *args, &block
+      execution = Execution.new(klass, dsl, *args, &block)
+      @executions << execution
       execution
     end
 
     # Returns an array of all executions for a given class.
     def class_executions klass
-      @executions[klass] || []
+      @executions.filter { |e| e.klass == klass }
     end
 
-    def to_h klass
+    # Returns an array of all executions for a given class.
+    def dsl_executions dsl_name
+      @executions.filter { |e| e.dsl.name == dsl_name }
+    end
+
+    def to_h dsl_name
       h = {}
-      class_executions(klass).each do |execution|
-        h[execution.dsl.name] ||= {}
+      dsl_executions(dsl_name).each do |execution|
+        h[execution.klass] ||= {
+          arguments: execution.arguments.to_h,
+          method_calls: {}
+        }
         execution.method_calls.method_calls.each do |method_call|
-          h[execution.dsl.name][method_call.method_name] ||= []
-          h[execution.dsl.name][method_call.method_name] << method_call.to_h
+          h[execution.klass][:method_calls][method_call.method_name] ||= []
+          h[execution.klass][:method_calls][method_call.method_name] << method_call.to_h
         end
       end
       h

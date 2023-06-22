@@ -34,9 +34,9 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Interpreter do
     end
 
     it "adds the expected Argument to the DSLMethod" do
-      expect(dsl_method.argument(:argument_name)).to be_a DSLCompose::DSL::DSLMethod::Argument
-      expect(dsl_method.argument(:argument_name).type).to be(:integer)
-      expect(dsl_method.argument(:argument_name).required?).to be(true)
+      expect(dsl_method.arguments.argument(:argument_name)).to be_a DSLCompose::DSL::Arguments::Argument
+      expect(dsl_method.arguments.argument(:argument_name).type).to be(:integer)
+      expect(dsl_method.arguments.argument(:argument_name).required?).to be(true)
     end
   end
 
@@ -48,9 +48,9 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Interpreter do
     end
 
     it "adds the expected Argument to the DSL" do
-      expect(dsl_method.argument(:argument_name)).to be_a DSLCompose::DSL::DSLMethod::Argument
-      expect(dsl_method.argument(:argument_name).type).to be(:integer)
-      expect(dsl_method.argument(:argument_name).optional?).to be(true)
+      expect(dsl_method.arguments.argument(:argument_name)).to be_a DSLCompose::DSL::Arguments::Argument
+      expect(dsl_method.arguments.argument(:argument_name).type).to be(:integer)
+      expect(dsl_method.arguments.argument(:argument_name).optional?).to be(true)
     end
   end
 end

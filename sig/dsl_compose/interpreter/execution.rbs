@@ -2,10 +2,11 @@
 module DSLCompose
   class Interpreter
     class Execution
-      @method_calls: MethodCalls
-      @dsl: DSL
+      attr_reader dsl: DSL
+      attr_reader klass: Object
+      attr_reader method_calls: MethodCalls
 
-      def initialize: (DSL dsl) -> void
+      def initialize: (Object klass, DSL dsl, *untyped args) -> void
       def instance_eval: () -> void
 
       private
