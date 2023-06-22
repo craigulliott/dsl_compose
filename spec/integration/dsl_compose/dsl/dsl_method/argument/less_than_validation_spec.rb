@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DSLCompose::DSL::DSLMethod::Argument::LessThanValidation do
+RSpec.describe DSLCompose::DSL::Arguments::Argument::LessThanValidation do
   describe "for a DSL that has a a method which includes a validated argument" do
     let(:dummy_class) {
       Class.new do
@@ -22,16 +22,19 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::LessThanValidation do
         method_name 99
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(dummy_class)).to eql(
+      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
         {
-          dsl_name: {
-            method_name: [
-              {
-                arguments: {
-                  required_option_name: 99
+          dummy_class => {
+            arguments: {},
+            method_calls: {
+              method_name: [
+                {
+                  arguments: {
+                    required_option_name: 99
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       )
@@ -42,7 +45,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::LessThanValidation do
         dummy_class.dsl_name do
           method_name 101
         end
-      }.to raise_error DSLCompose::DSL::DSLMethod::Argument::LessThanValidation::ValidationFailedError
+      }.to raise_error DSLCompose::DSL::Arguments::Argument::LessThanValidation::ValidationFailedError
     end
   end
 end

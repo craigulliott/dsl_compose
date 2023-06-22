@@ -1,0 +1,15 @@
+# Classes
+module DSLCompose
+  class DSL
+    class Arguments
+      class Argument
+        class FormatValidation
+          @regex: Regexp
+
+          def initialize: (Regexp regex) -> void
+          def validate!: (String value) -> void
+        end
+      end
+    end
+  end
+end

@@ -1,0 +1,30 @@
+# TypeProf 0.21.7
+
+# Classes
+module DSLCompose
+  class Interpreter
+    class Execution
+      class Arguments
+        attr_reader arguments: Hash[untyped, untyped]
+        def initialize: (untyped arguments, *untyped args) -> void
+        def to_h: -> Hash[untyped, untyped]
+
+        class MissingRequiredArgumentsError < StandardError
+          def initialize: (untyped required_count, untyped provided_count) -> void
+        end
+
+        class TooManyArgumentsError < StandardError
+          def message: -> String
+        end
+
+        class OptionalArgsShouldBeHashError < StandardError
+          def message: -> String
+        end
+
+        class InvalidArgumentTypeError < StandardError
+          def message: -> String
+        end
+      end
+    end
+  end
+end

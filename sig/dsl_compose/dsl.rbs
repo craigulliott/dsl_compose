@@ -4,6 +4,7 @@ module DSLCompose
     @dsl_methods: Hash[Symbol, DSLMethod]
 
     attr_reader name: Symbol
+    attr_reader arguments: Arguments
     attr_reader klass: Object
     attr_reader description: String
     def initialize: (Symbol name, Object klass) -> void

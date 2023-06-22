@@ -37,9 +37,9 @@ module DSLCompose
         # name must be a symbol
         # `type` can be either :integer, :boolean, :float, :string or :symbol
         # `block` contains the argument definition and will be evaluated seperately
-        # by the DSLMethod::Argument::Interpreter
+        # by the Argument::Interpreter
         def optional name, type, &block
-          @dsl_method.add_argument name, false, type, &block
+          @dsl_method.arguments.add_argument name, false, type, &block
         end
 
         # adds a new required argument to the DSLMethod
@@ -47,9 +47,9 @@ module DSLCompose
         # name must be a symbol
         # `type` can be either :integer, :boolean, :float, :string or :symbol
         # `block` contains the argument definition and will be evaluated seperately
-        # by the DSLMethod::Argument::Interpreter
+        # by the Argument::Interpreter
         def requires name, type, &block
-          @dsl_method.add_argument name, true, type, &block
+          @dsl_method.arguments.add_argument name, true, type, &block
         end
       end
     end

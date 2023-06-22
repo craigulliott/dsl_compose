@@ -82,4 +82,32 @@ RSpec.describe DSLCompose::DSL::Interpreter do
       expect(dsl.dsl_method(:method_name).required?).to be(true)
     end
   end
+
+  describe "when interpreting a DSL block which adds a required argument" do
+    before(:each) do
+      interpreter.instance_eval do
+        requires :argument_name, :integer
+      end
+    end
+
+    it "adds the expected Argument to the DSL" do
+      expect(dsl.arguments.argument(:argument_name)).to be_a DSLCompose::DSL::Arguments::Argument
+      expect(dsl.arguments.argument(:argument_name).type).to be(:integer)
+      expect(dsl.arguments.argument(:argument_name).required?).to be(true)
+    end
+  end
+
+  describe "when interpreting a DSL block which adds an optional argument" do
+    before(:each) do
+      interpreter.instance_eval do
+        optional :argument_name, :integer
+      end
+    end
+
+    it "adds the expected Argument to the DSL" do
+      expect(dsl.arguments.argument(:argument_name)).to be_a DSLCompose::DSL::Arguments::Argument
+      expect(dsl.arguments.argument(:argument_name).type).to be(:integer)
+      expect(dsl.arguments.argument(:argument_name).optional?).to be(true)
+    end
+  end
 end

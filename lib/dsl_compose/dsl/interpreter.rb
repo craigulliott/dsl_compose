@@ -47,6 +47,26 @@ module DSLCompose
       def add_unique_method name, required: nil, &block
         @dsl.add_method name, true, required ? true : false, &block
       end
+
+      # adds a new optional argument to the DSLMethod
+      #
+      # name must be a symbol
+      # `type` can be either :integer, :boolean, :float, :string or :symbol
+      # `block` contains the argument definition and will be evaluated seperately
+      # by the Argument::Interpreter
+      def optional name, type, &block
+        @dsl.arguments.add_argument name, false, type, &block
+      end
+
+      # adds a new required argument to the DSLMethod
+      #
+      # name must be a symbol
+      # `type` can be either :integer, :boolean, :float, :string or :symbol
+      # `block` contains the argument definition and will be evaluated seperately
+      # by the Argument::Interpreter
+      def requires name, type, &block
+        @dsl.arguments.add_argument name, true, type, &block
+      end
     end
   end
 end

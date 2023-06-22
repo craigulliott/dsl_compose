@@ -1,9 +1,11 @@
 # Classes
 module DSLCompose
   class Interpreter
-    attr_reader executions: Hash[Object, Array[Execution]]
+    attr_reader executions: Array[Execution]
     def initialize: -> void
-    def execute_dsl: (Object klass, DSL dsl) -> Execution
+    def execute_dsl: (Object klass, DSL dsl, *untyped args) -> Execution
     def class_executions: (Object klass) -> Array[Execution]
+    def dsl_executions: (Symbol dsl_name) -> Array[Execution]
+    def to_h: (Symbol dsl_name) -> Hash[Symbol, Hash[Symbol, Array[Hash[Symbol, Symbol]]]]
   end
 end

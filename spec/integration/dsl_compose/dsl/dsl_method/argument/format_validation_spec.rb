@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DSLCompose::DSL::DSLMethod::Argument::FormatValidation do
+RSpec.describe DSLCompose::DSL::Arguments::Argument::FormatValidation do
   describe "for a DSL that has a a method which includes a validated argument" do
     let(:dummy_class) {
       Class.new do
@@ -22,16 +22,19 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::FormatValidation do
         method_name "Aa"
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(dummy_class)).to eql(
+      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
         {
-          dsl_name: {
-            method_name: [
-              {
-                arguments: {
-                  required_option_name: "Aa"
+          dummy_class => {
+            arguments: {},
+            method_calls: {
+              method_name: [
+                {
+                  arguments: {
+                    required_option_name: "Aa"
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       )
@@ -42,7 +45,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod::Argument::FormatValidation do
         dummy_class.dsl_name do
           method_name "aa"
         end
-      }.to raise_error DSLCompose::DSL::DSLMethod::Argument::FormatValidation::ValidationFailedError
+      }.to raise_error DSLCompose::DSL::Arguments::Argument::FormatValidation::ValidationFailedError
     end
   end
 end

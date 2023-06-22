@@ -17,7 +17,7 @@ RSpec.describe DSLCompose::Interpreter do
 
   describe :executions do
     it "returns an empty object" do
-      expect(interpreter.executions).to be_kind_of Hash
+      expect(interpreter.executions).to be_kind_of Array
       expect(interpreter.executions).to be_empty
     end
 
@@ -27,11 +27,9 @@ RSpec.describe DSLCompose::Interpreter do
       end
 
       it "returns an object representing all executions" do
-        expect(interpreter.executions).to be_kind_of Hash
-        expect(interpreter.executions).to have_key(dummy_class)
-        expect(interpreter.executions[dummy_class]).to be_kind_of Array
-        expect(interpreter.executions[dummy_class].count).to eq 1
-        expect(interpreter.executions[dummy_class].first).to be_kind_of DSLCompose::Interpreter::Execution
+        expect(interpreter.executions).to be_kind_of Array
+        expect(interpreter.executions.count).to eq 1
+        expect(interpreter.executions.first).to be_kind_of DSLCompose::Interpreter::Execution
       end
     end
   end
@@ -62,6 +60,61 @@ RSpec.describe DSLCompose::Interpreter do
           expect(interpreter.class_executions(dummy_class).count).to eq 1
           expect(interpreter.class_executions(dummy_class).first).to be_kind_of DSLCompose::Interpreter::Execution
         end
+      end
+    end
+  end
+
+  describe :dsl_executions do
+    it "returns an empty array" do
+      expect(interpreter.dsl_executions(dsl.name)).to be_kind_of Array
+      expect(interpreter.dsl_executions(dsl.name)).to be_empty
+    end
+
+    describe "when an excecution has occured for a different dsl" do
+      let(:different_dsl) { DSLCompose::DSL.new :different_dsl_name, dummy_class }
+
+      before(:each) do
+        interpreter.execute_dsl Class.new, different_dsl
+      end
+
+      it "returns an empty array" do
+        expect(interpreter.dsl_executions(dsl.name)).to be_kind_of Array
+        expect(interpreter.dsl_executions(dsl.name)).to be_empty
+      end
+
+      describe "when an excecution has occured for this dsl" do
+        before(:each) do
+          interpreter.execute_dsl dummy_class, dsl
+        end
+
+        it "returns an array with the expected executions" do
+          expect(interpreter.dsl_executions(dsl.name)).to be_kind_of Array
+          expect(interpreter.dsl_executions(dsl.name).count).to eq 1
+          expect(interpreter.dsl_executions(dsl.name).first).to be_kind_of DSLCompose::Interpreter::Execution
+        end
+      end
+    end
+  end
+
+  describe :to_h do
+    it "returns an empty object" do
+      expect(interpreter.to_h(dsl.name)).to eql({})
+    end
+
+    describe "when an excecution has occured for this class" do
+      before(:each) do
+        interpreter.execute_dsl dummy_class, dsl
+      end
+
+      it "returns a object, keyed by class, with keys for arguments and method calls" do
+        expect(interpreter.to_h(dsl.name)).to eql(
+          {
+            dummy_class => {
+              arguments: {},
+              method_calls: {}
+            }
+          }
+        )
       end
     end
   end

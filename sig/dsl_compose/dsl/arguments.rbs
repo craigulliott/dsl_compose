@@ -1,0 +1,40 @@
+# TypeProf 0.21.7
+
+# Classes
+module DSLCompose
+  class DSL
+    class Arguments
+      @arguments: Hash[untyped, untyped]
+
+      def initialize: -> void
+      def arguments: -> Array[untyped]
+      def optional_arguments: -> Array[untyped]
+      def required_arguments: -> Array[untyped]
+      def argument: (untyped name) -> nil
+      def optional_argument: (untyped name) -> nil
+      def required_argument: (untyped name) -> nil
+      def has_argument?: (untyped name) -> bool
+      def add_argument: (untyped name, untyped required, untyped `type`) -> untyped
+
+      class ArgumentDoesNotExistError < StandardError
+        def message: -> String
+      end
+
+      class ArgumentOrderingError < StandardError
+        def message: -> String
+      end
+
+      class ArgumentAlreadyExistsError < StandardError
+        def message: -> String
+      end
+
+      class RequestedOptionalArgumentIsRequiredError < StandardError
+        def message: -> String
+      end
+
+      class RequestedRequiredArgumentIsOptionalError < StandardError
+        def message: -> String
+      end
+    end
+  end
+end

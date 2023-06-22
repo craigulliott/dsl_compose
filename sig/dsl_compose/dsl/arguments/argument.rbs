@@ -1,0 +1,67 @@
+type argument_type = :integer | :string | :boolean | :float | :array | :symbol
+# Classes
+module DSLCompose
+  class DSL
+    class Arguments
+      class Argument
+
+        attr_reader name: Symbol
+        attr_reader type: argument_type
+        attr_reader required: bool
+        attr_reader description: String
+
+        attr_reader greater_than_validation: GreaterThanValidation
+        attr_reader greater_than_or_equal_to_validation: GreaterThanOrEqualToValidation
+        attr_reader less_than_validation: LessThanValidation
+        attr_reader less_than_or_equal_to_validation: LessThanOrEqualToValidation
+        attr_reader format_validation: FormatValidation
+        attr_reader equal_to_validation: EqualToValidation
+        attr_reader in_validation: InValidation
+        attr_reader not_in_validation: NotInValidation
+        attr_reader length_validation: LengthValidation
+
+        def initialize: (Symbol name, bool required, argument_type `type`) -> void
+        def set_description: (String description) -> untyped
+        def required?: -> bool
+        def optional?: -> bool
+
+        def validate_greater_than: (Numeric value) -> void
+        def validate_greater_than_or_equal_to: (Numeric value) -> void
+        def validate_less_than: (Numeric value) -> void
+        def validate_less_than_or_equal_to: (Numeric value) -> void
+        def validate_format: (Regexp regexp) -> void
+        def validate_equal_to: (Numeric | Symbol | String value) -> void
+        def validate_in: (Array[Numeric | Symbol | String] values) -> void
+        def validate_not_in: (Array[Numeric | Symbol | String] values) -> void
+        def validate_length: (?maximum: nil | Numeric, ?minimum: nil | Numeric, ?is: nil | Numeric) -> void
+
+        class ValidationInvalidArgumentError < StandardError
+        end
+
+        class ValidationIncompatibleError < StandardError
+          def message: -> untyped
+        end
+
+        class ValidationAlreadyExistsError < StandardError
+          def message: -> String
+        end
+
+        class InvalidTypeError < StandardError
+          def message: -> String
+        end
+
+        class InvalidNameError < StandardError
+          def message: -> String
+        end
+
+        class InvalidDescriptionError < StandardError
+          def message: -> String
+        end
+
+        class DescriptionAlreadyExistsError < StandardError
+          def message: -> String
+        end
+      end
+    end
+  end
+end
