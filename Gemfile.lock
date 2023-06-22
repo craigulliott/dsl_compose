@@ -82,6 +82,8 @@ GEM
     standard-performance (1.1.0)
       lint_roller (~> 1.0)
       rubocop-performance (~> 1.18.0)
+    standardrb (1.0.1)
+      standard
     steep (1.4.0)
       activesupport (>= 5.1)
       concurrent-ruby (>= 1.2.2)
@@ -116,6 +118,7 @@ DEPENDENCIES
   rbs
   rspec (~> 3.0)
   standard (~> 1.0)
+  standardrb
   steep
   typeprof
 
