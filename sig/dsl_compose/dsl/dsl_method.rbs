@@ -2,26 +2,29 @@
 module DSLCompose
   class DSL
     class DSLMethod
-      @arguments: Hash[Symbol, Argument]
 
       attr_reader name: Symbol
       attr_reader unique: bool
       attr_reader required: bool
       attr_reader description: String
+      attr_reader arguments: Arguments
+
       def initialize: (Symbol name, bool unique, bool required) -> void
       def set_description: (String description) -> void
       def has_description?: -> bool
-      def arguments: -> Array[Argument]
-      def optional_arguments: -> Array[Argument]
-      def required_arguments: -> Array[Argument]
-      def argument: (Symbol name) -> Argument
-      def has_argument?: (Symbol name) -> bool
       def unique?: -> bool
       def required?: -> bool
       def optional?: -> bool
-      def add_argument: (Symbol name, bool required, argument_type `type`) -> Argument
+
+      class ArgumentDoesNotExistError < StandardError
+        def message: -> String
+      end
 
       class InvalidNameError < StandardError
+        def message: -> String
+      end
+
+      class MethodNameIsReservedError < StandardError
         def message: -> String
       end
 
@@ -38,6 +41,14 @@ module DSLCompose
       end
 
       class ArgumentAlreadyExistsError < StandardError
+        def message: -> String
+      end
+
+      class RequestedOptionalArgumentIsRequiredError < StandardError
+        def message: -> String
+      end
+
+      class RequestedRequiredArgumentIsOptionalError < StandardError
         def message: -> String
       end
     end

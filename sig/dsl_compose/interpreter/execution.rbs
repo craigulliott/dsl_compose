@@ -5,6 +5,7 @@ module DSLCompose
       attr_reader dsl: DSL
       attr_reader klass: Object
       attr_reader method_calls: MethodCalls
+      attr_reader arguments: Arguments
 
       def initialize: (Object klass, DSL dsl, *untyped args) -> void
       def instance_eval: () -> void
