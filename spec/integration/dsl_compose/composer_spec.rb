@@ -41,10 +41,10 @@ RSpec.describe DSLCompose::Composer do
     }.to raise_error(DSLCompose::Composer::ComposerAlreadyInstalledError)
   end
 
-  it "raises an error if included into a class which already has a dsl_interpreter method" do
+  it "raises an error if included into a class which already has a dsls method" do
     expect {
       Class.new do
-        def self.dsl_interpreter
+        def self.dsls
         end
         include DSLCompose::Composer
       end

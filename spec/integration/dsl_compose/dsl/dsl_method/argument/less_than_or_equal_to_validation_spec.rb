@@ -22,7 +22,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::LessThanOrEqualToValidation
         method_name 99
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
+      expect(dummy_class.dsls.to_h(:dsl_name)).to eql(
         {
           dummy_class => {
             arguments: {},

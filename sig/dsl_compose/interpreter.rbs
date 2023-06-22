@@ -7,5 +7,6 @@ module DSLCompose
     def class_executions: (Object klass) -> Array[Execution]
     def dsl_executions: (Symbol dsl_name) -> Array[Execution]
     def to_h: (Symbol dsl_name) -> Hash[Symbol, Hash[Symbol, Array[Hash[Symbol, Symbol]]]]
+    def executions_by_class: () -> Hash[Symbol, Hash[Symbol, Array[Hash[Symbol, Symbol]]]]
   end
 end

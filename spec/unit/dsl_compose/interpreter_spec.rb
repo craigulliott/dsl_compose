@@ -118,4 +118,29 @@ RSpec.describe DSLCompose::Interpreter do
       end
     end
   end
+
+  describe :executions_by_class do
+    it "returns an empty object" do
+      expect(interpreter.executions_by_class).to eql({})
+    end
+
+    describe "when an excecution has occured for this class" do
+      before(:each) do
+        interpreter.execute_dsl dummy_class, dsl
+      end
+
+      it "returns a object, keyed by class, with keys for arguments and method calls" do
+        expect(interpreter.executions_by_class).to eql(
+          {
+            dummy_class => {
+              dsl_name: [{
+                arguments: {},
+                method_calls: {}
+              }]
+            }
+          }
+        )
+      end
+    end
+  end
 end

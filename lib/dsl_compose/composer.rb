@@ -10,13 +10,13 @@ module DSLCompose
 
     class MethodAlreadyExistsWithThisDSLNameError < StandardError
       def message
-        "The define_dsl singleton method already exists for this class."
+        "The `define_dsl` singleton method already exists for this class."
       end
     end
 
     class GetDSLExecutionResultsMethodAlreadyExistsError < StandardError
       def message
-        "The dsl_interpreter singleton method already exists for this class."
+        "The `dsls` singleton method already exists for this class."
       end
     end
 
@@ -30,11 +30,11 @@ module DSLCompose
       interpreter = DSLCompose::Interpreter.new
 
       # return a specific DSL which is defined for this class
-      if klass.respond_to? :dsl_interpreter
+      if klass.respond_to? :dsls
         raise GetDSLExecutionResultsMethodAlreadyExistsError
       end
 
-      klass.define_singleton_method :dsl_interpreter do
+      klass.define_singleton_method :dsls do
         interpreter
       end
 

@@ -17,7 +17,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       method_name
     end
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {},
@@ -46,7 +46,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       method_name
     end
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {},
@@ -77,7 +77,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       method_name
     end
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {},
@@ -121,7 +121,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       method_name
     end
 
-    expect(klass.dsl_interpreter.to_h(:dsl_name)).to eql(
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
       {
         klass => {
           arguments: {},
@@ -170,7 +170,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
         method_name
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
+      expect(dummy_class.dsls.to_h(:dsl_name)).to eql(
         {
           dummy_class => {
             arguments: {},
@@ -206,7 +206,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
         another_method_name
       end
 
-      expect(dummy_class.dsl_interpreter.to_h(:dsl_name)).to eql(
+      expect(dummy_class.dsls.to_h(:dsl_name)).to eql(
         {
           dummy_class => {
             arguments: {},
