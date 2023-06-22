@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/craigulliott/dsl_compose/compare/v1.1.0...v1.2.0) (2023-06-22)
+
+
+### Features
+
+* adding arguments to initial DSL activation method ([bda7cd4](https://github.com/craigulliott/dsl_compose/commit/bda7cd4ef55bcd4bfd2be530b6a28645dee87885))
+
 ## [1.1.0](https://github.com/craigulliott/dsl_compose/compare/v1.0.0...v1.1.0) (2023-06-20)
 
 
