@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/craigulliott/dsl_compose/compare/v1.2.0...v1.3.0) (2023-06-22)
+
+
+### Features
+
+* adding an executions_by_class method to make processing the configuration more convenient ([#8](https://github.com/craigulliott/dsl_compose/issues/8)) ([313507c](https://github.com/craigulliott/dsl_compose/commit/313507ca572f59c03162a91d58e62500a9464f25))
+* fixing release please job ([#10](https://github.com/craigulliott/dsl_compose/issues/10)) ([880fa5b](https://github.com/craigulliott/dsl_compose/commit/880fa5b2aceed67aa9ff1e7cf53629af23e31b10))
+
 ## [1.2.0](https://github.com/craigulliott/dsl_compose/compare/v1.1.0...v1.2.0) (2023-06-22)
 
 
