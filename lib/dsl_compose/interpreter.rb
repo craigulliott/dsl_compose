@@ -27,9 +27,14 @@ module DSLCompose
       @executions.filter { |e| e.klass == klass }
     end
 
-    # Returns an array of all executions for a given class.
+    # Returns an array of all executions for a given name.
     def dsl_executions dsl_name
       @executions.filter { |e| e.dsl.name == dsl_name }
+    end
+
+    # Returns an array of all executions for a given name and class.
+    def class_dsl_executions klass, dsl_name
+      @executions.filter { |e| e.klass == klass && e.dsl.name == dsl_name }
     end
 
     def to_h dsl_name

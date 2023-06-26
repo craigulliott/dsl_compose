@@ -1,0 +1,10 @@
+# Classes
+module DSLCompose
+  class Parser
+    def initialize: -> void
+    def self.for_children_of: (Object base_class) -> void
+
+    class NotInitializable < StandardError
+    end
+  end
+end

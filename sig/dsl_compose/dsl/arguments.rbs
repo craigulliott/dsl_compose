@@ -1,20 +1,18 @@
-# TypeProf 0.21.7
-
 # Classes
 module DSLCompose
   class DSL
     class Arguments
-      @arguments: Hash[untyped, untyped]
+      @arguments: Hash[Symbol, Argument]
 
       def initialize: -> void
-      def arguments: -> Array[untyped]
-      def optional_arguments: -> Array[untyped]
-      def required_arguments: -> Array[untyped]
-      def argument: (untyped name) -> nil
-      def optional_argument: (untyped name) -> nil
-      def required_argument: (untyped name) -> nil
-      def has_argument?: (untyped name) -> bool
-      def add_argument: (untyped name, untyped required, untyped `type`) -> untyped
+      def arguments: -> Array[Argument]
+      def optional_arguments: -> Array[Argument]
+      def required_arguments: -> Array[Argument]
+      def argument: (Symbol name) -> Argument
+      def optional_argument: (Symbol name) -> Argument
+      def required_argument: (Symbol name) -> Argument
+      def has_argument?: (Symbol name) -> bool
+      def add_argument: (Symbol name, bool required, argument_type `type`) -> Argument
 
       class ArgumentDoesNotExistError < StandardError
         def message: -> String

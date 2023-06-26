@@ -1,0 +1,8 @@
+# Classes
+module DSLCompose
+  class Parser
+    class BlockArguments
+      def self.accepts_argument?: (Symbol arg_name) -> bool
+    end
+  end
+end
