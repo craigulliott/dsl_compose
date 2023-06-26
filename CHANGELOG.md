@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/craigulliott/dsl_compose/compare/v1.3.0...v1.4.0) (2023-06-26)
+
+
+### Features
+
+* added a Parser class which can be used to react to any DSLs which have been defined and used ([8d2f16b](https://github.com/craigulliott/dsl_compose/commit/8d2f16b67ae98486a47e6e8d6d6af81be508cb06))
+
 ## [1.3.0](https://github.com/craigulliott/dsl_compose/compare/v1.2.0...v1.3.0) (2023-06-22)
 
 
