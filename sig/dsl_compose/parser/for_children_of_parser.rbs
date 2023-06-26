@@ -1,0 +1,34 @@
+# Classes
+module DSLCompose
+  class Parser
+    class ForChildrenOfParser
+      @base_class: Object
+      @child_class: Object
+
+      def initialize: (Object base_class) -> void
+
+      # overriding this method because steep doesn't
+      # correctly infer that a block is being passed to this method
+      def instance_exec: (
+        ::Hash[untyped, untyped] args
+      ) -> void
+
+      private
+      def for_dsl: (Array[Symbol] dsl_names) -> untyped
+
+      class AllBlockParametersMustBeKeywordParametersError < StandardError
+        def message: -> String
+      end
+
+      class ClassDoesNotUseDSLComposeError < StandardError
+      end
+
+      class NoBlockProvided < StandardError
+      end
+
+      class NoChildClassError < StandardError
+        def message: -> String
+      end
+    end
+  end
+end

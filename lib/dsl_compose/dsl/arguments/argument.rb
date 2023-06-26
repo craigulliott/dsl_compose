@@ -40,6 +40,18 @@ module DSLCompose
           end
         end
 
+        class ArgumentNameReservedError < StandardError
+          def message
+            "This argument name is a reserved word. The names #{RESERVED_ARGUMENT_NAMES.join ", "} can not be used here because the Parser uses it to express a structural part of the DSL"
+          end
+        end
+
+        RESERVED_ARGUMENT_NAMES = [
+          :child_class,
+          :dsl_name,
+          :method_name
+        ].freeze
+
         # The name of this Argument.
         attr_reader :name
         # An arguments type. This determines what kind of value can be passed when calling the
@@ -73,6 +85,11 @@ module DSLCompose
         # `block` contains the instructions to further configure this Attribute
         def initialize name, required, type, &block
           if name.is_a? Symbol
+
+            if RESERVED_ARGUMENT_NAMES.include? name
+              raise ArgumentNameReservedError
+            end
+
             @name = name
           else
             raise InvalidNameError

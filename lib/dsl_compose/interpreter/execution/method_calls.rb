@@ -19,6 +19,10 @@ module DSLCompose
           @method_calls << method_call
           method_call
         end
+
+        def method_calls_by_name method_name
+          @method_calls.filter { |mc| mc.method_name == method_name }
+        end
       end
     end
   end

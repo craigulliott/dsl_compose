@@ -1,0 +1,38 @@
+# Classes
+module DSLCompose
+  class Parser
+    class ForChildrenOfParser
+      class ForDSLParser
+        class ForMethodParser
+          @base_class: Object
+          @child_class: Object
+          @dsl_execution: Interpreter::Execution
+          @method_names: Array[Symbol]
+          @method_name: Symbol
+
+          def initialize: (Object base_class, Object child_class, Interpreter::Execution dsl_execution, Array[Symbol] method_names) -> void
+
+          # overriding this method because steep doesn't
+          # correctly infer that a block is being passed to this method
+          def instance_exec: (
+            ::Hash[untyped, untyped] args
+          ) -> void
+
+          class AllBlockParametersMustBeKeywordParametersError < StandardError
+            def message: -> String
+          end
+
+          class NoBlockProvided < StandardError
+          end
+
+          class MethodDoesNotExistError < StandardError
+          end
+
+          class MethodNamesShouldBeSymbolsError < StandardError
+            def message: -> String
+          end
+        end
+      end
+    end
+  end
+end

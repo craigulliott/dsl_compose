@@ -187,6 +187,48 @@ MyClientLibrary.configure do
 end
 ```
 
+## Parsing complicated DSLs
+
+A parser class can be used to process complicated DSLs. In the example below, a base class named SomeBaseClass has DSLs named :dsl1, and :dsl2.
+
+```ruby
+# create your own parser by creating a new class which extends DSLCompose::Parser
+MyParser < DSLCompose::Parser
+  # `for_children_of` will process SomeBaseClass and yield the provided
+  # block once for every class which extends SomeBaseClass and uses at
+  # least one of the DSLs that have been defined on it.
+  for_children_of SomeBaseClass do |child_class:|
+    # `for_dsl` accepts a DSL name or an array of DSL names and will yield
+    # it's provided block once for each time a DSL of that name has been
+    # used on the child_class.
+    #
+    # An error will be raised if any of the provided DSL names does not exist
+    #
+    # You can optionally provide keyword arguments which correspond to any
+    # arguments that were defined for the DSL, if multiple dsl names are provided
+    # then the requested dsl argument must be present on all DSLs otherwise an
+    # error will be raised.
+    for_dsl [:dsl1, :dsl2] do |dsl_name:, a_dsl_argument:|
+      # `for_method` accepts a method name or an array of method names and will
+      # yield it's provided block once for each time a method with this name is
+      # executed within the DSL.
+      #
+      # An error will be raised if any of the provided method names does not exist
+      #
+      # You can optionally provide keyword arguments which correspond to any
+      # arguments that were defined for the DSL method, if multiple method names
+      # are provided then the requested dsl argument must be present on all DSLs
+      # otherwise an error will be raised.
+      for_method :some_method_name do |method_name:, a_method_argument:|
+        # your business logic goes here
+        ...
+      end
+    end
+  end
+end
+```
+
+
 ## Argument validations
 
 The following validations can be added to the arguments of your DSL methods. Validations can be added to both required and optional arguments, and you can add multiple validations to each argument.

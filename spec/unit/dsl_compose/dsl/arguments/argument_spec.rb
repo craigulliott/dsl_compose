@@ -7,19 +7,25 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
   let(:symbol_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, :symbol }
 
   describe :initialize do
-    it "initializes a new DSLMethod without raising any errors" do
+    it "initializes a new Argument without raising any errors" do
       expect {
         DSLCompose::DSL::Arguments::Argument.new :argument_name, true, :integer
       }.to_not raise_error
     end
 
-    it "raises an error if using a string instead of a symbol for the DSLMethod name" do
+    it "raises an error if using a string instead of a symbol for the Argument name" do
       expect {
         DSLCompose::DSL::Arguments::Argument.new "argument_name", true, :integer
       }.to raise_error(DSLCompose::DSL::Arguments::Argument::InvalidNameError)
     end
 
-    it "raises an error if passing an unexpected type for the DSLMethod name" do
+    it "raises an error if using a reserved word for an Argument name" do
+      expect {
+        DSLCompose::DSL::Arguments::Argument.new :method_name, true, :integer
+      }.to raise_error(DSLCompose::DSL::Arguments::Argument::ArgumentNameReservedError)
+    end
+
+    it "raises an error if passing an unexpected type for the Argument name" do
       expect {
         DSLCompose::DSL::Arguments::Argument.new 123, true, :integer
       }.to raise_error(DSLCompose::DSL::Arguments::Argument::InvalidNameError)

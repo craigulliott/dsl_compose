@@ -6,13 +6,13 @@ module DSLCompose
       class Arguments
         class MissingRequiredArgumentsError < StandardError
           def initialize required_count, provided_count
-            super "This method requires #{required_count} arguments, but only #{required_count} were provided"
+            super "This requires #{required_count} arguments, but only #{provided_count} were provided"
           end
         end
 
         class TooManyArgumentsError < StandardError
           def message
-            "Too many arguments provided to this method"
+            "Too many arguments provided"
           end
         end
 
