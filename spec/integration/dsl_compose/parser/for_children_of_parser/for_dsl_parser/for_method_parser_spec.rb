@@ -114,7 +114,6 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       child_classes = []
       method_names = []
       dsl_names = []
-      method_arg_names = []
       common_method_arg_names = []
       parser.for_children_of base_class do |child_class:|
         child_classes << child_class
@@ -147,7 +146,6 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       child_classes = []
       method_names = []
       dsl_names = []
-      method_arg_names = []
       common_method_arg_names = []
       parser.for_children_of base_class do |child_class:|
         child_classes << child_class
