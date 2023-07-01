@@ -11,9 +11,9 @@ Ruby gem to add dynamic DSLs to classes
 
 * Contains a simple internal DSL which is used to declare dynamic DSLs on your classes
 * Takes special care not to pollute the namespace of classes where it is used
-* Use of your declared DSLs is validated at run time
-* Automatically generate documentation and instructions for your DSLs
-* Complete test coverage
+* Use of your declared DSLs is strictly validated at run time
+* Automatically generate documentation for your DSLs
+* Extensive test coverage
 * Very lightweight and no external dependencies
 
 ## Installation
@@ -28,7 +28,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-DSLs are added to classes by including the DSLCompose::Composer module, and then calling the define_dsl singleton method within the class or a child class.
+DSLs are defined and added to classes by including the `DSLCompose::Composer` module, and then calling the `define_dsl` singleton method on that class. Those DSLs can then be used on child classes (classes which extend the original class).
 
 ### Defining your DSL
 
@@ -36,11 +36,11 @@ DSLs are added to classes by including the DSLCompose::Composer module, and then
 class Foo
   include DSLCompose::Composer
 
-  # Define and name the DSL. Your DSL will available on this
+  # Define and name your DSL. Your DSL will be available on this
   # class and any children of this class.
-  define_dsl :my_dsl do
+  define_dsl :your_dsl do
 
-    # A description of your DSL.
+    # A description of your DSL
     description <<-DESCRIPTION
       Add a description of your DSL here, this description will be
       used when generating the documentation for your DSL.
@@ -49,8 +49,8 @@ class Foo
     DESCRIPTION
 
     # You can add required or optional arguments to the initial method which is used
-    # to enter your dynamic DSL (for optional arguments, use `optional` instead of
-    # `required`).
+    # to call your dynamic DSL (for optional arguments, use `optional` instead of
+    # `required`)
     #
     # Arguments are validated, and their expected type must be defined. Supported
     # argument types are :integer, :boolean, :float, :string or :symbol
@@ -66,29 +66,29 @@ class Foo
       # You should provide descriptions for your methods. These descriptions will
       # be used when generating your documentation. Both of these descriptions
       # accept markdown
-      description "A description of my awesome method"
+      description "A description of your method"
 
-      # add your method argument definition here
+      # Add your method argument definition here
     end
 
-    # Define a required within your DSL. If a class uses your DSL but
-    # does not execute this method then an error will be raised.
+    # Define a required method within your DSL. An error will be raised if a class
+    # uses your DSL but does not execute this method
     add_method :a_required_method, required: true do
-      # add your description and method argument definition here (see below)
+      # Add your description here
+      # Add any method arguments here (more info below about method arguments)
     end
 
     # Define a method which can only be called once within your DSL. These
-    # methods will raise an error of they are called multiple times.
+    # "unique" methods will raise an error of they are called multiple times.
     #
-    # There "unique" methods can be optionally marked as required.
+    # unique methods can be optionally marked as required.
     add_unique_method :an_optional_method do
-      # add your description and method argument definition here (see below)
+      # Add your description and any method arguments here (more info below about method arguments)
     end
 
     # Define a method in your DSL which takes arguments
-    add_method :my_method do
-      # A description of my DSL method
-      description "A description of my DSL method"
+    add_method :your_method do
+      description "A description of your DSL method"
 
       # You can add required arguments to your methods. The order in which you
       # define these arguments determines the order of the arguments in your final DSL.
@@ -96,7 +96,7 @@ class Foo
       # Arguments are validated, and their expected type must be defined. Supported
       # argument types are :integer, :boolean, :float, :string or :symbol
       requires :first_method_argument, :string do
-        # You should provide descriptions for your arguments. These descriptions will
+        # You should provide descriptions for your arguments too. These descriptions will
         # be used when generating your documentation. This description supports markdown
         description "A description of the first argument for this method"
       end
@@ -124,8 +124,8 @@ Child classes can then use your new DSL
 ```ruby
 class Bar << Foo
 
-  my_dsl :first_dsl_argument, do
-    my_method "first_method_argument", optional_argument: 123
+  your_dsl :first_dsl_argument, do
+    your_method "first_method_argument", optional_argument: 123
   end
 
 end
