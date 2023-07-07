@@ -6,9 +6,6 @@ module DSLCompose
       class ForDSLParser
         class ForMethodParser
           class AllBlockParametersMustBeKeywordParametersError < StandardError
-            def message
-              "All block parameters must be keyword parameters, i.e. `for_children_of FooClass do |base_class:|`"
-            end
           end
 
           class NoBlockProvided < StandardError
@@ -18,9 +15,6 @@ module DSLCompose
           end
 
           class MethodNamesShouldBeSymbolsError < StandardError
-            def message
-              "Method names must be provided with a symbol or array of symbols"
-            end
           end
 
           # This class will yield to the provided block once for each time a method
@@ -43,7 +37,7 @@ module DSLCompose
             if block.parameters.any?
               # all parameters must be keyword arguments
               if block.parameters.filter { |p| p.first != :keyreq }.any?
-                raise AllBlockParametersMustBeKeywordParametersError
+                raise AllBlockParametersMustBeKeywordParametersError, "All block parameters must be keyword parameters, i.e. `for_children_of FooClass do |base_class:|`"
               end
             end
 
@@ -54,17 +48,17 @@ module DSLCompose
 
             # assert that the provided dsl name is an array
             unless method_names.is_a? Array
-              raise MethodNamesShouldBeSymbolsError
+              raise MethodNamesShouldBeSymbolsError, "Method names `#{method_names}` must be provided with a symbol or array of symbols"
             end
 
             # assert that the provided dsl name is an array of symbols
             unless method_names.all? { |method_name| method_name.is_a? Symbol }
-              raise MethodNamesShouldBeSymbolsError
+              raise MethodNamesShouldBeSymbolsError, "Method names `#{method_names}` must be provided with a symbol or array of symbols"
             end
 
             # assert that the provided method names all exist for the scoped DSL
             unless method_names.all? { |method_name| dsl_execution.dsl.has_dsl_method?(method_name) }
-              raise MethodDoesNotExistError
+              raise MethodDoesNotExistError, "Method names `#{method_names}` must all exist"
             end
 
             # for each provided dsl name, yield to the provided block

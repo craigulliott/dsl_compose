@@ -17,9 +17,17 @@ module DSLCompose
     # `klass` is the class in which the DSL is being used, not
     # the class in which the DSL was defined.
     def execute_dsl klass, dsl, *args, &block
+      # make sure we have these variables for the exception message below
+      class_name = nil
+      class_name = klass.name
+      dsl_name = nil
+      dsl_name = dsl.name
+
       execution = Execution.new(klass, dsl, *args, &block)
       @executions << execution
       execution
+    rescue => e
+      raise e, "Error processing dsl #{dsl_name} for class #{class_name}: #{e.message}", e.backtrace
     end
 
     # Returns an array of all executions for a given class.

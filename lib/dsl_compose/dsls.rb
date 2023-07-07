@@ -3,21 +3,12 @@
 module DSLCompose
   module DSLs
     class ClassDSLDefinitionDoesNotExistError < StandardError
-      def message
-        "The requested DSL does not exist on this class"
-      end
     end
 
     class DSLAlreadyExistsError < StandardError
-      def message
-        "A DSL with this name already exists"
-      end
     end
 
     class NoDSLDefinitionsForClassError < StandardError
-      def message
-        "No DSLs have been defined for this class"
-      end
     end
 
     # an object to hold all of the defined DSLs in our application, the DSLs are
@@ -30,7 +21,7 @@ module DSLCompose
       @dsls[klass] ||= {}
 
       if @dsls[klass].key? name
-        raise DSLAlreadyExistsError
+        raise DSLAlreadyExistsError, "A DSL with the name `#{name}` already exists"
       end
 
       @dsls[klass][name] = DSLCompose::DSL.new(name, klass)
@@ -53,7 +44,7 @@ module DSLCompose
       if @dsls.key? klass
         @dsls[klass].values
       else
-        raise NoDSLDefinitionsForClassError
+        raise NoDSLDefinitionsForClassError, "No DSLs have been defined for this class"
       end
     end
 
@@ -64,10 +55,10 @@ module DSLCompose
         if @dsls[klass].key? name
           @dsls[klass][name]
         else
-          raise ClassDSLDefinitionDoesNotExistError
+          raise ClassDSLDefinitionDoesNotExistError, "The requested DSL `#{name}` does not exist on this class"
         end
       else
-        raise NoDSLDefinitionsForClassError
+        raise NoDSLDefinitionsForClassError, "No DSLs have been defined for this class"
       end
     end
 

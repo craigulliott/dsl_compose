@@ -6,27 +6,21 @@ module DSLCompose
       class Argument
         class NotInValidation
           class InvalidValueError < StandardError
-            def message
-              "The value provided to validate_greater_than must be a number"
-            end
           end
 
           class ValidationFailedError < StandardError
-            def message
-              "The argument is invalid"
-            end
           end
 
           def initialize values
             unless values.is_a?(Array)
-              raise InvalidValueError
+              raise InvalidValueError, "The value `#{values}` provided to this validator must be of type Array"
             end
 
             @values = values
           end
 
           def validate! value
-            raise ValidationFailedError if @values.include?(value)
+            raise ValidationFailedError, "The argument is invalid. Expected not in #{@values} but received #{value}" if @values.include?(value)
           end
         end
       end

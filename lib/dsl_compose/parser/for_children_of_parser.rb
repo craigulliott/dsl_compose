@@ -4,9 +4,6 @@ module DSLCompose
   class Parser
     class ForChildrenOfParser
       class AllBlockParametersMustBeKeywordParametersError < StandardError
-        def message
-          "All block parameters must be keyword parameters, i.e. `for_children_of FooClass do |base_class:|`"
-        end
       end
 
       class ClassDoesNotUseDSLComposeError < StandardError
@@ -16,9 +13,6 @@ module DSLCompose
       end
 
       class NoChildClassError < StandardError
-        def message
-          "No child_class was found, please call this method from within a `for_children_of` block"
-        end
       end
 
       # This class will yield to the provided block for each class which extends the base_class, provided
@@ -26,7 +20,7 @@ module DSLCompose
       def initialize base_class, &block
         # assert the provided class has the DSLCompose::Composer module installed
         unless base_class.respond_to? :dsls
-          raise ClassDoesNotUseDSLComposeError
+          raise ClassDoesNotUseDSLComposeError, base_class
         end
 
         @base_class = base_class
@@ -40,7 +34,7 @@ module DSLCompose
         if block.parameters.any?
           # all parameters must be keyword arguments
           if block.parameters.filter { |p| p.first != :keyreq }.any?
-            raise AllBlockParametersMustBeKeywordParametersError
+            raise AllBlockParametersMustBeKeywordParametersError, "All block parameters must be keyword parameters, i.e. `for_children_of FooClass do |base_class:|`"
           end
         end
 
@@ -78,7 +72,7 @@ module DSLCompose
         child_class = @child_class
 
         unless child_class
-          raise NoChildClassError
+          raise NoChildClassError, "No child_class was found, please call this method from within a `for_children_of` block"
         end
 
         ForDSLParser.new(@base_class, child_class, dsl_names, &block)

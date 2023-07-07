@@ -5,9 +5,6 @@ module DSLCompose
     class ForChildrenOfParser
       class ForDSLParser
         class AllBlockParametersMustBeKeywordParametersError < StandardError
-          def message
-            "All block parameters must be keyword parameters, i.e. `for_dsl :dsl_name do |dsl_name:|`"
-          end
         end
 
         class NoBlockProvided < StandardError
@@ -17,9 +14,6 @@ module DSLCompose
         end
 
         class DSLNamesShouldBeSymbolsError < StandardError
-          def message
-            "DSL names must be provided with a symbol or array of symbols"
-          end
         end
 
         # This class will yield to the provided block once for each time a DSL
@@ -40,7 +34,7 @@ module DSLCompose
           if block.parameters.any?
             # all parameters must be keyword arguments
             if block.parameters.filter { |p| p.first != :keyreq }.any?
-              raise AllBlockParametersMustBeKeywordParametersError
+              raise AllBlockParametersMustBeKeywordParametersError, "All block parameters must be keyword parameters, i.e. `for_dsl :dsl_name do |dsl_name:|`"
             end
           end
 
@@ -51,17 +45,17 @@ module DSLCompose
 
           # assert that the provided dsl name is an array
           unless dsl_names.is_a? Array
-            raise DSLNamesShouldBeSymbolsError
+            raise DSLNamesShouldBeSymbolsError, "DSL names `#{dsl_names}` must be provided with a symbol or array of symbols"
           end
 
           # assert that the provided dsl name is an array of symbols
           unless dsl_names.all? { |dsl_name| dsl_name.is_a? Symbol }
-            raise DSLNamesShouldBeSymbolsError
+            raise DSLNamesShouldBeSymbolsError, "DSL names `#{dsl_names}` must be provided with a symbol or array of symbols"
           end
 
           # assert that the provided dsl names all exist
           unless dsl_names.all? { |dsl_name| DSLs.class_dsl_exists?(base_class, dsl_name) }
-            raise DSLDoesNotExistError
+            raise DSLDoesNotExistError, "DSLs named `#{dsl_names}` must all exist"
           end
 
           # for each provided dsl name, yield to the provided block

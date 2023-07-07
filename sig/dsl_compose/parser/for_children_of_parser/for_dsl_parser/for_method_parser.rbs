@@ -19,8 +19,7 @@ module DSLCompose
           ) -> void
 
           class AllBlockParametersMustBeKeywordParametersError < StandardError
-            def message: -> String
-          end
+                end
 
           class NoBlockProvided < StandardError
           end
@@ -29,8 +28,7 @@ module DSLCompose
           end
 
           class MethodNamesShouldBeSymbolsError < StandardError
-            def message: -> String
-          end
+                end
         end
       end
     end

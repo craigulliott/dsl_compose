@@ -3,26 +3,17 @@
 module DSLCompose
   module Composer
     class ComposerAlreadyInstalledError < StandardError
-      def message
-        "This module has already been included or the define_dsl singleton method already exists for this class."
-      end
     end
 
     class MethodAlreadyExistsWithThisDSLNameError < StandardError
-      def message
-        "The `define_dsl` singleton method already exists for this class."
-      end
     end
 
     class GetDSLExecutionResultsMethodAlreadyExistsError < StandardError
-      def message
-        "The `dsls` singleton method already exists for this class."
-      end
     end
 
     def self.included klass
       if (klass.private_methods + klass.methods).include? :define_dsl
-        raise ComposerAlreadyInstalledError
+        raise ComposerAlreadyInstalledError, "This module has already been included or the define_dsl singleton method already exists for this class."
       end
 
       # create an interpreter for this class which will be shared by all child classes and all
@@ -31,7 +22,7 @@ module DSLCompose
 
       # return a specific DSL which is defined for this class
       if klass.respond_to? :dsls
-        raise GetDSLExecutionResultsMethodAlreadyExistsError
+        raise GetDSLExecutionResultsMethodAlreadyExistsError, "The `dsls` singleton method already exists for this class."
       end
 
       klass.define_singleton_method :dsls do
@@ -52,7 +43,7 @@ module DSLCompose
 
           # ensure that creating this DSL will not override any existing methods on this class
           if respond_to? name
-            raise MethodAlreadyExistsWithThisDSLNameError
+            raise MethodAlreadyExistsWithThisDSLNameError, "The `define_dsl` singleton method `#{name}` already exists for this class."
           end
 
           # add a singleton method with the name of this new DSL onto our class, this is how our new DSL will be accessed

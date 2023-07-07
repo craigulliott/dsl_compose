@@ -7,39 +7,21 @@ module DSLCompose
   # by calling `define_dsl` in a class and passing it a block which contains the DSL definition
   class DSL
     class MethodDoesNotExistError < StandardError
-      def message
-        "This method does not exist for this DSL"
-      end
     end
 
     class MethodAlreadyExistsError < StandardError
-      def message
-        "This method already exists for this DSL"
-      end
     end
 
     class InvalidNameError < StandardError
-      def message
-        "This DSL name is invalid, it must be of type symbol"
-      end
     end
 
     class InvalidDescriptionError < StandardError
-      def message
-        "This DSL description is invalid, it must be of type string and have length greater than 0"
-      end
     end
 
     class DescriptionAlreadyExistsError < StandardError
-      def message
-        "The DSL description has already been set"
-      end
     end
 
     class NoBlockProvidedError < StandardError
-      def message
-        "No block was provided for this DSL"
-      end
     end
 
     # The name of this DSL.
@@ -64,7 +46,7 @@ module DSLCompose
       if name.is_a? Symbol
         @name = name
       else
-        raise InvalidNameError
+        raise InvalidNameError, "The DSL name `#{name}` is invalid, it must be of type symbol"
       end
 
       @klass = klass
@@ -81,8 +63,10 @@ module DSLCompose
         # would have access to all of the methods defined in here.
         Interpreter.new(self).instance_eval(&block)
       else
-        raise NoBlockProvidedError
+        raise NoBlockProvidedError, "No block was provided for this DSL"
       end
+    rescue => e
+      raise e, "Error defining DSL #{@name} on #{@klass}: #{e.message}", e.backtrace
     end
 
     # Set the description for this DSL to the provided value.
@@ -91,11 +75,11 @@ module DSLCompose
     # The `description` can only be set once per DSL
     def set_description description
       unless description.is_a?(String) && description.length > 0
-        raise InvalidDescriptionError
+        raise InvalidDescriptionError, "The DSL description `#{description}` is invalid, it must be of type string and have length greater than 0"
       end
 
       if has_description?
-        raise DescriptionAlreadyExistsError
+        raise DescriptionAlreadyExistsError, "The DSL description has already been set"
       end
 
       @description = description
@@ -112,7 +96,7 @@ module DSLCompose
     # Method `name` must be unique within the DSL.
     def add_method name, unique, required, &block
       if has_dsl_method? name
-        raise MethodAlreadyExistsError
+        raise MethodAlreadyExistsError, "The method `#{name}` already exists for this DSL"
       end
 
       @dsl_methods[name] = DSLMethod.new(name, unique, required, &block)
@@ -139,7 +123,7 @@ module DSLCompose
       if has_dsl_method? name
         @dsl_methods[name]
       else
-        raise MethodDoesNotExistError
+        raise MethodDoesNotExistError, "The method `#{name}` does not exist for this DSL"
       end
     end
 
