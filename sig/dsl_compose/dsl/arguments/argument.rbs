@@ -43,24 +43,19 @@ module DSLCompose
         end
 
         class ValidationAlreadyExistsError < StandardError
-          def message: -> String
-        end
+            end
 
         class InvalidTypeError < StandardError
-          def message: -> String
-        end
+            end
 
         class InvalidNameError < StandardError
-          def message: -> String
-        end
+            end
 
         class InvalidDescriptionError < StandardError
-          def message: -> String
-        end
+            end
 
         class DescriptionAlreadyExistsError < StandardError
-          def message: -> String
-        end
+            end
       end
     end
   end

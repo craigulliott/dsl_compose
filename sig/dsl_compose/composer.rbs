@@ -8,7 +8,6 @@ module DSLCompose
     def self.define_dsl: (Symbol name) -> void
 
     class ComposerAlreadyInstalled < StandardError
-      def message: -> String
     end
   end
 end

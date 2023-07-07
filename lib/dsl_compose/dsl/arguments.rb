@@ -4,33 +4,18 @@ module DSLCompose
   class DSL
     class Arguments
       class ArgumentDoesNotExistError < StandardError
-        def message
-          "This argument does not exist for this DSLMethod"
-        end
       end
 
       class ArgumentOrderingError < StandardError
-        def message
-          "Required arguments can not be added after optional ones"
-        end
       end
 
       class ArgumentAlreadyExistsError < StandardError
-        def message
-          "An argument with this name already exists for this DSL method"
-        end
       end
 
       class RequestedOptionalArgumentIsRequiredError < StandardError
-        def message
-          "A specific argument which was expected to be optional was requested, but the argument found was flagged as required"
-        end
       end
 
       class RequestedRequiredArgumentIsOptionalError < StandardError
-        def message
-          "A specific argument which was expected to be required was requested, but the argument found was flagged as optional"
-        end
       end
 
       def initialize
@@ -58,7 +43,7 @@ module DSLCompose
         if has_argument? name
           @arguments[name]
         else
-          raise ArgumentDoesNotExistError
+          raise ArgumentDoesNotExistError, "The argument `#{name}` does not exist for this DSLMethod"
         end
       end
 
@@ -69,7 +54,7 @@ module DSLCompose
         if arg.optional?
           @arguments[name]
         else
-          raise RequestedOptionalArgumentIsRequiredError
+          raise RequestedOptionalArgumentIsRequiredError, "A specific argument `#{name}` which was expected to be optional was requested, but the argument found was flagged as required"
         end
       end
 
@@ -80,7 +65,7 @@ module DSLCompose
         if arg.required?
           @arguments[name]
         else
-          raise RequestedRequiredArgumentIsOptionalError
+          raise RequestedRequiredArgumentIsOptionalError, "A specific argument `#{name}` which was expected to be required was requested, but the argument found was flagged as optional"
         end
       end
 
@@ -98,12 +83,12 @@ module DSLCompose
       # or optional on the method which is exposed in our DSL.
       def add_argument name, required, type, &block
         if @arguments.key? name
-          raise ArgumentAlreadyExistsError
+          raise ArgumentAlreadyExistsError, "An argument with the name `#{name}` already exists for this DSL method"
         end
 
         # required arguments may not come after optional ones
         if required && optional_arguments.any?
-          raise ArgumentOrderingError
+          raise ArgumentOrderingError, "Required arguments can not be added after optional ones"
         end
 
         @arguments[name] = Argument.new(name, required, type, &block)

@@ -11,15 +11,12 @@ module DSLCompose
     def self.reset: -> void
 
     class ClassDSLDefinitionDoesNotExistError < StandardError
-      def message: -> String
     end
 
     class DSLAlreadyExistsError < StandardError
-      def message: -> String
     end
 
     class NoDSLDefinitionsForClassError < StandardError
-      def message: -> String
     end
   end
 end

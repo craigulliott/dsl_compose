@@ -18,23 +18,18 @@ module DSLCompose
     def has_dsl_method?: (Symbol name) -> bool
 
     class MethodDoesNotExistError < StandardError
-      def message: -> String
     end
 
     class MethodAlreadyExistsError < StandardError
-      def message: -> String
     end
 
     class InvalidNameError < StandardError
-      def message: -> String
     end
 
     class InvalidDescriptionError < StandardError
-      def message: -> String
     end
 
     class DescriptionAlreadyExistsError < StandardError
-      def message: -> String
     end
   end
 end

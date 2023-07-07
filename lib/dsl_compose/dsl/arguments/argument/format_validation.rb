@@ -6,9 +6,6 @@ module DSLCompose
       class Argument
         class FormatValidation
           class ValidationFailedError < StandardError
-            def message
-              "The argument is invalid"
-            end
           end
 
           def initialize regex
@@ -16,7 +13,7 @@ module DSLCompose
           end
 
           def validate! value
-            raise ValidationFailedError if @regex.match(value).nil?
+            raise ValidationFailedError, "The argument is invalid. Expected format #{@regex} but received #{value}" if @regex.match(value).nil?
           end
         end
       end

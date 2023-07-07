@@ -6,9 +6,6 @@ module DSLCompose
       class Argument
         class LengthValidation
           class ValidationFailedError < StandardError
-            def message
-              "The argument is invalid"
-            end
           end
 
           def initialize maximum: nil, minimum: nil, is: nil
@@ -20,17 +17,17 @@ module DSLCompose
           def validate! value
             maximum = @maximum
             unless maximum.nil?
-              raise ValidationFailedError if value.length > maximum
+              raise ValidationFailedError, "The argument is invalid. Expected #{value} to be less than or equal to #{maximum} characters" if value.length > maximum
             end
 
             minimum = @minimum
             unless minimum.nil?
-              raise ValidationFailedError if value.length < minimum
+              raise ValidationFailedError, "The argument is invalid. Expected #{value} to be greater than or equal to #{minimum} characters" if value.length < minimum
             end
 
             is = @is
             unless is.nil?
-              raise ValidationFailedError if value.length != is
+              raise ValidationFailedError, "The argument is invalid. Expected #{value} to be #{is} characters long" if value.length != is
             end
 
             true

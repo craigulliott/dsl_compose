@@ -15,24 +15,19 @@ module DSLCompose
       def add_argument: (Symbol name, bool required, argument_type `type`) -> Argument
 
       class ArgumentDoesNotExistError < StandardError
-        def message: -> String
-      end
+        end
 
       class ArgumentOrderingError < StandardError
-        def message: -> String
-      end
+        end
 
       class ArgumentAlreadyExistsError < StandardError
-        def message: -> String
-      end
+        end
 
       class RequestedOptionalArgumentIsRequiredError < StandardError
-        def message: -> String
-      end
+        end
 
       class RequestedRequiredArgumentIsOptionalError < StandardError
-        def message: -> String
-      end
+        end
     end
   end
 end

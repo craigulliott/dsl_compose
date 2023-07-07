@@ -17,8 +17,7 @@ module DSLCompose
       def for_dsl: (Array[Symbol] dsl_names) -> untyped
 
       class AllBlockParametersMustBeKeywordParametersError < StandardError
-        def message: -> String
-      end
+        end
 
       class ClassDoesNotUseDSLComposeError < StandardError
       end
@@ -27,8 +26,7 @@ module DSLCompose
       end
 
       class NoChildClassError < StandardError
-        def message: -> String
-      end
+        end
     end
   end
 end

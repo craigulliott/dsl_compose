@@ -6,27 +6,21 @@ module DSLCompose
       class Argument
         class GreaterThanOrEqualToValidation
           class InvalidValueError < StandardError
-            def message
-              "The value provided to validate_greater_than must be a number"
-            end
           end
 
           class ValidationFailedError < StandardError
-            def message
-              "The argument is invalid"
-            end
           end
 
           def initialize value
             unless value.is_a?(Numeric)
-              raise InvalidValueError
+              raise InvalidValueError, "The value `#{value}` provided to this validator must be of type number"
             end
 
             @value = value
           end
 
           def validate! value
-            raise ValidationFailedError unless value >= @value
+            raise ValidationFailedError, "The argument is invalid. Expected greater than or equal to #{@value} but received #{value}" unless value >= @value
           end
         end
       end

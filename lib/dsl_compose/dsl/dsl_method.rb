@@ -3,58 +3,16 @@
 module DSLCompose
   class DSL
     class DSLMethod
-      class ArgumentDoesNotExistError < StandardError
-        def message
-          "This argument does not exist for this DSLMethod"
-        end
-      end
-
       class InvalidNameError < StandardError
-        def message
-          "The method #{method_name} is invalid, it must be of type symbol"
-        end
       end
 
       class MethodNameIsReservedError < StandardError
-        def message
-          "This method already would override an existing internal method"
-        end
       end
 
       class InvalidDescriptionError < StandardError
-        def message
-          "The DSL method description is invalid, it must be of type string and have length greater than 0"
-        end
       end
 
       class DescriptionAlreadyExistsError < StandardError
-        def message
-          "The description has already been set"
-        end
-      end
-
-      class ArgumentOrderingError < StandardError
-        def message
-          "Required arguments can not be added after optional ones"
-        end
-      end
-
-      class ArgumentAlreadyExistsError < StandardError
-        def message
-          "An argument with this name already exists for this DSL method"
-        end
-      end
-
-      class RequestedOptionalArgumentIsRequiredError < StandardError
-        def message
-          "A specific argument which was expected to be optional was requested, but the argument found was flagged as required"
-        end
-      end
-
-      class RequestedRequiredArgumentIsOptionalError < StandardError
-        def message
-          "A specific argument which was expected to be required was requested, but the argument found was flagged as optional"
-        end
       end
 
       # The name of this DSLMethod.
@@ -82,12 +40,12 @@ module DSLCompose
 
           # don't allow methods to override existing internal methods
           if Class.respond_to? name
-            raise MethodNameIsReservedError
+            raise MethodNameIsReservedError, "This method #{name} would override an existing internal method"
           end
 
           @name = name
         else
-          raise InvalidNameError
+          raise InvalidNameError, "The method name `#{name}` is invalid, it must be of type symbol"
         end
 
         @unique = unique ? true : false
@@ -101,6 +59,8 @@ module DSLCompose
         if block
           Interpreter.new(self).instance_eval(&block)
         end
+      rescue => e
+        raise e, "Error defining method #{name}: #{e.message}", e.backtrace
       end
 
       # Set the description for this DSLMethod to the provided value.
@@ -109,11 +69,11 @@ module DSLCompose
       # The `description` can only be set once per DSLMethod
       def set_description description
         unless description.is_a?(String) && description.length > 0
-          raise InvalidDescriptionError
+          raise InvalidDescriptionError, "The DSL method description `#{description}` is invalid, it must be of type string and have length greater than 0"
         end
 
         if has_description?
-          raise DescriptionAlreadyExistsError
+          raise DescriptionAlreadyExistsError, "The description has already been set"
         end
 
         @description = description

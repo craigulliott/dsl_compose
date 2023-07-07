@@ -6,9 +6,6 @@ module DSLCompose
       class Argument
         class EqualToValidation
           class ValidationFailedError < StandardError
-            def message
-              "The argument is invalid"
-            end
           end
 
           def initialize value
@@ -16,7 +13,7 @@ module DSLCompose
           end
 
           def validate! value
-            raise ValidationFailedError unless value == @value
+            raise ValidationFailedError, "The argument is invalid. Expected #{@value} but received #{value}" unless value == @value
           end
         end
       end

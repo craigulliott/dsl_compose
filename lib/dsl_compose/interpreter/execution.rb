@@ -4,15 +4,9 @@ module DSLCompose
   class Interpreter
     class Execution
       class MethodIsUniqueError < StandardError
-        def message
-          "This method is unique and can only be called once within this DSL"
-        end
       end
 
       class RequiredMethodNotCalledError < StandardError
-        def message
-          "This method is required, but was not called within this DSL"
-        end
       end
 
       attr_reader :dsl
@@ -36,7 +30,8 @@ module DSLCompose
         # assert that all required methods have been called at least once
         dsl.required_dsl_methods.each do |dsl_method|
           unless @method_calls.method_called? dsl_method.name
-            raise RequiredMethodNotCalledError
+            dsl_method_name = dsl_method&.name
+            raise RequiredMethodNotCalledError, "The method #{dsl_method_name} is required, but was not called within this DSL"
           end
         end
       end
@@ -50,7 +45,7 @@ module DSLCompose
 
         # if the method is unique, then it can only be called once per DSL
         if dsl_method.unique? && @method_calls.method_called?(method_name)
-          raise MethodIsUniqueError
+          raise MethodIsUniqueError, "This method `#{method_name}` is unique and can only be called once within this DSL"
         end
 
         @method_calls.add_method_call dsl_method, *args, &block

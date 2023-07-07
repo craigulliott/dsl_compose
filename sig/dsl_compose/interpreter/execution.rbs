@@ -15,8 +15,7 @@ module DSLCompose
       def respond_to_missing?: (Symbol method_name, *untyped args) -> untyped
 
       class MethodIsUniqueError < StandardError
-        def message: -> String
-      end
+        end
     end
   end
 end

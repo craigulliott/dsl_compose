@@ -5,45 +5,27 @@ module DSLCompose
     class Arguments
       class Argument
         class ValidationIncompatibleError < StandardError
-          def message
-            "The validation is not compatible with this argument type"
-          end
         end
 
         class ValidationAlreadyExistsError < StandardError
-          def message
-            "This validation has already been applied to this method option."
-          end
         end
 
         class InvalidTypeError < StandardError
-          def message
-            "Argument type must be one of :integer, :boolean, :float, :string or :symbol"
-          end
         end
 
         class InvalidNameError < StandardError
-          def message
-            "The option name is invalid, it must be of type symbol."
-          end
         end
 
         class InvalidDescriptionError < StandardError
-          def message
-            "The option description is invalid, it must be of type string and have length greater than 0."
-          end
         end
 
         class DescriptionAlreadyExistsError < StandardError
-          def message
-            "The description has already been set"
-          end
         end
 
         class ArgumentNameReservedError < StandardError
-          def message
-            "This argument name is a reserved word. The names #{RESERVED_ARGUMENT_NAMES.join ", "} can not be used here because the Parser uses it to express a structural part of the DSL"
-          end
+        end
+
+        class ValidationInvalidArgumentError < StandardError
         end
 
         RESERVED_ARGUMENT_NAMES = [
@@ -87,18 +69,18 @@ module DSLCompose
           if name.is_a? Symbol
 
             if RESERVED_ARGUMENT_NAMES.include? name
-              raise ArgumentNameReservedError
+              raise ArgumentNameReservedError, "This argument name `#{name}` is a reserved word. The names #{RESERVED_ARGUMENT_NAMES.join ", "} can not be used here because the Parser uses them to express a structural part of the DSL"
             end
 
             @name = name
           else
-            raise InvalidNameError
+            raise InvalidNameError, "The option name `#{name}` is invalid, it must be of type symbol."
           end
 
           if type == :integer || type == :boolean || type == :float || type == :string || type == :symbol
             @type = type
           else
-            raise InvalidTypeError
+            raise InvalidTypeError, "Argument type `#{type}` must be one of :integer, :boolean, :float, :string or :symbol"
           end
 
           @required = required ? true : false
@@ -111,6 +93,8 @@ module DSLCompose
           if block
             Interpreter.new(self).instance_eval(&block)
           end
+        rescue => e
+          raise e, "Error defining argument #{name}: #{e.message}", e.backtrace
         end
 
         # Set the description for this Argument to the provided value.
@@ -119,11 +103,11 @@ module DSLCompose
         # The `description` can only be set once per Argument
         def set_description description
           unless description.is_a?(String) && description.length > 0
-            raise InvalidDescriptionError
+            raise InvalidDescriptionError, "The option description `#{description}` is invalid, it must be of type string and have length greater than 0."
           end
 
           if has_description?
-            raise DescriptionAlreadyExistsError
+            raise DescriptionAlreadyExistsError, "The description has already been set"
           end
 
           @description = description
@@ -146,11 +130,15 @@ module DSLCompose
 
         def validate_greater_than value
           if @greater_than_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `greater_than` has already been applied to this method option."
+          end
+
+          unless value.is_a?(Numeric)
+            raise ValidationInvalidArgumentError, value
           end
 
           unless @type == :integer || @type == :float
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
           @greater_than_validation = GreaterThanValidation.new value
@@ -158,15 +146,15 @@ module DSLCompose
 
         def validate_greater_than_or_equal_to value
           if @greater_than_or_equal_to_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `greater_than_or_equal_to` has already been applied to this method option."
           end
 
           unless value.is_a?(Numeric)
-            raise ValidationInvalidArgumentError
+            raise ValidationInvalidArgumentError, value
           end
 
           unless @type == :integer || @type == :float
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
           @greater_than_or_equal_to_validation = GreaterThanOrEqualToValidation.new value
@@ -174,15 +162,15 @@ module DSLCompose
 
         def validate_less_than value
           if @less_than_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `less_than` has already been applied to this method option."
           end
 
           unless value.is_a?(Numeric)
-            raise ValidationInvalidArgumentError
+            raise ValidationInvalidArgumentError, value
           end
 
           unless @type == :integer || @type == :float
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
           @less_than_validation = LessThanValidation.new value
@@ -190,15 +178,15 @@ module DSLCompose
 
         def validate_less_than_or_equal_to value
           if @less_than_or_equal_to_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `less_than_or_equal_to` has already been applied to this method option."
           end
 
           unless value.is_a?(Numeric)
-            raise ValidationInvalidArgumentError
+            raise ValidationInvalidArgumentError, value
           end
 
           unless @type == :integer || @type == :float
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
           @less_than_or_equal_to_validation = LessThanOrEqualToValidation.new value
@@ -206,26 +194,26 @@ module DSLCompose
 
         def validate_format regexp
           if @format_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `format` has already been applied to this method option."
           end
 
           unless regexp.is_a? Regexp
-            raise ValidationInvalidArgumentError
+            raise ValidationInvalidArgumentError, regexp
           end
 
           unless @type == :string || @type == :symbol
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
           @format_validation = FormatValidation.new regexp
         end
 
         def validate_equal_to value
           if @equal_to_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `equal_to` has already been applied to this method option."
           end
 
           unless @type == :integer || @type == :float || @type == :string || @type == :symbol || @type == :boolean
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
           @equal_to_validation = EqualToValidation.new value
@@ -233,15 +221,15 @@ module DSLCompose
 
         def validate_in values
           if @in_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `in` has already been applied to this method option."
           end
 
           unless values.is_a? Array
-            raise ValidationInvalidArgumentError
+            raise ValidationInvalidArgumentError, values
           end
 
           unless @type == :integer || @type == :float || @type == :string || @type == :symbol
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
           @in_validation = InValidation.new values
@@ -249,15 +237,15 @@ module DSLCompose
 
         def validate_not_in values
           if @not_in_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `not_in` has already been applied to this method option."
           end
 
           unless values.is_a? Array
-            raise ValidationInvalidArgumentError
+            raise ValidationInvalidArgumentError, values
           end
 
           unless @type == :integer || @type == :float || @type == :string || @type == :symbol
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
           @not_in_validation = NotInValidation.new values
@@ -265,11 +253,11 @@ module DSLCompose
 
         def validate_length maximum: nil, minimum: nil, is: nil
           if @length_validation
-            raise ValidationAlreadyExistsError
+            raise ValidationAlreadyExistsError, "The validation `length` has already been applied to this method option."
           end
 
           unless @type == :string || @type == :symbol
-            raise ValidationIncompatibleError
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
           @length_validation = LengthValidation.new(maximum: maximum, minimum: minimum, is: is)
