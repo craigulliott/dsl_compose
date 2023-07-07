@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/craigulliott/dsl_compose/compare/v1.4.0...v1.5.0) (2023-07-07)
+
+
+### Features
+
+* adding a parser method to rerun the parser, this is most useful from within a test suite when you are testing the parser itself ([#15](https://github.com/craigulliott/dsl_compose/issues/15)) ([fe4de0e](https://github.com/craigulliott/dsl_compose/commit/fe4de0e53f78aff34de4ba1c432b10022d2b6ab4))
+
 ## [1.4.0](https://github.com/craigulliott/dsl_compose/compare/v1.3.0...v1.4.0) (2023-06-26)
 
 
