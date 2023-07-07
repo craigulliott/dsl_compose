@@ -37,6 +37,13 @@ module DSLCompose
       @executions.filter { |e| e.klass == klass && e.dsl.name == dsl_name }
     end
 
+    # removes all executions from the interpreter, this is primarily used from
+    # within a test suite when dynamically creating classes for tests and then
+    # wanting to clear the interpreter before the next test.
+    def clear
+      @executions = []
+    end
+
     def to_h dsl_name
       h = {}
       dsl_executions(dsl_name).each do |execution|

@@ -119,6 +119,32 @@ RSpec.describe DSLCompose::Interpreter do
     end
   end
 
+  describe :clear do
+    it "does not throw an error" do
+      expect {
+        interpreter.clear
+      }.to_not raise_error
+    end
+
+    describe "when an excecution has occured for this class" do
+      before(:each) do
+        interpreter.execute_dsl dummy_class, dsl
+      end
+
+      it "does not throw an error" do
+        expect {
+          interpreter.clear
+        }.to_not raise_error
+      end
+
+      it "clears the executions (evidenced by to_h returning an empty object)" do
+        expect(interpreter.to_h(dsl.name)).to_not eql({})
+        interpreter.clear
+        expect(interpreter.to_h(dsl.name)).to eql({})
+      end
+    end
+  end
+
   describe :executions_by_class do
     it "returns an empty object" do
       expect(interpreter.executions_by_class).to eql({})
