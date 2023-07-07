@@ -45,4 +45,39 @@ RSpec.describe DSLCompose::Parser do
       end
     end
   end
+
+  describe :rerun do
+    describe "For a class which extends a class which has a DSL defined, and uses that defined DSL" do
+      let(:child_class) {
+        Class.new(base_class) do
+          dsl_name :foo do
+          end
+        end
+      }
+      before(:each) {
+        child_class
+      }
+
+      describe "after for_children_of has been called with a block" do
+        let(:tracking_object) {
+          {
+            executions: 0
+          }
+        }
+
+        before(:each) do
+          tr_ob = tracking_object
+          parser.for_children_of base_class do
+            tr_ob[:executions] += 1
+          end
+        end
+
+        it "executes the originally provided block once per child class" do
+          expect(tracking_object[:executions]).to eq(1)
+          parser.rerun
+          expect(tracking_object[:executions]).to eq(2)
+        end
+      end
+    end
+  end
 end

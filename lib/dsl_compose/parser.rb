@@ -27,10 +27,28 @@ module DSLCompose
     # the first step in defining a parser is to set the base_class, this method
     # will yield to the provided block for each child class of the provided base_class
     # provided that the child_class uses at least one of the base_classes defined DSLs
-    def self.for_children_of base_class, &block
+    def self.for_children_of base_class, rerun = false, &block
+      unless rerun
+        @runs ||= []
+        @runs << {
+          base_class: base_class,
+          block: block
+        }
+      end
+
       # we parse the provided block in the context of the ForChildrenOfParser class
       # to help make this code more readable, and to limit polluting the current namespace
       ForChildrenOfParser.new(base_class, &block)
+    end
+
+    # this method is used to rerun the parser, this is most useful from within a test suite
+    # when you are testing the parser itself
+    def self.rerun
+      @runs&.each do |run|
+        base_class = run[:base_class]
+        block = run[:block]
+        for_children_of base_class, true, &block
+      end
     end
   end
 end
