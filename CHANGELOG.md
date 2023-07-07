@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/craigulliott/dsl_compose/compare/v1.5.0...v1.6.0) (2023-07-07)
+
+
+### Features
+
+* added an interpreter clear method to erase state between tests ([#17](https://github.com/craigulliott/dsl_compose/issues/17)) ([9d0a0c9](https://github.com/craigulliott/dsl_compose/commit/9d0a0c9c521bed61f08fecaa388d1410f513498b))
+
 ## [1.5.0](https://github.com/craigulliott/dsl_compose/compare/v1.4.0...v1.5.0) (2023-07-07)
 
 
