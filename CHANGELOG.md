@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/craigulliott/dsl_compose/compare/v1.6.0...v1.7.0) (2023-07-07)
+
+
+### Features
+
+* better error messages ([#19](https://github.com/craigulliott/dsl_compose/issues/19)) ([a9afa6c](https://github.com/craigulliott/dsl_compose/commit/a9afa6cb1b7482d0d7a646b6872ca5e969393eb7))
+
 ## [1.6.0](https://github.com/craigulliott/dsl_compose/compare/v1.5.0...v1.6.0) (2023-07-07)
 
 
