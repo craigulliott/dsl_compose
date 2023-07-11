@@ -125,50 +125,106 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
   end
 
   describe "when interpreting an Argument block which adds an end_with_validation" do
-    before(:each) do
-      symbol_argument_interpreter.instance_eval do
-        validate_end_with :_foo
+    describe "when providing a single value" do
+      before(:each) do
+        symbol_argument_interpreter.instance_eval do
+          validate_end_with :_foo
+        end
+      end
+
+      it "adds the expected validation to the Argument" do
+        expect(symbol_argument.end_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::EndWithValidation
       end
     end
 
-    it "adds the expected validation to the Argument" do
-      expect(symbol_argument.end_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::EndWithValidation
+    describe "when providing an array of values" do
+      before(:each) do
+        symbol_argument_interpreter.instance_eval do
+          validate_end_with [:_foo]
+        end
+      end
+
+      it "adds the expected validation to the Argument" do
+        expect(symbol_argument.end_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::EndWithValidation
+      end
     end
   end
 
   describe "when interpreting an Argument block which adds a not_end_with_validation" do
-    before(:each) do
-      symbol_argument_interpreter.instance_eval do
-        validate_not_end_with :_foo
+    describe "when providing a single value" do
+      before(:each) do
+        symbol_argument_interpreter.instance_eval do
+          validate_not_end_with :_foo
+        end
+      end
+
+      it "adds the expected validation to the Argument" do
+        expect(symbol_argument.not_end_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::NotEndWithValidation
       end
     end
 
-    it "adds the expected validation to the Argument" do
-      expect(symbol_argument.not_end_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::NotEndWithValidation
+    describe "when providing an array of values" do
+      before(:each) do
+        symbol_argument_interpreter.instance_eval do
+          validate_not_end_with [:_foo]
+        end
+      end
+
+      it "adds the expected validation to the Argument" do
+        expect(symbol_argument.not_end_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::NotEndWithValidation
+      end
     end
   end
 
   describe "when interpreting an Argument block which adds a start_with_validation" do
-    before(:each) do
-      symbol_argument_interpreter.instance_eval do
-        validate_start_with :foo_
+    describe "when providing a single value" do
+      before(:each) do
+        symbol_argument_interpreter.instance_eval do
+          validate_start_with :foo_
+        end
+      end
+
+      it "adds the expected validation to the Argument" do
+        expect(symbol_argument.start_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::StartWithValidation
       end
     end
 
-    it "adds the expected validation to the Argument" do
-      expect(symbol_argument.start_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::StartWithValidation
+    describe "when providing an array of values" do
+      before(:each) do
+        symbol_argument_interpreter.instance_eval do
+          validate_start_with [:foo_]
+        end
+      end
+
+      it "adds the expected validation to the Argument" do
+        expect(symbol_argument.start_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::StartWithValidation
+      end
     end
   end
 
   describe "when interpreting an Argument block which adds a not_start_with_validation" do
-    before(:each) do
-      symbol_argument_interpreter.instance_eval do
-        validate_not_start_with :foo_
+    describe "when providing a single value" do
+      before(:each) do
+        symbol_argument_interpreter.instance_eval do
+          validate_not_start_with :foo_
+        end
+      end
+
+      it "adds the expected validation to the Argument" do
+        expect(symbol_argument.not_start_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::NotStartWithValidation
       end
     end
 
-    it "adds the expected validation to the Argument" do
-      expect(symbol_argument.not_start_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::NotStartWithValidation
+    describe "when providing an array of values" do
+      before(:each) do
+        symbol_argument_interpreter.instance_eval do
+          validate_not_start_with [:foo_]
+        end
+      end
+
+      it "adds the expected validation to the Argument" do
+        expect(symbol_argument.not_start_with_validation).to be_a DSLCompose::DSL::Arguments::Argument::NotStartWithValidation
+      end
     end
   end
 

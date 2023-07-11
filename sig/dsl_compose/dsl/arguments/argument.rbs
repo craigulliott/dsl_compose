@@ -37,10 +37,10 @@ module DSLCompose
         def validate_equal_to: (Numeric | Symbol | String value) -> void
         def validate_in: (Array[Numeric | Symbol | String] values) -> void
         def validate_not_in: (Array[Numeric | Symbol | String] values) -> void
-        def validate_end_with: (String value) -> void
-        def validate_not_end_with: (String value) -> void
-        def validate_start_with: (String value) -> void
-        def validate_not_start_with: (String value) -> void
+        def validate_end_with: (Symbol | Array[Symbol] value) -> void
+        def validate_not_end_with: (Symbol | Array[Symbol] value) -> void
+        def validate_start_with: (Symbol | Array[Symbol] value) -> void
+        def validate_not_start_with: (Symbol | Array[Symbol] value) -> void
         def validate_length: (?maximum: nil | Numeric, ?minimum: nil | Numeric, ?is: nil | Numeric) -> void
 
         class ValidationInvalidArgumentError < StandardError

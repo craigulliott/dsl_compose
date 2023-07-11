@@ -260,8 +260,8 @@ module DSLCompose
             raise ValidationAlreadyExistsError, "The validation `end_with` has already been applied to this method option."
           end
 
-          unless value.is_a? Symbol
-            raise ValidationInvalidArgumentError, value
+          unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
+            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
           end
 
           unless @type == :string || @type == :symbol
@@ -276,8 +276,8 @@ module DSLCompose
             raise ValidationAlreadyExistsError, "The validation `not_end_with` has already been applied to this method option."
           end
 
-          unless value.is_a? Symbol
-            raise ValidationInvalidArgumentError, value
+          unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
+            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
           end
 
           unless @type == :string || @type == :symbol
@@ -292,8 +292,8 @@ module DSLCompose
             raise ValidationAlreadyExistsError, "The validation `start_with` has already been applied to this method option."
           end
 
-          unless value.is_a? Symbol
-            raise ValidationInvalidArgumentError, value
+          unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
+            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
           end
 
           unless @type == :string || @type == :symbol
@@ -308,8 +308,8 @@ module DSLCompose
             raise ValidationAlreadyExistsError, "The validation `not_start_with` has already been applied to this method option."
           end
 
-          unless value.is_a? Symbol
-            raise ValidationInvalidArgumentError, value
+          unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
+            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
           end
 
           unless @type == :string || @type == :symbol
