@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/craigulliott/dsl_compose/compare/v1.7.0...v1.8.0) (2023-07-11)
+
+
+### Features
+
+* adding start_with, not_start_with, end_with and not_end_with ar… ([#21](https://github.com/craigulliott/dsl_compose/issues/21)) ([ea2f213](https://github.com/craigulliott/dsl_compose/commit/ea2f2130c1b9a856e89cbf9b4f09c0c3c739d3de))
+
 ## [1.7.0](https://github.com/craigulliott/dsl_compose/compare/v1.6.0...v1.7.0) (2023-07-07)
 
 
