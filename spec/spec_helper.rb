@@ -14,8 +14,13 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  # before each spec, clear all the DSLs so that we can start fresh each time
-  config.before(:each) do
+  # after each spec, clear all the DSLs so that we can start fresh each time
+  config.after(:each) do
     DSLCompose::DSLs.reset
+  end
+
+  # after each spec, clear all the shared configuration so that we can start fresh each time
+  config.after(:each) do
+    DSLCompose::SharedConfiguration.clear
   end
 end

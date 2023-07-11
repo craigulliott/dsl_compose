@@ -41,6 +41,8 @@ require "dsl_compose/parser"
 
 require "dsl_compose/composer"
 
+require "dsl_compose/shared_configuration"
+
 require "dsl_compose/dsls"
 
 module DSLCompose

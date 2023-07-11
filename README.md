@@ -15,6 +15,7 @@ Ruby gem to add dynamic DSLs to classes
 * Automatically generate documentation for your DSLs
 * Extensive test coverage
 * Very lightweight and no external dependencies
+* Share common DSL configuration between DSLs
 
 ## Installation
 
@@ -116,6 +117,39 @@ class Foo
 end
 
 ```
+
+### Shared Configuration
+
+If you are composing many DSLs across one or many classes and these DSLs share common configuration, then you can share configuration between them.
+
+Define your shared configuration
+
+```ruby
+DSLCompose::SharedConfiguration.add :my_common_validators do
+  validate_not_end_with [:_id, :_at, :_count, :_type]
+  validate_not_in [:type, :stage]
+  validate_length minimum: 0, maximum: 10
+  validate_format /\A[a-z]+(_[a-z]+)*\Z/
+end
+```
+
+Use your shared DSL from within any of your DSL compositions
+
+```ruby
+class Foo
+  include DSLCompose::Composer
+
+  define_dsl :your_dsl do
+    optional :optional_argument, :integer do
+      # this will import and apply your shared configuration
+      import_shared :my_common_validators
+    end
+
+  end
+end
+```
+
+You can use `import_shared` anywhere within your DSL definition, you can even use `import_shared` within other shared configuration
 
 ### Using your DSL
 
