@@ -260,7 +260,7 @@ module DSLCompose
             raise ValidationAlreadyExistsError, "The validation `end_with` has already been applied to this method option."
           end
 
-          unless value.is_a? String
+          unless value.is_a? Symbol
             raise ValidationInvalidArgumentError, value
           end
 
@@ -276,7 +276,7 @@ module DSLCompose
             raise ValidationAlreadyExistsError, "The validation `not_end_with` has already been applied to this method option."
           end
 
-          unless value.is_a? String
+          unless value.is_a? Symbol
             raise ValidationInvalidArgumentError, value
           end
 
@@ -292,7 +292,7 @@ module DSLCompose
             raise ValidationAlreadyExistsError, "The validation `start_with` has already been applied to this method option."
           end
 
-          unless value.is_a? String
+          unless value.is_a? Symbol
             raise ValidationInvalidArgumentError, value
           end
 
@@ -308,7 +308,7 @@ module DSLCompose
             raise ValidationAlreadyExistsError, "The validation `not_start_with` has already been applied to this method option."
           end
 
-          unless value.is_a? String
+          unless value.is_a? Symbol
             raise ValidationInvalidArgumentError, value
           end
 

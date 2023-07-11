@@ -127,7 +127,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
   describe "when interpreting an Argument block which adds an end_with_validation" do
     before(:each) do
       symbol_argument_interpreter.instance_eval do
-        validate_end_with "_foo"
+        validate_end_with :_foo
       end
     end
 
@@ -139,7 +139,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
   describe "when interpreting an Argument block which adds a not_end_with_validation" do
     before(:each) do
       symbol_argument_interpreter.instance_eval do
-        validate_not_end_with "_foo"
+        validate_not_end_with :_foo
       end
     end
 
@@ -151,7 +151,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
   describe "when interpreting an Argument block which adds a start_with_validation" do
     before(:each) do
       symbol_argument_interpreter.instance_eval do
-        validate_start_with "foo_"
+        validate_start_with :foo_
       end
     end
 
@@ -163,7 +163,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
   describe "when interpreting an Argument block which adds a not_start_with_validation" do
     before(:each) do
       symbol_argument_interpreter.instance_eval do
-        validate_not_start_with "foo_"
+        validate_not_start_with :foo_
       end
     end
 

@@ -11,16 +11,27 @@ module DSLCompose
           class ValidationFailedError < StandardError
           end
 
-          def initialize value
-            unless value.is_a?(String)
-              raise InvalidValueError, "The value `#{value}` provided to this validator must be of type String"
+          def initialize values
+            # if the provided values is a symbol, then convert it to an array
+            if values.is_a? Symbol
+              values = [values]
             end
 
-            @value = value
+            # assert that the provided values is an array
+            unless values.is_a? Array
+              raise ValidationFailedError, "The value `#{values}` provided to this validator must be a Symbol or an Array of Symbols"
+            end
+
+            # assert that the provided values is an array of symbols
+            unless values.all? { |value| value.is_a? Symbol }
+              raise ValidationFailedError, "The value `#{values}` provided to this validator must be a Symbol or an Array of Symbols"
+            end
+
+            @values = values
           end
 
           def validate! value
-            raise ValidationFailedError, "The argument is invalid. Expected `#{value}` to not start with `#{@value}`" if value.start_with? @value
+            raise ValidationFailedError, "The argument is invalid. Expected `#{value}` to not start with `#{@values}`" if @values.filter { |v| value.start_with? v.to_s }.any?
             true
           end
         end

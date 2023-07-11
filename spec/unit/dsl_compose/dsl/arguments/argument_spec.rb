@@ -247,17 +247,17 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
 
   describe :validate_end_with do
     it "sets the validation without raising an error" do
-      symbol_argument.validate_end_with("_foo")
+      symbol_argument.validate_end_with(:_foo)
     end
 
     describe "when this validation has already been set" do
       before(:each) do
-        symbol_argument.validate_end_with("_foo")
+        symbol_argument.validate_end_with(:_foo)
       end
 
       it "raises an error" do
         expect {
-          symbol_argument.validate_end_with("_foo")
+          symbol_argument.validate_end_with(:_foo)
         }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
       end
     end
@@ -265,17 +265,17 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
 
   describe :validate_not_end_with do
     it "sets the validation without raising an error" do
-      symbol_argument.validate_end_with("_foo")
+      symbol_argument.validate_end_with(:_foo)
     end
 
     describe "when this validation has already been set" do
       before(:each) do
-        symbol_argument.validate_end_with("_foo")
+        symbol_argument.validate_end_with(:_foo)
       end
 
       it "raises an error" do
         expect {
-          symbol_argument.validate_end_with("_foo")
+          symbol_argument.validate_end_with(:_foo)
         }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
       end
     end
@@ -283,17 +283,17 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
 
   describe :validate_start_with do
     it "sets the validation without raising an error" do
-      symbol_argument.validate_start_with("foo_")
+      symbol_argument.validate_start_with(:foo_)
     end
 
     describe "when this validation has already been set" do
       before(:each) do
-        symbol_argument.validate_start_with("foo_")
+        symbol_argument.validate_start_with(:foo_)
       end
 
       it "raises an error" do
         expect {
-          symbol_argument.validate_start_with("foo_")
+          symbol_argument.validate_start_with(:foo_)
         }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
       end
     end
@@ -301,17 +301,17 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
 
   describe :validate_not_start_with do
     it "sets the validation without raising an error" do
-      symbol_argument.validate_start_with("foo_")
+      symbol_argument.validate_start_with(:foo_)
     end
 
     describe "when this validation has already been set" do
       before(:each) do
-        symbol_argument.validate_start_with("foo_")
+        symbol_argument.validate_start_with(:foo_)
       end
 
       it "raises an error" do
         expect {
-          symbol_argument.validate_start_with("foo_")
+          symbol_argument.validate_start_with(:foo_)
         }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
       end
     end
