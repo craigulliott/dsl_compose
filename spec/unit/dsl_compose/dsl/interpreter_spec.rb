@@ -110,4 +110,22 @@ RSpec.describe DSLCompose::DSL::Interpreter do
       expect(dsl.arguments.argument(:argument_name).optional?).to be(true)
     end
   end
+
+  describe "when interpreting a DSL block which adds an optional argument via shared configuration" do
+    before(:each) do
+      DSLCompose::SharedConfiguration.add :shared_conf do
+        optional :argument_name, :integer
+      end
+
+      interpreter.instance_eval do
+        import_shared :shared_conf
+      end
+    end
+
+    it "adds the expected Argument to the DSL" do
+      expect(dsl.arguments.argument(:argument_name)).to be_a DSLCompose::DSL::Arguments::Argument
+      expect(dsl.arguments.argument(:argument_name).type).to be(:integer)
+      expect(dsl.arguments.argument(:argument_name).optional?).to be(true)
+    end
+  end
 end

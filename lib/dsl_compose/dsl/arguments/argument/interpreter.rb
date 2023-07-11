@@ -99,6 +99,14 @@ module DSLCompose
           def validate_format regexp
             @argument.validate_format regexp
           end
+
+          # executes the shared configuration block with the given name within the
+          # context of this part of the DSL, this is a mechanism to share configuration
+          # between DSLs
+          def import_shared shared_configuration_name
+            block = SharedConfiguration.get shared_configuration_name
+            instance_eval(&block)
+          end
         end
       end
     end

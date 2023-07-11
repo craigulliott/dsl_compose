@@ -239,4 +239,20 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
       expect(symbol_argument.length_validation).to be_a DSLCompose::DSL::Arguments::Argument::LengthValidation
     end
   end
+
+  describe "when interpreting an Argument block which adds a length_validation via shared configuration" do
+    before(:each) do
+      DSLCompose::SharedConfiguration.add :shared_conf do
+        validate_length is: 10
+      end
+
+      symbol_argument_interpreter.instance_eval do
+        import_shared :shared_conf
+      end
+    end
+
+    it "adds the expected validation to the Argument" do
+      expect(symbol_argument.length_validation).to be_a DSLCompose::DSL::Arguments::Argument::LengthValidation
+    end
+  end
 end

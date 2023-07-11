@@ -1,0 +1,21 @@
+# TypeProf 0.21.7
+
+# Classes
+module DSLCompose
+  module SharedConfiguration
+    self.@shared_configuration: Hash[Symbol, untyped]
+
+    def self.add: (Symbol name) -> void
+    def self.get: (Symbol name) -> untyped
+    def self.clear: -> Hash[Symbol, untyped]
+
+    class SharedConfigurationAlreadyExistsError < StandardError
+    end
+
+    class SharedConfigurationDoesNotExistError < StandardError
+    end
+
+    class InvalidSharedConfigurationNameError < StandardError
+    end
+  end
+end
