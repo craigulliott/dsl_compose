@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/craigulliott/dsl_compose/compare/v1.8.0...v1.9.0) (2023-07-11)
+
+
+### Features
+
+* start_with, not_start_with, end_with and not_end_with validators now accept an array of values to test against ([#23](https://github.com/craigulliott/dsl_compose/issues/23)) ([cddcb4b](https://github.com/craigulliott/dsl_compose/commit/cddcb4b629499e3af0d71cc27f5c2f1dd8ae76d5))
+
 ## [1.8.0](https://github.com/craigulliott/dsl_compose/compare/v1.7.0...v1.8.0) (2023-07-11)
 
 
