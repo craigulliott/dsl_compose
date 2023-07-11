@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/craigulliott/dsl_compose/compare/v1.9.1...v1.10.0) (2023-07-11)
+
+
+### Features
+
+* ability to easily share configuration between multiple DSLs ([#27](https://github.com/craigulliott/dsl_compose/issues/27)) ([38ff61b](https://github.com/craigulliott/dsl_compose/commit/38ff61bed7c9d4357a0019c40fc20bc54d62bebb))
+
 ## [1.9.1](https://github.com/craigulliott/dsl_compose/compare/v1.9.0...v1.9.1) (2023-07-11)
 
 
