@@ -6,10 +6,10 @@ module DSLCompose
     class Arguments
       class Argument
         class NotStartWithValidation
-          @value: String
+          @values: Array[Symbol]
 
-          def initialize: (String value) -> void
-          def validate!: (String value) -> true
+          def initialize: (Array[Symbol]) -> void
+          def validate!: (Symbol | String value) -> true
 
           class InvalidValueError < StandardError
           end
