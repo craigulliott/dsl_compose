@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/craigulliott/dsl_compose/compare/v1.9.0...v1.9.1) (2023-07-11)
+
+
+### Bug Fixes
+
+* bug fix where argument class was using wrong type check for start and end with validators ([#25](https://github.com/craigulliott/dsl_compose/issues/25)) ([d16fd35](https://github.com/craigulliott/dsl_compose/commit/d16fd35d0b574eafe6ad9d68d4e7f5884e89c521))
+
 ## [1.9.0](https://github.com/craigulliott/dsl_compose/compare/v1.8.0...v1.9.0) (2023-07-11)
 
 
