@@ -1,20 +1,21 @@
+# TypeProf 0.21.7
+
 # Classes
 module DSLCompose
   class DSL
     class Arguments
       class Argument
-        class GreaterThanValidation
-          @value: Numeric
+        class NotStartWithValidation
+          @value: String
 
-          def initialize: (Numeric value) -> void
-          def validate!: (Numeric value) -> true
+          def initialize: (String value) -> void
+          def validate!: (String value) -> true
 
           class InvalidValueError < StandardError
           end
 
           class ValidationFailedError < StandardError
           end
-
         end
       end
     end

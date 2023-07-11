@@ -7,7 +7,13 @@ module DSLCompose
           @values: Array[Numeric | Symbol | String]
 
           def initialize: (Array[Numeric | Symbol | String] values) -> void
-          def validate!: (Numeric | Symbol | String value) -> void
+          def validate!: (Numeric | Symbol | String value) -> true
+
+          class InvalidValueError < StandardError
+          end
+
+          class ValidationFailedError < StandardError
+          end
         end
       end
     end

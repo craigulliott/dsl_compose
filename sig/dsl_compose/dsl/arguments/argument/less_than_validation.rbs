@@ -7,7 +7,13 @@ module DSLCompose
           @value: Numeric
 
           def initialize: (Numeric value) -> void
-          def validate!: (Numeric value) -> void
+          def validate!: (Numeric value) -> true
+
+          class InvalidValueError < StandardError
+          end
+
+          class ValidationFailedError < StandardError
+          end
         end
       end
     end

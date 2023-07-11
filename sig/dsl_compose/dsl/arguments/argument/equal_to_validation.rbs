@@ -7,7 +7,12 @@ module DSLCompose
           @value: Numeric | String | Symbol | bool
 
           def initialize: (Numeric | String | Symbol | bool value) -> void
-          def validate!: (Numeric | String | Symbol | bool value) -> void
+          def validate!: (Numeric | String | Symbol | bool value) -> true
+
+
+          class ValidationFailedError < StandardError
+          end
+
         end
       end
     end

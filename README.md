@@ -292,6 +292,18 @@ The following validations can be added to the arguments of your DSL methods. Val
         # The argument must be one of the provided values.
         validate_in ["cat", "dog"]
 
+        # The argument must start with the following string.
+        validate_start_with ["foo_"]
+
+        # The argument must not start with the following string.
+        validate_not_start_with ["foo_"]
+
+        # The argument must end with the following string.
+        validate_end_with ["_foo"]
+
+        # The argument must not end with the following string.
+        validate_not_end_with ["_foo"]
+
         # The argument must match the provided regex.
         validate_format /\A[A-Z][a-z]+\Z/
 
@@ -326,6 +338,18 @@ The following validations can be added to the arguments of your DSL methods. Val
 
         # The argument must be one of the provided values.
         validate_in [:cat, :dog]
+
+        # The argument must start with the following string.
+        validate_start_with ["foo_"]
+
+        # The argument must not start with the following string.
+        validate_not_start_with ["foo_"]
+
+        # The argument must end with the following string.
+        validate_end_with ["_foo"]
+
+        # The argument must not end with the following string.
+        validate_not_end_with ["_foo"]
 
         # The argument must match the provided regex.
         validate_format /\A[A-Z][a-z]+\Z/

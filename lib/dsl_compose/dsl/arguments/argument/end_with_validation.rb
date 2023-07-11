@@ -4,7 +4,7 @@ module DSLCompose
   class DSL
     class Arguments
       class Argument
-        class GreaterThanOrEqualToValidation
+        class EndWithValidation
           class InvalidValueError < StandardError
           end
 
@@ -12,15 +12,15 @@ module DSLCompose
           end
 
           def initialize value
-            unless value.is_a?(Numeric)
-              raise InvalidValueError, "The value `#{value}` provided to this validator must be of type number"
+            unless value.is_a?(String)
+              raise InvalidValueError, "The value `#{value}` provided to this validator must be of type String"
             end
 
             @value = value
           end
 
           def validate! value
-            raise ValidationFailedError, "The argument is invalid. Expected greater than or equal to #{@value} but received #{value}" unless value >= @value
+            raise ValidationFailedError, "The argument is invalid. Expected `#{value}` to end with `#{@value}`" unless value.end_with? @value
             true
           end
         end

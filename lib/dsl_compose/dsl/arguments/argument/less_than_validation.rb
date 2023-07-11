@@ -21,6 +21,7 @@ module DSLCompose
 
           def validate! value
             raise ValidationFailedError, "The argument is invalid. Expected less than #{@value} but received #{value}" unless value < @value
+            true
           end
         end
       end

@@ -56,6 +56,10 @@ module DSLCompose
         attr_reader :equal_to_validation
         attr_reader :in_validation
         attr_reader :not_in_validation
+        attr_reader :end_with_validation
+        attr_reader :not_end_with_validation
+        attr_reader :start_with_validation
+        attr_reader :not_start_with_validation
         attr_reader :length_validation
 
         # Create a new Attribute object.
@@ -251,6 +255,70 @@ module DSLCompose
           @not_in_validation = NotInValidation.new values
         end
 
+        def validate_end_with value
+          if @end_with_validation
+            raise ValidationAlreadyExistsError, "The validation `end_with` has already been applied to this method option."
+          end
+
+          unless value.is_a? String
+            raise ValidationInvalidArgumentError, value
+          end
+
+          unless @type == :string || @type == :symbol
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
+          end
+
+          @end_with_validation = EndWithValidation.new value
+        end
+
+        def validate_not_end_with value
+          if @not_end_with_validation
+            raise ValidationAlreadyExistsError, "The validation `not_end_with` has already been applied to this method option."
+          end
+
+          unless value.is_a? String
+            raise ValidationInvalidArgumentError, value
+          end
+
+          unless @type == :string || @type == :symbol
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
+          end
+
+          @not_end_with_validation = NotEndWithValidation.new value
+        end
+
+        def validate_start_with value
+          if @start_with_validation
+            raise ValidationAlreadyExistsError, "The validation `start_with` has already been applied to this method option."
+          end
+
+          unless value.is_a? String
+            raise ValidationInvalidArgumentError, value
+          end
+
+          unless @type == :string || @type == :symbol
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
+          end
+
+          @start_with_validation = StartWithValidation.new value
+        end
+
+        def validate_not_start_with value
+          if @not_start_with_validation
+            raise ValidationAlreadyExistsError, "The validation `not_start_with` has already been applied to this method option."
+          end
+
+          unless value.is_a? String
+            raise ValidationInvalidArgumentError, value
+          end
+
+          unless @type == :string || @type == :symbol
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
+          end
+
+          @not_start_with_validation = NotStartWithValidation.new value
+        end
+
         def validate_length maximum: nil, minimum: nil, is: nil
           if @length_validation
             raise ValidationAlreadyExistsError, "The validation `length` has already been applied to this method option."
@@ -282,6 +350,10 @@ module DSLCompose
             (equal_to_validation.nil? || equal_to_validation.validate!(value)) &&
             (in_validation.nil? || in_validation.validate!(value)) &&
             (not_in_validation.nil? || not_in_validation.validate!(value)) &&
+            (end_with_validation.nil? || end_with_validation.validate!(value)) &&
+            (not_end_with_validation.nil? || not_end_with_validation.validate!(value)) &&
+            (start_with_validation.nil? || start_with_validation.validate!(value)) &&
+            (not_start_with_validation.nil? || not_start_with_validation.validate!(value)) &&
             (length_validation.nil? || length_validation.validate!(value))
         end
 
@@ -291,6 +363,10 @@ module DSLCompose
             (equal_to_validation.nil? || equal_to_validation.validate!(value)) &&
             (in_validation.nil? || in_validation.validate!(value)) &&
             (not_in_validation.nil? || not_in_validation.validate!(value)) &&
+            (end_with_validation.nil? || end_with_validation.validate!(value)) &&
+            (not_end_with_validation.nil? || not_end_with_validation.validate!(value)) &&
+            (start_with_validation.nil? || start_with_validation.validate!(value)) &&
+            (not_start_with_validation.nil? || not_start_with_validation.validate!(value)) &&
             (length_validation.nil? || length_validation.validate!(value))
         end
 

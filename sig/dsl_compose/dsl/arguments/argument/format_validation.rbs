@@ -7,7 +7,14 @@ module DSLCompose
           @regex: Regexp
 
           def initialize: (Regexp regex) -> void
-          def validate!: (String value) -> void
+          def validate!: (String value) -> true
+
+          class InvalidValueError < StandardError
+          end
+
+          class ValidationFailedError < StandardError
+          end
+
         end
       end
     end

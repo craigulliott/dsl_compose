@@ -3,6 +3,7 @@
 require "dsl_compose/version"
 
 require "dsl_compose/dsl/arguments/argument/equal_to_validation"
+require "dsl_compose/dsl/arguments/argument/end_with_validation"
 require "dsl_compose/dsl/arguments/argument/format_validation"
 require "dsl_compose/dsl/arguments/argument/greater_than_or_equal_to_validation"
 require "dsl_compose/dsl/arguments/argument/greater_than_validation"
@@ -10,7 +11,10 @@ require "dsl_compose/dsl/arguments/argument/in_validation"
 require "dsl_compose/dsl/arguments/argument/length_validation"
 require "dsl_compose/dsl/arguments/argument/less_than_or_equal_to_validation"
 require "dsl_compose/dsl/arguments/argument/less_than_validation"
+require "dsl_compose/dsl/arguments/argument/not_end_with_validation"
 require "dsl_compose/dsl/arguments/argument/not_in_validation"
+require "dsl_compose/dsl/arguments/argument/not_start_with_validation"
+require "dsl_compose/dsl/arguments/argument/start_with_validation"
 
 require "dsl_compose/dsl/arguments/argument/interpreter"
 require "dsl_compose/dsl/arguments/argument"
