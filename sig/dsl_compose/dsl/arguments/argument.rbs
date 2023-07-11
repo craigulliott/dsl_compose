@@ -18,6 +18,10 @@ module DSLCompose
         attr_reader equal_to_validation: EqualToValidation
         attr_reader in_validation: InValidation
         attr_reader not_in_validation: NotInValidation
+        attr_reader end_with_validation: EndWithValidation
+        attr_reader not_end_with_validation: NotEndWithValidation
+        attr_reader start_with_validation: StartWithValidation
+        attr_reader not_start_with_validation: NotStartWithValidation
         attr_reader length_validation: LengthValidation
 
         def initialize: (Symbol name, bool required, argument_type `type`) -> void
@@ -33,6 +37,10 @@ module DSLCompose
         def validate_equal_to: (Numeric | Symbol | String value) -> void
         def validate_in: (Array[Numeric | Symbol | String] values) -> void
         def validate_not_in: (Array[Numeric | Symbol | String] values) -> void
+        def validate_end_with: (String value) -> void
+        def validate_not_end_with: (String value) -> void
+        def validate_start_with: (String value) -> void
+        def validate_not_start_with: (String value) -> void
         def validate_length: (?maximum: nil | Numeric, ?minimum: nil | Numeric, ?is: nil | Numeric) -> void
 
         class ValidationInvalidArgumentError < StandardError
@@ -43,19 +51,19 @@ module DSLCompose
         end
 
         class ValidationAlreadyExistsError < StandardError
-            end
+        end
 
         class InvalidTypeError < StandardError
-            end
+        end
 
         class InvalidNameError < StandardError
-            end
+        end
 
         class InvalidDescriptionError < StandardError
-            end
+        end
 
         class DescriptionAlreadyExistsError < StandardError
-            end
+        end
       end
     end
   end
