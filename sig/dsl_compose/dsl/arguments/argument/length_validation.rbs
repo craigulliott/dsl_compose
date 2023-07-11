@@ -9,7 +9,11 @@ module DSLCompose
           @is: nil | Numeric
 
           def initialize: (?maximum: nil | Numeric, ?minimum: nil | Numeric, ?is: nil | Numeric) -> void
-          def validate!: (String | Symbol value) -> void
+          def validate!: (String | Symbol value) -> true
+
+          class ValidationFailedError < StandardError
+          end
+
         end
       end
     end

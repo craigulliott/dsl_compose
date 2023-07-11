@@ -75,6 +75,26 @@ module DSLCompose
             @argument.validate_in values
           end
 
+          # adds an end_with validator to the argument
+          def validate_end_with value
+            @argument.validate_end_with value
+          end
+
+          # adds a not_end_with validator to the argument
+          def validate_not_end_with value
+            @argument.validate_not_end_with value
+          end
+
+          # adds a start_with validator to the argument
+          def validate_start_with value
+            @argument.validate_start_with value
+          end
+
+          # adds a not_start_with validator to the argument
+          def validate_not_start_with value
+            @argument.validate_not_start_with value
+          end
+
           # adds a format validator to the argument
           def validate_format regexp
             @argument.validate_format regexp

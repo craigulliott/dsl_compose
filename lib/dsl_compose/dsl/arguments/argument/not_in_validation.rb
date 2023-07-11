@@ -21,6 +21,7 @@ module DSLCompose
 
           def validate! value
             raise ValidationFailedError, "The argument is invalid. Expected not in #{@values} but received #{value}" if @values.include?(value)
+            true
           end
         end
       end

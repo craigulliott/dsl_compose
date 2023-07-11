@@ -19,6 +19,10 @@ module DSLCompose
           def validate_length: (?minimum: Numeric?, ?maximum: Numeric?, ?is: Numeric?) -> void
           def validate_not_in: ([Numeric | Symbol | String] values) -> void
           def validate_in: ([Numeric | Symbol | String] values) -> void
+          def validate_end_with: (String value) -> void
+          def validate_not_end_with: (String value) -> void
+          def validate_start_with: (String value) -> void
+          def validate_not_start_with: (String value) -> void
           def validate_format: (Regexp regex) -> void
         end
       end
