@@ -77,9 +77,7 @@ module DSLCompose
                 # add any arguments that were provided to the method call
                 method_call.arguments.arguments.each do |name, value|
                   if BlockArguments.accepts_argument?(name, &block)
-                    # if this value is a ClassCoerce object, then convert it from its original
-                    # string value to a class
-                    args[name] = value.is_a?(ClassCoerce) ? value.to_class : value
+                    args[name] = value
                   end
                 end
 

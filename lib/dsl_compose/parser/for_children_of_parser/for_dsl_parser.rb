@@ -73,9 +73,7 @@ module DSLCompose
               # add any arguments that were provided to the DSL
               dsl_execution.arguments.arguments.each do |name, value|
                 if BlockArguments.accepts_argument?(name, &block)
-                  # if this value is a ClassCoerce object, then convert it from its original
-                  # string value to a class
-                  args[name] = value.is_a?(ClassCoerce) ? value.to_class : value
+                  args[name] = value
                 end
               end
               # set the dsl_execution in an instance variable so that method calls to `for_method`

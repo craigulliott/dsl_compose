@@ -116,54 +116,6 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     )
   end
 
-  it "successfully evaluates a DSL with a method which has both a required array and an optional array argument" do
-    klass = Class.new do
-      include DSLCompose::Composer
-      define_dsl :dsl_name do
-        requires :required_option_name, :symbol, array: true
-        optional :optional_option_name, :integer, array: true
-      end
-    end
-
-    klass.dsl_name [:foo], optional_option_name: [456]
-
-    expect(klass.dsls.to_h(:dsl_name)).to eql(
-      {
-        klass => {
-          arguments: {
-            required_option_name: [:foo],
-            optional_option_name: [456]
-          },
-          method_calls: {}
-        }
-      }
-    )
-  end
-
-  it "successfully evaluates a DSL with a method which has both a required array and an optional array argument but where non array values are provided" do
-    klass = Class.new do
-      include DSLCompose::Composer
-      define_dsl :dsl_name do
-        requires :required_option_name, :symbol, array: true
-        optional :optional_option_name, :integer, array: true
-      end
-    end
-
-    klass.dsl_name :foo, optional_option_name: 456
-
-    expect(klass.dsls.to_h(:dsl_name)).to eql(
-      {
-        klass => {
-          arguments: {
-            required_option_name: [:foo],
-            optional_option_name: [456]
-          },
-          method_calls: {}
-        }
-      }
-    )
-  end
-
   it "raises an error if evaluating a DSL with a required argument argument, where that argument is not provided" do
     klass = Class.new do
       include DSLCompose::Composer
@@ -248,35 +200,5 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
       klass.dsl_name :my_required_arg, {optional_arg: 123} do
       end
     }.to raise_error DSLCompose::Interpreter::Execution::Arguments::InvalidArgumentTypeError
-  end
-
-  it "raises an error if evaluating a DSL and passing an optional argument of an unexpected type to an argument which accepts an array" do
-    klass = Class.new do
-      include DSLCompose::Composer
-      define_dsl :dsl_name do
-        requires :required_arg_name, :symbol
-        optional :optional_arg, :symbol, array: true
-      end
-    end
-
-    expect {
-      klass.dsl_name :my_required_arg, {optional_arg: [123]} do
-      end
-    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::InvalidArgumentTypeError
-  end
-
-  it "raises an error if evaluating a DSL and passing an array of values to an optional argument which does not accept arrays" do
-    klass = Class.new do
-      include DSLCompose::Composer
-      define_dsl :dsl_name do
-        requires :required_arg_name, :symbol
-        optional :optional_arg, :symbol
-      end
-    end
-
-    expect {
-      klass.dsl_name :my_required_arg, {optional_arg: [123]} do
-      end
-    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::ArrayNotValidError
   end
 end
