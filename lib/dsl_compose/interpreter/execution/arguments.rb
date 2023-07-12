@@ -53,7 +53,20 @@ module DSLCompose
             # assert the each provided optional argument is valid
             optional_arg.keys.each do |optional_argument_name|
               optional_argument = arguments.optional_argument optional_argument_name
-              optional_arg_value = optional_arg[optional_argument_name]
+
+              # the value for class types are wrapped in a ClassCoerce class so that they can be
+              # treated specially by the parser (it automatically converts them from a string name
+              # to the corresponding class, logic which doesn't happen here in case the class doesnt
+              # exist yet)
+              optional_arg_value = if optional_argument.type == :class
+                if optional_arg[optional_argument_name].is_a?(Array)
+                  optional_arg[optional_argument_name].map { |v| ClassCoerce.new v }
+                else
+                  ClassCoerce.new optional_arg[optional_argument_name]
+                end
+              else
+                optional_arg[optional_argument_name]
+              end
 
               if optional_arg_value.is_a?(Array) && !optional_argument.array
                 raise ArrayNotValidError, "An array was provided to an argument which does not accept an array of values"
@@ -67,30 +80,39 @@ module DSLCompose
                 case optional_argument.type
                 when :integer
                   unless value.is_a? Integer
-                    raise InvalidArgumentTypeError, "#{value} is not an Integer"
+                    raise InvalidArgumentTypeError, "`#{value}` is not an Integer"
                   end
                   optional_argument.validate_integer! value
 
                 when :symbol
                   unless value.is_a? Symbol
-                    raise InvalidArgumentTypeError, "#{value} is not a Symbol"
+                    raise InvalidArgumentTypeError, "`#{value}` is not a Symbol"
                   end
                   optional_argument.validate_symbol! value
 
                 when :string
                   unless value.is_a? String
-                    raise InvalidArgumentTypeError, "#{value} is not a String"
+                    raise InvalidArgumentTypeError, "`#{value}` is not a String"
                   end
                   optional_argument.validate_string! value
 
                 when :boolean
                   unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
-                    raise InvalidArgumentTypeError, "#{value} is not a boolean"
+                    raise InvalidArgumentTypeError, "`#{value}` is not a boolean"
                   end
                   optional_argument.validate_boolean! value
 
+                when :class
+                  unless value.is_a?(ClassCoerce)
+                    raise InvalidArgumentTypeError, "`#{value}` is not a class coerce (String)"
+                  end
+                  optional_argument.validate_class! value
+
+                when :object
+                  optional_argument.validate_object! value
+
                 else
-                  raise InvalidArgumentTypeError, "The argument value #{value} is not a supported type"
+                  raise InvalidArgumentTypeError, "The argument value `#{value}` is not a supported type"
                 end
               end
 
@@ -116,7 +138,19 @@ module DSLCompose
             argument_name = nil
             argument_name = required_argument.name
 
-            required_arg_value = args[i]
+            # the value for class types are wrapped in a ClassCoerce class so that they can be
+            # treated specially by the parser (it automatically converts them from a string name
+            # to the corresponding class, logic which doesn't happen here in case the class doesnt
+            # exist yet)
+            required_arg_value = if required_argument.type == :class
+              if args[i].is_a?(Array)
+                args[i].map { |v| ClassCoerce.new v }
+              else
+                ClassCoerce.new args[i]
+              end
+            else
+              args[i]
+            end
 
             if required_arg_value.is_a?(Array) && !required_argument.array
               raise ArrayNotValidError, "An array was provided to an argument which does not accept an array of values"
@@ -130,30 +164,39 @@ module DSLCompose
               case required_argument.type
               when :integer
                 unless value.is_a? Integer
-                  raise InvalidArgumentTypeError, "#{value} is not an Integer"
+                  raise InvalidArgumentTypeError, "`#{value}` is not an Integer"
                 end
                 required_argument.validate_integer! value
 
               when :symbol
                 unless value.is_a? Symbol
-                  raise InvalidArgumentTypeError, "#{value} is not a Symbol"
+                  raise InvalidArgumentTypeError, "`#{value}` is not a Symbol"
                 end
                 required_argument.validate_symbol! value
 
               when :string
                 unless value.is_a? String
-                  raise InvalidArgumentTypeError, "#{value} is not a String"
+                  raise InvalidArgumentTypeError, "`#{value}` is not a String"
                 end
                 required_argument.validate_string! value
 
               when :boolean
                 unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
-                  raise InvalidArgumentTypeError, "#{value} is not a boolean"
+                  raise InvalidArgumentTypeError, "`#{value}` is not a boolean"
                 end
                 required_argument.validate_boolean! value
 
+              when :class
+                unless value.is_a?(ClassCoerce)
+                  raise InvalidArgumentTypeError, "`#{value}` is not a class coerce (String)"
+                end
+                required_argument.validate_class! value
+
+              when :object
+                required_argument.validate_object! value
+
               else
-                raise InvalidArgumentTypeError, "The argument #{value} is not a supported type"
+                raise InvalidArgumentTypeError, "The argument `#{value}` is not a supported type"
               end
             end
 

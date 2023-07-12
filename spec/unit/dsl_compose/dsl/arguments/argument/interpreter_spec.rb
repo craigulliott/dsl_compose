@@ -7,6 +7,8 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
   let(:integer_argument_interpreter) { DSLCompose::DSL::Arguments::Argument::Interpreter.new integer_argument }
   let(:symbol_argument) { DSLCompose::DSL::Arguments::Argument.new :symbol_argument_name, true, :symbol }
   let(:symbol_argument_interpreter) { DSLCompose::DSL::Arguments::Argument::Interpreter.new symbol_argument }
+  let(:object_argument) { DSLCompose::DSL::Arguments::Argument.new :object_argument_name, true, :object }
+  let(:object_argument_interpreter) { DSLCompose::DSL::Arguments::Argument::Interpreter.new object_argument }
 
   describe :initialize do
     it "initializes a new Interpreter without raising any errors" do
@@ -237,6 +239,18 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
 
     it "adds the expected validation to the Argument" do
       expect(symbol_argument.length_validation).to be_a DSLCompose::DSL::Arguments::Argument::LengthValidation
+    end
+  end
+
+  describe "when interpreting an Argument block which adds a is_a_validation" do
+    before(:each) do
+      object_argument_interpreter.instance_eval do
+        validate_is_a "Regexp"
+      end
+    end
+
+    it "adds the expected validation to the Argument" do
+      expect(object_argument.is_a_validation).to be_a DSLCompose::DSL::Arguments::Argument::IsAValidation
     end
   end
 

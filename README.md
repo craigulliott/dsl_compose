@@ -54,7 +54,9 @@ class Foo
     # `required`)
     #
     # Arguments are validated, and their expected type must be defined. Supported
-    # argument types are :integer, :boolean, :float, :string or :symbol
+    # argument types are :integer, :boolean, :float, :string, :symbol, :class or :object
+    # when :class is used, it should be provided to your final DSL as a string of the
+    # classes name, such as "Users::UserModel" and not the actual class.
     requires :first_dsl_argument, :symbol do
       # You should provide descriptions for your arguments. These descriptions will
       # be used when generating your documentation. This description supports markdown
@@ -110,6 +112,16 @@ class Foo
 
         # You can add validation to your arguments. A full list is provided later in this document
         validate_greater_than 0
+      end
+
+      # All optional and required arguments can optionally accept an array of values. When using
+      # your final DSL, a single item can be provided but will automatically be converted to an
+      # array of items. All items in the array must be of the expected type.
+      optional :another_optional_argument, :object, array: true do
+        description "A description of an optional argument which accepts an array"
+
+        # You can add validation to your arguments. A full list is provided later in this document
+        validate_is_a Date
       end
     end
 
@@ -407,6 +419,42 @@ The following validations can be added to the arguments of your DSL methods. Val
 
         # The provided attribute must be `false`.
         validate_equal_to false
+
+      end
+
+    end
+  end
+```
+
+### Class attributes (:class)
+
+```ruby
+  define_dsl :my_dsl do
+    add_method :my_method do
+
+      requires :my_first_argument, :class do
+
+        # There are no validations for :class types
+
+      end
+
+    end
+  end
+```
+
+### Object attributes (:object)
+
+```ruby
+  define_dsl :my_dsl do
+    add_method :my_method do
+
+      requires :my_first_argument, :object do
+
+        # The provided attribute must be an instantiated object which
+        # is an instance of the class.
+        #
+        # For example, this would accept a regexp object such as /[a-z]+/
+        validate_is_a Regexp
 
       end
 

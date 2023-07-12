@@ -8,6 +8,7 @@ require "dsl_compose/dsl/arguments/argument/format_validation"
 require "dsl_compose/dsl/arguments/argument/greater_than_or_equal_to_validation"
 require "dsl_compose/dsl/arguments/argument/greater_than_validation"
 require "dsl_compose/dsl/arguments/argument/in_validation"
+require "dsl_compose/dsl/arguments/argument/is_a_validation"
 require "dsl_compose/dsl/arguments/argument/length_validation"
 require "dsl_compose/dsl/arguments/argument/less_than_or_equal_to_validation"
 require "dsl_compose/dsl/arguments/argument/less_than_validation"
@@ -40,6 +41,8 @@ require "dsl_compose/parser/block_arguments"
 require "dsl_compose/parser"
 
 require "dsl_compose/composer"
+
+require "dsl_compose/class_coerce"
 
 require "dsl_compose/shared_configuration"
 

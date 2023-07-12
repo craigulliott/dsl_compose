@@ -64,6 +64,7 @@ module DSLCompose
         attr_reader :start_with_validation
         attr_reader :not_start_with_validation
         attr_reader :length_validation
+        attr_reader :is_a_validation
 
         # Create a new Attribute object.
         #
@@ -84,10 +85,10 @@ module DSLCompose
             raise InvalidNameError, "The option name `#{name}` is invalid, it must be of type symbol."
           end
 
-          if type == :integer || type == :boolean || type == :float || type == :string || type == :symbol
+          if type == :integer || type == :boolean || type == :float || type == :string || type == :symbol || type == :class || type == :object
             @type = type
           else
-            raise InvalidTypeError, "Argument type `#{type}` must be one of :integer, :boolean, :float, :string or :symbol"
+            raise InvalidTypeError, "Argument type `#{type}` must be one of :integer, :boolean, :float, :string, :symbol, :class or :object"
           end
 
           @required = required ? true : false
@@ -336,6 +337,18 @@ module DSLCompose
           @length_validation = LengthValidation.new(maximum: maximum, minimum: minimum, is: is)
         end
 
+        def validate_is_a klass
+          if @is_a_validation
+            raise ValidationAlreadyExistsError, "The validation `is_a` has already been applied to this method option."
+          end
+
+          unless @type == :object
+            raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
+          end
+
+          @is_a_validation = IsAValidation.new(klass)
+        end
+
         # returns true if every provided integer validation also returns true
         def validate_integer! value
           (greater_than_validation.nil? || greater_than_validation.validate!(value)) &&
@@ -378,6 +391,17 @@ module DSLCompose
         # returns true if every provided boolean validation also returns true
         def validate_boolean! value
           (equal_to_validation.nil? || equal_to_validation.validate!(value))
+        end
+
+        # returns true if every provided class validation also returns true
+        def validate_class! value
+          # there are no class validations
+          true
+        end
+
+        # returns true if every provided object validation also returns true
+        def validate_object! value
+          (is_a_validation.nil? || is_a_validation.validate!(value))
         end
       end
     end
