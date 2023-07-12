@@ -8,6 +8,7 @@ module DSLCompose
         attr_reader name: Symbol
         attr_reader type: argument_type
         attr_reader required: bool
+        attr_reader array: bool
         attr_reader description: String
 
         attr_reader greater_than_validation: GreaterThanValidation
@@ -24,7 +25,7 @@ module DSLCompose
         attr_reader not_start_with_validation: NotStartWithValidation
         attr_reader length_validation: LengthValidation
 
-        def initialize: (Symbol name, bool required, argument_type `type`) -> void
+        def initialize: (Symbol name, bool required, argument_type `type`, ?array: bool) -> void
         def set_description: (String description) -> untyped
         def required?: -> bool
         def optional?: -> bool

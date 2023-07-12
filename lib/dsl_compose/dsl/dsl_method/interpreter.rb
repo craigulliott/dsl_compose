@@ -38,8 +38,8 @@ module DSLCompose
         # `type` can be either :integer, :boolean, :float, :string or :symbol
         # `block` contains the argument definition and will be evaluated seperately
         # by the Argument::Interpreter
-        def optional name, type, &block
-          @dsl_method.arguments.add_argument name, false, type, &block
+        def optional name, type, array: false, &block
+          @dsl_method.arguments.add_argument name, false, type, array: array, &block
         end
 
         # adds a new required argument to the DSLMethod
@@ -48,8 +48,8 @@ module DSLCompose
         # `type` can be either :integer, :boolean, :float, :string or :symbol
         # `block` contains the argument definition and will be evaluated seperately
         # by the Argument::Interpreter
-        def requires name, type, &block
-          @dsl_method.arguments.add_argument name, true, type, &block
+        def requires name, type, array: false, &block
+          @dsl_method.arguments.add_argument name, true, type, array: array, &block
         end
 
         # executes the shared configuration block with the given name within the

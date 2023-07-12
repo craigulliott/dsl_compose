@@ -42,6 +42,9 @@ module DSLCompose
         attr_reader :type
         # if required, then this Argument must be provided when calling its associated DSLMethod.
         attr_reader :required
+        # If true, then this argument accepts an array of values. It will also accept a single value,
+        # but that single value will be automatically converted to an array
+        attr_reader :array
         # An otional description of this Attribute, if provided then it must be a string.
         # The description accepts markdown and is used when generating documentation.
         attr_reader :description
@@ -69,7 +72,7 @@ module DSLCompose
         # calling its associated DSLMethod.
         # `type` can be either :integer, :boolean, :float, :string or :symbol
         # `block` contains the instructions to further configure this Attribute
-        def initialize name, required, type, &block
+        def initialize name, required, type, array: false, &block
           if name.is_a? Symbol
 
             if RESERVED_ARGUMENT_NAMES.include? name
@@ -88,6 +91,8 @@ module DSLCompose
           end
 
           @required = required ? true : false
+
+          @array = array ? true : false
 
           # If a block was provided, then we evaluate it using a seperate
           # interpreter class. We do this because the interpreter class contains
