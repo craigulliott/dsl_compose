@@ -100,11 +100,6 @@ module DSLCompose
             @argument.validate_format regexp
           end
 
-          # adds an 'is a' validator to the argument
-          def validate_is_a klass
-            @argument.validate_is_a klass
-          end
-
           # executes the shared configuration block with the given name within the
           # context of this part of the DSL, this is a mechanism to share configuration
           # between DSLs

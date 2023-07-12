@@ -12,7 +12,7 @@ module DSLCompose
       def optional_argument: (Symbol name) -> Argument
       def required_argument: (Symbol name) -> Argument
       def has_argument?: (Symbol name) -> bool
-      def add_argument: (Symbol name, bool required, argument_type `type`, ?array: bool) -> Argument
+      def add_argument: (Symbol name, bool required, argument_type `type`) -> Argument
 
       class ArgumentDoesNotExistError < StandardError
         end

@@ -24,7 +24,6 @@ module DSLCompose
           def validate_start_with: (Symbol | Array[Symbol] value) -> void
           def validate_not_start_with: (Symbol | Array[Symbol] value) -> void
           def validate_format: (Regexp regex) -> void
-          def validate_is_a: (String class_name) -> void
         end
       end
     end

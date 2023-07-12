@@ -11,8 +11,6 @@ module DSLCompose
       def description: (String description) -> void
       def add_method: (Symbol name, ?required: nil) -> void
       def add_unique_method: (Symbol name, ?required: nil) -> void
-      def optional: (Symbol name, argument_type `type`, ?array: bool) -> void
-      def requires: (Symbol name, argument_type `type`, ?array: bool) -> void
-  end
+    end
   end
 end
