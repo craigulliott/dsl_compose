@@ -32,6 +32,38 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     end
   end
 
+  describe :name do
+    it "returns the expected value" do
+      expect(integer_argument.name).to eq :argument_name
+    end
+  end
+
+  describe :type do
+    it "returns the expected value" do
+      expect(integer_argument.type).to eq :integer
+    end
+  end
+
+  describe :required do
+    it "returns the expected value" do
+      expect(integer_argument.required).to eq true
+    end
+  end
+
+  describe :array do
+    it "returns the expected value" do
+      expect(integer_argument.array).to eq false
+    end
+
+    describe "when an argument is created with array: true" do
+      let(:integer_array_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, :integer, array: true }
+
+      it "returns the expected value" do
+        expect(integer_array_argument.array).to eq true
+      end
+    end
+  end
+
   describe :set_description do
     it "sets a valid description without raising an error" do
       integer_argument.set_description "This is a description"

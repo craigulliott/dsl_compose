@@ -16,6 +16,9 @@ module DSLCompose
         class InvalidArgumentTypeError < StandardError
         end
 
+        class ArrayNotValidError < StandardError
+        end
+
         attr_reader :arguments
 
         def initialize arguments, *args
@@ -49,40 +52,79 @@ module DSLCompose
 
             # assert the each provided optional argument is valid
             optional_arg.keys.each do |optional_argument_name|
-              optional_arg_value = optional_arg[optional_argument_name]
               optional_argument = arguments.optional_argument optional_argument_name
 
-              case optional_argument.type
-              when :integer
-                unless optional_arg_value.is_a? Integer
-                  raise InvalidArgumentTypeError, "#{optional_arg_value} is not an Integer"
+              # the value for class types are wrapped in a ClassCoerce class so that they can be
+              # treated specially by the parser (it automatically converts them from a string name
+              # to the corresponding class, logic which doesn't happen here in case the class doesnt
+              # exist yet)
+              optional_arg_value = if optional_argument.type == :class
+                if optional_arg[optional_argument_name].is_a?(Array)
+                  optional_arg[optional_argument_name].map { |v| ClassCoerce.new v }
+                else
+                  ClassCoerce.new optional_arg[optional_argument_name]
                 end
-                optional_argument.validate_integer! optional_arg_value
-
-              when :symbol
-                unless optional_arg_value.is_a? Symbol
-                  raise InvalidArgumentTypeError, "#{optional_arg_value} is not a Symbol"
-                end
-                optional_argument.validate_symbol! optional_arg_value
-
-              when :string
-                unless optional_arg_value.is_a? String
-                  raise InvalidArgumentTypeError, "#{optional_arg_value} is not a String"
-                end
-                optional_argument.validate_string! optional_arg_value
-
-              when :boolean
-                unless optional_arg_value.is_a?(TrueClass) || optional_arg_value.is_a?(FalseClass)
-                  raise InvalidArgumentTypeError, "#{optional_arg_value} is not a boolean"
-                end
-                optional_argument.validate_boolean! optional_arg_value
-
               else
-                raise InvalidArgumentTypeError, "The argument #{optional_arg_value} is not a supported type"
+                optional_arg[optional_argument_name]
               end
 
-              # the provided value appears valid for this argument, save the value
-              @arguments[optional_argument_name] = optional_arg_value
+              if optional_arg_value.is_a?(Array) && !optional_argument.array
+                raise ArrayNotValidError, "An array was provided to an argument which does not accept an array of values"
+              end
+
+              # to simplify the code, we always process the reset of the validations as an array, even
+              # if the argument is not of type array
+              values = optional_arg_value.is_a?(Array) ? optional_arg_value : [optional_arg_value]
+
+              values.each do |value|
+                case optional_argument.type
+                when :integer
+                  unless value.is_a? Integer
+                    raise InvalidArgumentTypeError, "`#{value}` is not an Integer"
+                  end
+                  optional_argument.validate_integer! value
+
+                when :symbol
+                  unless value.is_a? Symbol
+                    raise InvalidArgumentTypeError, "`#{value}` is not a Symbol"
+                  end
+                  optional_argument.validate_symbol! value
+
+                when :string
+                  unless value.is_a? String
+                    raise InvalidArgumentTypeError, "`#{value}` is not a String"
+                  end
+                  optional_argument.validate_string! value
+
+                when :boolean
+                  unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
+                    raise InvalidArgumentTypeError, "`#{value}` is not a boolean"
+                  end
+                  optional_argument.validate_boolean! value
+
+                when :class
+                  unless value.is_a?(ClassCoerce)
+                    raise InvalidArgumentTypeError, "`#{value}` is not a class coerce (String)"
+                  end
+                  optional_argument.validate_class! value
+
+                when :object
+                  optional_argument.validate_object! value
+
+                else
+                  raise InvalidArgumentTypeError, "The argument value `#{value}` is not a supported type"
+                end
+              end
+
+              # The provided value appears valid for this argument, save the value.
+              #
+              # If the argument accepts an array of values, then automatically convert valid singular values
+              # into an array.
+              @arguments[optional_argument_name] = if optional_argument.array && !optional_arg_value.is_a?(Array)
+                [optional_arg_value]
+              else
+                optional_arg_value
+              end
 
             rescue => e
               raise e, "Error processing optional argument #{optional_argument_name}: #{e.message}", e.backtrace
@@ -96,38 +138,77 @@ module DSLCompose
             argument_name = nil
             argument_name = required_argument.name
 
-            arg = args[i]
-            case required_argument.type
-            when :integer
-              unless arg.is_a? Integer
-                raise InvalidArgumentTypeError, "#{arg} is not an Integer"
+            # the value for class types are wrapped in a ClassCoerce class so that they can be
+            # treated specially by the parser (it automatically converts them from a string name
+            # to the corresponding class, logic which doesn't happen here in case the class doesnt
+            # exist yet)
+            required_arg_value = if required_argument.type == :class
+              if args[i].is_a?(Array)
+                args[i].map { |v| ClassCoerce.new v }
+              else
+                ClassCoerce.new args[i]
               end
-              required_argument.validate_integer! arg
-
-            when :symbol
-              unless arg.is_a? Symbol
-                raise InvalidArgumentTypeError, "#{arg} is not a Symbol"
-              end
-              required_argument.validate_symbol! arg
-
-            when :string
-              unless arg.is_a? String
-                raise InvalidArgumentTypeError, "#{arg} is not a String"
-              end
-              required_argument.validate_string! arg
-
-            when :boolean
-              unless arg.is_a?(TrueClass) || arg.is_a?(FalseClass)
-                raise InvalidArgumentTypeError, "#{arg} is not a boolean"
-              end
-              required_argument.validate_boolean! arg
-
             else
-              raise InvalidArgumentTypeError, "The argument #{arg} is not a supported type"
+              args[i]
             end
 
-            # the provided value appears valid for this argument, save the value
-            @arguments[required_argument.name] = arg
+            if required_arg_value.is_a?(Array) && !required_argument.array
+              raise ArrayNotValidError, "An array was provided to an argument which does not accept an array of values"
+            end
+
+            # to simplify the code, we always process the reset of the validations as an array, even
+            # if the argument is not of type array
+            values = required_arg_value.is_a?(Array) ? required_arg_value : [required_arg_value]
+
+            values.each do |value|
+              case required_argument.type
+              when :integer
+                unless value.is_a? Integer
+                  raise InvalidArgumentTypeError, "`#{value}` is not an Integer"
+                end
+                required_argument.validate_integer! value
+
+              when :symbol
+                unless value.is_a? Symbol
+                  raise InvalidArgumentTypeError, "`#{value}` is not a Symbol"
+                end
+                required_argument.validate_symbol! value
+
+              when :string
+                unless value.is_a? String
+                  raise InvalidArgumentTypeError, "`#{value}` is not a String"
+                end
+                required_argument.validate_string! value
+
+              when :boolean
+                unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
+                  raise InvalidArgumentTypeError, "`#{value}` is not a boolean"
+                end
+                required_argument.validate_boolean! value
+
+              when :class
+                unless value.is_a?(ClassCoerce)
+                  raise InvalidArgumentTypeError, "`#{value}` is not a class coerce (String)"
+                end
+                required_argument.validate_class! value
+
+              when :object
+                required_argument.validate_object! value
+
+              else
+                raise InvalidArgumentTypeError, "The argument `#{value}` is not a supported type"
+              end
+            end
+
+            # The provided value appears valid for this argument, save the value.
+            #
+            # If the argument accepts an array of values, then automatically convert valid singular values
+            # into an array.
+            @arguments[argument_name] = if required_argument.array && !required_arg_value.is_a?(Array)
+              [required_arg_value]
+            else
+              required_arg_value
+            end
 
           rescue => e
             raise e, "Error processing required argument #{argument_name}: #{e.message}", e.backtrace

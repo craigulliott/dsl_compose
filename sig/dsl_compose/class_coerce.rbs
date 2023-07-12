@@ -1,0 +1,11 @@
+# TypeProf 0.21.7
+
+# Classes
+module DSLCompose
+  class ClassCoerce
+    @class_name: String
+
+    def initialize: (String class_name) -> void
+    def to_class: -> untyped
+  end
+end
