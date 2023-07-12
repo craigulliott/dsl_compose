@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/craigulliott/dsl_compose/compare/v1.10.0...v1.11.0) (2023-07-12)
+
+
+### Features
+
+* arguments can optionally accept arrays of values, also added a :class and :object type, and an associated "is_a" validator for :object ([#31](https://github.com/craigulliott/dsl_compose/issues/31)) ([acd7034](https://github.com/craigulliott/dsl_compose/commit/acd70345a4d1873e657d0e897f527269ca320453))
+
 ## [1.10.0](https://github.com/craigulliott/dsl_compose/compare/v1.9.1...v1.10.0) (2023-07-11)
 
 
