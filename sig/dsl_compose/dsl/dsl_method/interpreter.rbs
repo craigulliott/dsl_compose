@@ -10,8 +10,8 @@ module DSLCompose
 
         private
         def description: (String description) -> void
-        def optional: (Symbol name, argument_type `type`) -> void
-        def requires: (Symbol name, argument_type `type`) -> void
+        def optional: (Symbol name, argument_type `type`, ?array: bool) -> void
+        def requires: (Symbol name, argument_type `type`, ?array: bool) -> void
       end
     end
   end

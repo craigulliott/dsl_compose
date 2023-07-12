@@ -7,7 +7,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
     Class.new do
       include DSLCompose::Composer
       define_dsl :dsl_name do
-        requires :dsl_arg_name, :symbol
+        requires :dsl_arg_name, :symbol, array: true
         requires :common_dsl_arg_name, :symbol
       end
       define_dsl :other_dsl_name do
@@ -18,6 +18,38 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
   let(:child_class1) { Class.new(base_class) }
   let(:child_class2) { Class.new(base_class) }
   let(:parser) { Class.new(DSLCompose::Parser) }
+
+  describe "for a DSL which accepts a class" do
+    let(:base_class_which_accepts_a_class_argument) {
+      Class.new do
+        include DSLCompose::Composer
+        define_dsl :dsl_name do
+          requires :dsl_arg_name, :class
+        end
+      end
+    }
+    let(:child_class1) { Class.new(base_class_which_accepts_a_class_argument) }
+
+    before(:each) do
+      child_class1.dsl_name "Integer"
+    end
+
+    it "parses the DSL and provides the actual class, not the name, in the parse result" do
+      child_classes = []
+      dsl_names = []
+      dsl_args = []
+      parser.for_children_of base_class_which_accepts_a_class_argument do |child_class:|
+        child_classes << child_class
+        for_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
+          dsl_names << dsl_name
+          dsl_args << dsl_arg_name
+        end
+      end
+      expect(child_classes).to eql([child_class1])
+      expect(dsl_names).to eql([:dsl_name])
+      expect(dsl_args).to eql([Integer])
+    end
+  end
 
   describe "for the same DSL used on two different child classes" do
     before(:each) do
@@ -38,7 +70,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       end
       expect(child_classes).to eql([child_class1, child_class2])
       expect(dsl_names).to eql([:dsl_name, :dsl_name])
-      expect(dsl_arg_names).to eql([:foo1, :foo2])
+      expect(dsl_arg_names).to eql([[:foo1], [:foo2]])
     end
   end
 
@@ -61,7 +93,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       end
       expect(child_classes).to eql([child_class1])
       expect(dsl_names).to eql([:dsl_name, :dsl_name])
-      expect(dsl_arg_names).to eql([:foo1, :foo2])
+      expect(dsl_arg_names).to eql([[:foo1], [:foo2]])
     end
   end
 

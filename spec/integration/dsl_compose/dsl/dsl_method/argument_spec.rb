@@ -143,6 +143,74 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     )
   end
 
+  it "successfully evaluates a DSL with a method which has both a required array and an optional array argument" do
+    klass = Class.new do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        add_method :method_name do
+          requires :required_option_name, :symbol, array: true
+          optional :optional_option_name, :integer, array: true
+        end
+      end
+    end
+
+    klass.dsl_name do
+      method_name [:foo], optional_option_name: [456]
+    end
+
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
+      {
+        klass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {
+                  required_option_name: [:foo],
+                  optional_option_name: [456]
+                }
+              }
+            ]
+          }
+        }
+      }
+    )
+  end
+
+  it "successfully evaluates a DSL with a method which has both a required array and an optional array argument but where non array values are provided" do
+    klass = Class.new do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        add_method :method_name do
+          requires :required_option_name, :symbol, array: true
+          optional :optional_option_name, :integer, array: true
+        end
+      end
+    end
+
+    klass.dsl_name do
+      method_name :foo, optional_option_name: 456
+    end
+
+    expect(klass.dsls.to_h(:dsl_name)).to eql(
+      {
+        klass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {
+                  required_option_name: [:foo],
+                  optional_option_name: [456]
+                }
+              }
+            ]
+          }
+        }
+      }
+    )
+  end
+
   it "raises an error if evaluating a DSL with a required method argument, where that argument is not provided" do
     klass = Class.new do
       include DSLCompose::Composer
