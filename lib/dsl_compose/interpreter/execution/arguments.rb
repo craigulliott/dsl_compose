@@ -53,6 +53,7 @@ module DSLCompose
             # assert the each provided optional argument is valid
             optional_arg.keys.each do |optional_argument_name|
               optional_argument = arguments.optional_argument optional_argument_name
+              optional_arg_value = optional_arg[optional_argument_name]
 
               # the value for class types are wrapped in a ClassCoerce class so that they can be
               # treated specially by the parser (it automatically converts them from a string name
