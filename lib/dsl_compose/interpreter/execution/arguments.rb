@@ -68,20 +68,6 @@ module DSLCompose
                 optional_arg[optional_argument_name]
               end
 
-              # the value for class types are wrapped in a ClassCoerce class so that they can be
-              # treated specially by the parser (it automatically converts them from a string name
-              # to the corresponding class, logic which doesn't happen here in case the class doesnt
-              # exist yet)
-              optional_arg_value = if optional_argument.type == :class
-                if optional_arg[optional_argument_name].is_a?(Array)
-                  optional_arg[optional_argument_name].map { |v| ClassCoerce.new v }
-                else
-                  ClassCoerce.new optional_arg[optional_argument_name]
-                end
-              else
-                optional_arg[optional_argument_name]
-              end
-
               if optional_arg_value.is_a?(Array) && !optional_argument.array
                 raise ArrayNotValidError, "An array was provided to an argument which does not accept an array of values"
               end
