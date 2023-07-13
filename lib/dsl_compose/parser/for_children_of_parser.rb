@@ -15,8 +15,26 @@ module DSLCompose
       class NoChildClassError < StandardError
       end
 
-      # This class will yield to the provided block for each class which extends the base_class, provided
-      # that the child also uses at least one of the DSLs which have been defined on the base_class
+      # This class will yield to the provided block for each descendant
+      # class of the provided base_class
+      #
+      # For example:
+      #
+      # class BaseClass
+      #   include DSLCompose::Composer
+      #   define_dsl :my_foo_dsl
+      # end
+      #
+      # class ChildClass < BaseClass
+      #   my_foo_dsl
+      # end
+      #
+      # class GrandchildClass < ChildClass
+      # end
+      #
+      # parser.for_children_of BaseClass do |child_class:|
+      #    # this will yield for ChildClass and GrandchildClass
+      # and
       def initialize base_class, &block
         # assert the provided class has the DSLCompose::Composer module installed
         unless base_class.respond_to? :dsls
@@ -38,9 +56,8 @@ module DSLCompose
           end
         end
 
-        # yield the provided block for each child class of the provided base_class
-        # which uses a defined DSL
-        base_class.dsls.executions_by_class.each do |child_class, dsl|
+        # yeild the block for all descendents of the provided base_class
+        ObjectSpace.each_object(Class).select { |klass| klass < base_class }.each do |child_class|
           args = {}
           if BlockArguments.accepts_argument?(:child_class, &block)
             args[:child_class] = child_class
@@ -57,7 +74,7 @@ module DSLCompose
 
       # Given a dsl name, or array of dsl names, this method will yield to the
       # provided block once for each time a dsl with one of the provided names
-      # was used on the correspondng child_class
+      # was used on the correspondng child_class or any of its ancestors.
       #
       # The value of child_class and base_class are set from the yield of this
       # classes initializer, meaning that the use of this method should look

@@ -19,4 +19,6 @@ Gem::Specification.new do |spec|
   spec.files = ["README.md", "LICENSE.txt", "CHANGELOG.md", "CODE_OF_CONDUCT.md"] + Dir["lib/**/*"]
 
   spec.require_paths = ["lib"]
+
+  spec.add_development_dependency "class_spec_helper"
 end

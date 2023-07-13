@@ -3,23 +3,21 @@
 require "spec_helper"
 
 RSpec.describe DSLCompose::DSL::DSLMethod do
-  let(:dummy_class) { Class.new { include DSLCompose::Composer } }
-
   it "successfully evaluates a DSL with a method, where the method has no configuration block" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name do
         add_method :method_name
       end
     end
 
-    klass.dsl_name do
+    TestClass.dsl_name do
       method_name
     end
 
-    expect(klass.dsls.to_h(:dsl_name)).to eql(
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
       {
-        klass => {
+        TestClass => {
           arguments: {},
           method_calls: {
             method_name: [
@@ -34,21 +32,21 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
   end
 
   it "successfully evaluates a DSL with a method, where the method is called twice" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name do
         add_method :method_name
       end
     end
 
-    klass.dsl_name do
+    TestClass.dsl_name do
       method_name
       method_name
     end
 
-    expect(klass.dsls.to_h(:dsl_name)).to eql(
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
       {
-        klass => {
+        TestClass => {
           arguments: {},
           method_calls: {
             method_name: [
@@ -66,20 +64,20 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
   end
 
   it "successfully evaluates a DSL with a unique method" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name do
         add_unique_method :method_name
       end
     end
 
-    klass.dsl_name do
+    TestClass.dsl_name do
       method_name
     end
 
-    expect(klass.dsls.to_h(:dsl_name)).to eql(
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
       {
-        klass => {
+        TestClass => {
           arguments: {},
           method_calls: {
             method_name: [
@@ -94,7 +92,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
   end
 
   it "raises an error if evaluating a DSL where a unique method is called twice" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name do
         add_unique_method :method_name
@@ -102,7 +100,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
     end
 
     expect {
-      klass.dsl_name do
+      TestClass.dsl_name do
         method_name
         method_name
       end
@@ -110,20 +108,20 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
   end
 
   it "successfully evaluates a DSL with a required method" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name do
         add_method :method_name, required: true
       end
     end
 
-    klass.dsl_name do
+    TestClass.dsl_name do
       method_name
     end
 
-    expect(klass.dsls.to_h(:dsl_name)).to eql(
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
       {
-        klass => {
+        TestClass => {
           arguments: {},
           method_calls: {
             method_name: [
@@ -136,11 +134,11 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
       }
     )
 
-    expect(DSLCompose::DSLs.class_dsl(klass, :dsl_name).dsl_methods.count).to eq(1)
+    expect(DSLCompose::DSLs.class_dsl(TestClass, :dsl_name).dsl_methods.count).to eq(1)
   end
 
   it "raises an error if evaluating a DSL where a required method is not called" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name do
         add_method :method_name, required: true
@@ -148,31 +146,32 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
     end
 
     expect {
-      klass.dsl_name do
+      TestClass.dsl_name do
       end
     }.to raise_error DSLCompose::Interpreter::Execution::RequiredMethodNotCalledError
   end
 
   describe "extending an empty DSL" do
-    let(:dummy_class) { Class.new { include DSLCompose::Composer } }
-
     before(:each) do
-      dummy_class.define_dsl :dsl_name do
+      create_class :TestClassWithEmptyDSL do
+        include DSLCompose::Composer
+        define_dsl :dsl_name do
+        end
       end
     end
 
     it "allows adding a new method and evaluating the DSL" do
-      dummy_class.define_dsl :dsl_name do
+      TestClassWithEmptyDSL.define_dsl :dsl_name do
         add_method :method_name
       end
 
-      dummy_class.dsl_name do
+      TestClassWithEmptyDSL.dsl_name do
         method_name
       end
 
-      expect(dummy_class.dsls.to_h(:dsl_name)).to eql(
+      expect(TestClassWithEmptyDSL.dsls.to_h(:dsl_name)).to eql(
         {
-          dummy_class => {
+          TestClassWithEmptyDSL => {
             arguments: {},
             method_calls: {
               method_name: [
@@ -188,27 +187,28 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
   end
 
   describe "extending a DSL which already has a method" do
-    let(:dummy_class) { Class.new { include DSLCompose::Composer } }
-
     before(:each) do
-      dummy_class.define_dsl :dsl_name do
-        add_method :method_name
+      create_class :TestClassWhichAlreadyHasAMethod do
+        include DSLCompose::Composer
+        define_dsl :dsl_name do
+          add_method :method_name
+        end
       end
     end
 
     it "allows adding a method with a different name and evaluating the DSL with both methods" do
-      dummy_class.define_dsl :dsl_name do
+      TestClassWhichAlreadyHasAMethod.define_dsl :dsl_name do
         add_method :another_method_name
       end
 
-      dummy_class.dsl_name do
+      TestClassWhichAlreadyHasAMethod.dsl_name do
         method_name
         another_method_name
       end
 
-      expect(dummy_class.dsls.to_h(:dsl_name)).to eql(
+      expect(TestClassWhichAlreadyHasAMethod.dsls.to_h(:dsl_name)).to eql(
         {
-          dummy_class => {
+          TestClassWhichAlreadyHasAMethod => {
             arguments: {},
             method_calls: {
               method_name: [
@@ -229,7 +229,7 @@ RSpec.describe DSLCompose::DSL::DSLMethod do
 
     it "raises an error if adding a method with the same name" do
       expect {
-        dummy_class.define_dsl :dsl_name do
+        TestClassWhichAlreadyHasAMethod.define_dsl :dsl_name do
           add_method :method_name
         end
       }.to raise_error(DSLCompose::DSL::MethodAlreadyExistsError)

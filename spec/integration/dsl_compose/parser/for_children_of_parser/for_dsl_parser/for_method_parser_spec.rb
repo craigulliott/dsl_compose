@@ -3,8 +3,8 @@
 require "spec_helper"
 
 RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodParser do
-  let(:base_class) {
-    Class.new do
+  before(:each) do
+    create_class :BaseClass do
       include DSLCompose::Composer
       define_dsl :dsl_name do
         add_method :method_name do
@@ -25,28 +25,31 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
         end
       end
     end
-  }
-  let(:child_class1) { Class.new(base_class) }
-  let(:child_class2) { Class.new(base_class) }
-  let(:parser) { Class.new(DSLCompose::Parser) }
+
+    create_class :ChildClass1, BaseClass
+    create_class :ChildClass2, BaseClass
+    create_class :GrandchildClass, ChildClass1
+
+    create_class :TestParser, DSLCompose::Parser
+  end
 
   describe "where a DSL is used three times, but a method is only called once" do
     before(:each) do
-      child_class1.dsl_name
-      child_class1.dsl_name
-      child_class1.dsl_name do
+      ChildClass1.dsl_name
+      ChildClass1.dsl_name
+      ChildClass1.dsl_name do
         method_name :foo, :bar
       end
-      child_class1.dsl_name
+      ChildClass1.dsl_name
     end
 
-    it "parses for each use of the DSL, but only once for the dsl method with the dsl method args" do
+    it "parses for each use of the DSL, but only once for the dsl method with the dsl method args, and repeats this for GrandchildClass which extends ChildClass1" do
       child_classes = []
       method_names = []
       dsl_names = []
       method_arg_names = []
       common_method_arg_names = []
-      parser.for_children_of base_class do |child_class:|
+      TestParser.for_children_of BaseClass do |child_class:|
         child_classes << child_class
         for_dsl :dsl_name do |dsl_name:|
           dsl_names << dsl_name
@@ -57,31 +60,31 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
           end
         end
       end
-      expect(child_classes).to eql([child_class1])
-      expect(method_names).to eql([:method_name])
-      expect(method_arg_names).to eql([:foo])
-      expect(common_method_arg_names).to eql([:bar])
-      expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name, :dsl_name])
+      expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
+      expect(method_names).to eql([:method_name, :method_name])
+      expect(method_arg_names).to eql([:foo, :foo])
+      expect(common_method_arg_names).to eql([:bar, :bar])
+      expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name, :dsl_name, :dsl_name, :dsl_name, :dsl_name, :dsl_name])
     end
   end
 
   describe "where a DSL method is used twice from the same DSL on the same child class" do
     before(:each) do
-      child_class1.dsl_name do
+      ChildClass1.dsl_name do
         method_name :foo1, :bar1
       end
-      child_class1.dsl_name do
+      ChildClass1.dsl_name do
         method_name :foo2, :bar2
       end
     end
 
-    it "parses for each use of the DSL method" do
+    it "parses for each use of the DSL method, and repeats this for GrandchildClass which extends ChildClass1" do
       child_classes = []
       method_names = []
       dsl_names = []
       method_arg_names = []
       common_method_arg_names = []
-      parser.for_children_of base_class do |child_class:|
+      TestParser.for_children_of BaseClass do |child_class:|
         child_classes << child_class
         for_dsl :dsl_name do |dsl_name:|
           dsl_names << dsl_name
@@ -92,30 +95,30 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
           end
         end
       end
-      expect(child_classes).to eql([child_class1])
-      expect(method_names).to eql([:method_name, :method_name])
-      expect(method_arg_names).to eql([:foo1, :foo2])
-      expect(common_method_arg_names).to eql([:bar1, :bar2])
-      expect(dsl_names).to eql([:dsl_name, :dsl_name])
+      expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
+      expect(method_names).to eql([:method_name, :method_name, :method_name, :method_name])
+      expect(method_arg_names).to eql([:foo1, :foo2, :foo1, :foo2])
+      expect(common_method_arg_names).to eql([:bar1, :bar2, :bar1, :bar2])
+      expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name, :dsl_name])
     end
   end
 
   describe "where a DSL method with the same name is used from two different DSLs on the same child class" do
     before(:each) do
-      child_class1.dsl_name do
+      ChildClass1.dsl_name do
         common_method_name :foo1, :bar1
       end
-      child_class1.other_dsl_name do
+      ChildClass1.other_dsl_name do
         common_method_name :foo2
       end
     end
 
-    it "parses for each use of the DSL method" do
+    it "parses for each use of the DSL method, and repeats this for GrandchildClass which extends ChildClass1" do
       child_classes = []
       method_names = []
       dsl_names = []
       common_method_arg_names = []
-      parser.for_children_of base_class do |child_class:|
+      TestParser.for_children_of BaseClass do |child_class:|
         child_classes << child_class
         for_dsl [:dsl_name, :other_dsl_name] do |dsl_name:|
           dsl_names << dsl_name
@@ -125,29 +128,29 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
           end
         end
       end
-      expect(child_classes).to eql([child_class1])
-      expect(method_names).to eql([:common_method_name, :common_method_name])
-      expect(common_method_arg_names).to eql([:bar1, :foo2])
-      expect(dsl_names).to eql([:dsl_name, :other_dsl_name])
+      expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
+      expect(method_names).to eql([:common_method_name, :common_method_name, :common_method_name, :common_method_name])
+      expect(common_method_arg_names).to eql([:bar1, :foo2, :bar1, :foo2])
+      expect(dsl_names).to eql([:dsl_name, :other_dsl_name, :dsl_name, :other_dsl_name])
     end
   end
 
   describe "where a DSL method with the same name is used from two different DSLs on different child classes" do
     before(:each) do
-      child_class1.dsl_name do
+      ChildClass1.dsl_name do
         common_method_name :foo1, :bar1
       end
-      child_class2.other_dsl_name do
+      ChildClass2.other_dsl_name do
         common_method_name :foo2
       end
     end
 
-    it "parses for each use of the DSL method" do
+    it "parses for each use of the DSL method, and repeats this for GrandchildClass which extends ChildClass1" do
       child_classes = []
       method_names = []
       dsl_names = []
       common_method_arg_names = []
-      parser.for_children_of base_class do |child_class:|
+      TestParser.for_children_of BaseClass do |child_class:|
         child_classes << child_class
         for_dsl [:dsl_name, :other_dsl_name] do |dsl_name:|
           dsl_names << dsl_name
@@ -157,10 +160,10 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
           end
         end
       end
-      expect(child_classes).to eql([child_class1, child_class2])
-      expect(method_names).to eql([:common_method_name, :common_method_name])
-      expect(common_method_arg_names).to eql([:bar1, :foo2])
-      expect(dsl_names).to eql([:dsl_name, :other_dsl_name])
+      expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
+      expect(method_names).to eql([:common_method_name, :common_method_name, :common_method_name])
+      expect(common_method_arg_names).to eql([:bar1, :foo2, :bar1])
+      expect(dsl_names).to eql([:dsl_name, :other_dsl_name, :dsl_name])
     end
   end
 end

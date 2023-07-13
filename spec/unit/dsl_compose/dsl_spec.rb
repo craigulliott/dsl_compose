@@ -3,25 +3,28 @@
 require "spec_helper"
 
 RSpec.describe DSLCompose::DSL do
-  let(:dummy_class) { Class.new }
-  let(:dsl) { DSLCompose::DSL.new :dsl_name, dummy_class }
+  before(:each) do
+    create_class :TestClass
+  end
+
+  let(:dsl) { DSLCompose::DSL.new :dsl_name, TestClass }
 
   describe :initialize do
     it "initializes a new DSL without raising any errors" do
       expect {
-        DSLCompose::DSL.new :dsl_name, dummy_class
+        DSLCompose::DSL.new :dsl_name, TestClass
       }.to_not raise_error
     end
 
     it "raises an error if using a string instead of a symbol for the DSL name" do
       expect {
-        DSLCompose::DSL.new "dsl_name", dummy_class
+        DSLCompose::DSL.new "dsl_name", TestClass
       }.to raise_error(DSLCompose::DSL::InvalidNameError)
     end
 
     it "raises an error if passing an unexpected type for the DSL name" do
       expect {
-        DSLCompose::DSL.new 123, dummy_class
+        DSLCompose::DSL.new 123, TestClass
       }.to raise_error(DSLCompose::DSL::InvalidNameError)
     end
   end

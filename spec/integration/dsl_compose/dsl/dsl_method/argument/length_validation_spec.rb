@@ -4,8 +4,8 @@ require "spec_helper"
 
 RSpec.describe DSLCompose::DSL::Arguments::Argument::LengthValidation do
   describe "for a DSL that has a a method which includes a validated argument" do
-    let(:dummy_class) {
-      Class.new do
+    before(:each) do
+      create_class :TestClass do
         include DSLCompose::Composer
         define_dsl :dsl_name do
           add_method :method_name do
@@ -15,16 +15,16 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::LengthValidation do
           end
         end
       end
-    }
+    end
 
     it "successfully evaluates the DSL when a valid argument is provided to the method" do
-      dummy_class.dsl_name do
+      TestClass.dsl_name do
         method_name "abcdefghij"
       end
 
-      expect(dummy_class.dsls.to_h(:dsl_name)).to eql(
+      expect(TestClass.dsls.to_h(:dsl_name)).to eql(
         {
-          dummy_class => {
+          TestClass => {
             arguments: {},
             method_calls: {
               method_name: [
@@ -42,7 +42,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument::LengthValidation do
 
     it "raises an error when evaluating a DSL with an invalid argument provided to the method" do
       expect {
-        dummy_class.dsl_name do
+        TestClass.dsl_name do
           method_name "abc"
         end
       }.to raise_error DSLCompose::DSL::Arguments::Argument::LengthValidation::ValidationFailedError
