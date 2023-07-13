@@ -3,9 +3,12 @@
 require "spec_helper"
 
 RSpec.describe DSLCompose::Interpreter do
-  let(:dummy_class) { Class.new }
+  before(:each) do
+    create_class :TestClass
+  end
+
   let(:interpreter) { DSLCompose::Interpreter.new }
-  let(:dsl) { DSLCompose::DSL.new :dsl_name, dummy_class }
+  let(:dsl) { DSLCompose::DSL.new :dsl_name, TestClass }
 
   describe :initialize do
     it "initializes a new interpreter without raising any errors" do
@@ -23,7 +26,7 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when an excecution has occured" do
       before(:each) do
-        interpreter.execute_dsl dummy_class, dsl
+        interpreter.execute_dsl TestClass, dsl
       end
 
       it "returns an object representing all executions" do
@@ -36,29 +39,31 @@ RSpec.describe DSLCompose::Interpreter do
 
   describe :class_executions do
     it "returns an empty array" do
-      expect(interpreter.class_executions(dummy_class)).to be_kind_of Array
-      expect(interpreter.class_executions(dummy_class)).to be_empty
+      expect(interpreter.class_executions(TestClass)).to be_kind_of Array
+      expect(interpreter.class_executions(TestClass)).to be_empty
     end
 
     describe "when an excecution has occured for a different class" do
       before(:each) do
-        interpreter.execute_dsl Class.new, dsl
+        create_class :DifferentTestClass
+
+        interpreter.execute_dsl DifferentTestClass, dsl
       end
 
       it "returns an empty array" do
-        expect(interpreter.class_executions(dummy_class)).to be_kind_of Array
-        expect(interpreter.class_executions(dummy_class)).to be_empty
+        expect(interpreter.class_executions(TestClass)).to be_kind_of Array
+        expect(interpreter.class_executions(TestClass)).to be_empty
       end
 
       describe "when an excecution has occured for this class" do
         before(:each) do
-          interpreter.execute_dsl dummy_class, dsl
+          interpreter.execute_dsl TestClass, dsl
         end
 
         it "returns an array with the expected executions" do
-          expect(interpreter.class_executions(dummy_class)).to be_kind_of Array
-          expect(interpreter.class_executions(dummy_class).count).to eq 1
-          expect(interpreter.class_executions(dummy_class).first).to be_kind_of DSLCompose::Interpreter::Execution
+          expect(interpreter.class_executions(TestClass)).to be_kind_of Array
+          expect(interpreter.class_executions(TestClass).count).to eq 1
+          expect(interpreter.class_executions(TestClass).first).to be_kind_of DSLCompose::Interpreter::Execution
         end
       end
     end
@@ -71,10 +76,12 @@ RSpec.describe DSLCompose::Interpreter do
     end
 
     describe "when an excecution has occured for a different dsl" do
-      let(:different_dsl) { DSLCompose::DSL.new :different_dsl_name, dummy_class }
+      let(:different_dsl) { DSLCompose::DSL.new :different_dsl_name, TestClass }
 
       before(:each) do
-        interpreter.execute_dsl Class.new, different_dsl
+        create_class :DifferentTestClass
+
+        interpreter.execute_dsl DifferentTestClass, different_dsl
       end
 
       it "returns an empty array" do
@@ -84,7 +91,7 @@ RSpec.describe DSLCompose::Interpreter do
 
       describe "when an excecution has occured for this dsl" do
         before(:each) do
-          interpreter.execute_dsl dummy_class, dsl
+          interpreter.execute_dsl TestClass, dsl
         end
 
         it "returns an array with the expected executions" do
@@ -103,13 +110,13 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when an excecution has occured for this class" do
       before(:each) do
-        interpreter.execute_dsl dummy_class, dsl
+        interpreter.execute_dsl TestClass, dsl
       end
 
       it "returns a object, keyed by class, with keys for arguments and method calls" do
         expect(interpreter.to_h(dsl.name)).to eql(
           {
-            dummy_class => {
+            TestClass => {
               arguments: {},
               method_calls: {}
             }
@@ -128,7 +135,7 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when an excecution has occured for this class" do
       before(:each) do
-        interpreter.execute_dsl dummy_class, dsl
+        interpreter.execute_dsl TestClass, dsl
       end
 
       it "does not throw an error" do
@@ -152,13 +159,13 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when an excecution has occured for this class" do
       before(:each) do
-        interpreter.execute_dsl dummy_class, dsl
+        interpreter.execute_dsl TestClass, dsl
       end
 
       it "returns a object, keyed by class, with keys for arguments and method calls" do
         expect(interpreter.executions_by_class).to eql(
           {
-            dummy_class => {
+            TestClass => {
               dsl_name: [{
                 arguments: {},
                 method_calls: {}

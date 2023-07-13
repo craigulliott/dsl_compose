@@ -3,44 +3,25 @@
 require "spec_helper"
 
 RSpec.describe DSLCompose::Parser::ForChildrenOfParser do
-  let(:base_class) {
-    Class.new do
+  before(:each) do
+    create_class :BaseClass do
       include DSLCompose::Composer
       define_dsl :dsl_name do
       end
     end
-  }
-  let(:child_class1) { Class.new(base_class) }
-  let(:child_class2) { Class.new(base_class) }
-  let(:parser) { Class.new(DSLCompose::Parser) }
 
-  describe "for a DSL used on two child classes" do
-    before(:each) do
-      child_class1.dsl_name
-      child_class2.dsl_name
-    end
+    create_class :ChildClass1, BaseClass
+    create_class :ChildClass2, BaseClass
+    create_class :GrandchildClass, ChildClass1
 
-    it "successfully parses the DSL and returns each child class" do
-      child_classes = []
-      parser.for_children_of base_class do |child_class:|
-        child_classes << child_class
-      end
-      expect(child_classes).to eql([child_class1, child_class2])
-    end
+    create_class :TestParser, DSLCompose::Parser
   end
 
-  describe "for the same DSL used twice on a child class" do
-    before(:each) do
-      child_class1.dsl_name
-      child_class1.dsl_name
+  it "successfully parses the DSL and returns each child class whether the DSL was used or not" do
+    child_classes = []
+    TestParser.for_children_of BaseClass do |child_class:|
+      child_classes << child_class
     end
-
-    it "parses only once per child class" do
-      child_classes = []
-      parser.for_children_of base_class do |child_class:|
-        child_classes << child_class
-      end
-      expect(child_classes).to eql([child_class1])
-    end
+    expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
   end
 end

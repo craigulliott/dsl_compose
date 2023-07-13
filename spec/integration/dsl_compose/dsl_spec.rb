@@ -4,51 +4,51 @@ require "spec_helper"
 
 RSpec.describe DSLCompose::DSL do
   it "successfully creates a new DSL which has no configuration block" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name
     end
 
-    expect(DSLCompose::DSLs.class_dsl(klass, :dsl_name)).to be_a(DSLCompose::DSL)
+    expect(DSLCompose::DSLs.class_dsl(TestClass, :dsl_name)).to be_a(DSLCompose::DSL)
   end
 
   it "successfully evaluates a DSL which has no configuration block" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name
     end
 
-    klass.dsl_name do
+    TestClass.dsl_name do
     end
 
-    expect(klass.dsls.to_h(:dsl_name).count).to eq(1)
+    expect(TestClass.dsls.to_h(:dsl_name).count).to eq(1)
   end
 
   it "allows calling the same DSL twice for a class, because DSL definitions can be extended/combined" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name
       define_dsl :dsl_name
     end
 
-    expect(DSLCompose::DSLs.class_dsl(klass, :dsl_name)).to be_a(DSLCompose::DSL)
+    expect(DSLCompose::DSLs.class_dsl(TestClass, :dsl_name)).to be_a(DSLCompose::DSL)
   end
 
   it "successfully evaluates a DSL twice" do
-    klass = Class.new do
+    create_class :TestClass do
       include DSLCompose::Composer
       define_dsl :dsl_name
     end
 
-    klass.dsl_name do
+    TestClass.dsl_name do
     end
 
-    klass.dsl_name do
+    TestClass.dsl_name do
     end
 
-    expect(klass.dsls.to_h(:dsl_name)).to eql(
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
       {
-        klass => {
+        TestClass => {
           arguments: {},
           method_calls: {}
         }
@@ -59,7 +59,7 @@ RSpec.describe DSLCompose::DSL do
   describe "the DSL name" do
     it "raises an error if using a name which is already present on a class as a method" do
       expect {
-        Class.new do
+        create_class :TestClass do
           include DSLCompose::Composer
           define_dsl :name
         end
@@ -68,7 +68,7 @@ RSpec.describe DSLCompose::DSL do
 
     it "raises an error if using a string instead of a symbol for the DSL name" do
       expect {
-        Class.new do
+        create_class :TestClass do
           include DSLCompose::Composer
           define_dsl "dsl_name"
         end
@@ -77,7 +77,7 @@ RSpec.describe DSLCompose::DSL do
 
     it "raises an error if passing an unexpected type for the DSL name" do
       expect {
-        Class.new do
+        create_class :TestClass do
           include DSLCompose::Composer
           define_dsl 123
         end

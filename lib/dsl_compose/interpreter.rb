@@ -40,9 +40,10 @@ module DSLCompose
       @executions.filter { |e| e.dsl.name == dsl_name }
     end
 
-    # Returns an array of all executions for a given name and class.
+    # Returns an array of all executions for a given name and class. This includes
+    # any ancestors of the provided class
     def class_dsl_executions klass, dsl_name
-      @executions.filter { |e| e.klass == klass && e.dsl.name == dsl_name }
+      @executions.filter { |e| e.dsl.name == dsl_name && (e.klass == klass || klass < e.klass) }
     end
 
     # removes all executions from the interpreter, this is primarily used from

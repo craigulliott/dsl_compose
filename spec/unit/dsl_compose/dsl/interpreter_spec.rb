@@ -3,8 +3,11 @@
 require "spec_helper"
 
 RSpec.describe DSLCompose::DSL::Interpreter do
-  let(:dummy_class) { Class.new }
-  let(:dsl) { DSLCompose::DSL.new :dsl_name, dummy_class }
+  before(:each) do
+    create_class :TestClass
+  end
+
+  let(:dsl) { DSLCompose::DSL.new :dsl_name, TestClass }
   let(:interpreter) { DSLCompose::DSL::Interpreter.new dsl }
 
   describe :initialize do
