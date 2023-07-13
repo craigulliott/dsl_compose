@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/craigulliott/dsl_compose/compare/v1.11.0...v1.12.0) (2023-07-13)
+
+
+### Features
+
+* parsers are now aware of class inheritance, and all classes now assume the DSL configurations of all their ancestors ([#33](https://github.com/craigulliott/dsl_compose/issues/33)) ([6a6cfb1](https://github.com/craigulliott/dsl_compose/commit/6a6cfb1fd9bb44c2ea949888c7b7be14ddc0cef8))
+
 ## [1.11.0](https://github.com/craigulliott/dsl_compose/compare/v1.10.0...v1.11.0) (2023-07-12)
 
 
