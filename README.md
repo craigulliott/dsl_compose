@@ -241,13 +241,23 @@ A parser class can be used to process complicated DSLs. In the example below, a 
 # create your own parser by creating a new class which extends DSLCompose::Parser
 MyParser < DSLCompose::Parser
   # `for_children_of` will process SomeBaseClass and yield the provided
-  # block once for every class which extends SomeBaseClass
+  # block once for every class which extends SomeBaseClass.
+  #
+  # If you only want to process classes at the end of the class hierarchy (classes
+  # which extend the provided base class, but do not have their own children) then
+  # use `for_final_children_of` instead of `for_children_of`
   for_children_of SomeBaseClass do |child_class:|
-    # `for_dsl` accepts a DSL name or an array of DSL names and will yield
-    # it's provided block once for each time a DSL of that name has been
-    # used on the child_class.
+    # `for_dsl` accepts a DSL name or an array of DSL names and will yield it's
+    # provided block once for each time a DSL of that name has been used
+    # directly on the child_class.
     #
-    # An error will be raised if any of the provided DSL names does not exist
+    # If you want to yield the provided block for classes which didn't directly use
+    # one of the provided DSLs, but the DSL was used on one of their ancestors, then
+    # use `for_inherited_dsl :dsl_name` instead of `for_dsl  :dsl_name`. If you want
+    # the block to yield whether the DSL was used directly on the provided class or
+    # anywhere in it's ancestor chain, then use `for_dsl_or_inherited_dsl :dsl_name`.
+    #
+    # An error will be raised if any of the provided DSL names does not exist.
     #
     # You can optionally provide keyword arguments which correspond to any
     # arguments that were defined for the DSL, if multiple dsl names are provided

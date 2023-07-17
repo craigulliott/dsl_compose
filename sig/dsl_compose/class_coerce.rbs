@@ -7,5 +7,10 @@ module DSLCompose
 
     def initialize: (String class_name) -> void
     def to_class: -> untyped
+
+
+    class UnexpectedClassNameError < StandardError
+    end
+
   end
 end

@@ -1,10 +1,10 @@
 # Classes
 module DSLCompose
   class Parser
-    self.@runs: Array[{base_class: ::Object, block: untyped}]
+    self.@runs: Array[{base_class: singleton(Object), block: untyped, final_children_only: bool}]
 
     def initialize: -> void
-    def self.for_children_of: (Object base_class, ?bool rerun) -> void
+    def self.for_children_of: (singleton(Object) base_class, ?final_children_only: bool, ?rerun: bool) -> void
 
     class NotInitializable < StandardError
     end

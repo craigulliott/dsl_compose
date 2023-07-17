@@ -18,5 +18,5 @@ gem "standard", "~> 1.0"
 # typed ruby
 gem "rbs"
 gem "typeprof"
-gem "steep"
+gem "steep", "1.4"
 gem "standardrb"

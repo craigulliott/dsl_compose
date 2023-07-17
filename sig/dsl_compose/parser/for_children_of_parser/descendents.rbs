@@ -1,0 +1,19 @@
+# TypeProf 0.21.7
+
+# Classes
+module DSLCompose
+  class Parser
+    class ForChildrenOfParser
+      class Descendents
+        @base_class: singleton(Object)
+        @final_children_only: bool
+
+        def initialize: (singleton(Object) base_class, bool final_children_only) -> void
+        def classes: -> Array[singleton(Object)]
+
+        private
+        def has_descendents: (singleton(Object) base_class) -> bool
+      end
+    end
+  end
+end

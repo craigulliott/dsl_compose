@@ -8,6 +8,7 @@ module DSLCompose
     attr_reader klass: Object
     attr_reader description: String
     def initialize: (Symbol name, Object klass) -> void
+    def evaluate_configuration_block: () -> void
     def set_description: (String description) -> String
     def has_description?: -> bool
     def add_method: (Symbol name, bool unique, bool required) -> DSLMethod
@@ -24,6 +25,9 @@ module DSLCompose
     end
 
     class InvalidNameError < StandardError
+    end
+
+    class NoBlockProvidedError < StandardError
     end
 
     class InvalidDescriptionError < StandardError

@@ -28,7 +28,6 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
 
     create_class :ChildClass1, BaseClass
     create_class :ChildClass2, BaseClass
-    create_class :GrandchildClass, ChildClass1
 
     create_class :TestParser, DSLCompose::Parser
   end
@@ -43,7 +42,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       ChildClass1.dsl_name
     end
 
-    it "parses for each use of the DSL, but only once for the dsl method with the dsl method args, and repeats this for GrandchildClass which extends ChildClass1" do
+    it "parses for each use of the DSL, but only once for the dsl method with the dsl method args" do
       child_classes = []
       method_names = []
       dsl_names = []
@@ -60,11 +59,11 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
           end
         end
       end
-      expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
-      expect(method_names).to eql([:method_name, :method_name])
-      expect(method_arg_names).to eql([:foo, :foo])
-      expect(common_method_arg_names).to eql([:bar, :bar])
-      expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name, :dsl_name, :dsl_name, :dsl_name, :dsl_name, :dsl_name])
+      expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2])
+      expect(method_names).to eql([:method_name])
+      expect(method_arg_names).to eql([:foo])
+      expect(common_method_arg_names).to eql([:bar])
+      expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name, :dsl_name])
     end
   end
 
@@ -78,7 +77,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       end
     end
 
-    it "parses for each use of the DSL method, and repeats this for GrandchildClass which extends ChildClass1" do
+    it "parses for each use of the DSL method" do
       child_classes = []
       method_names = []
       dsl_names = []
@@ -95,11 +94,11 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
           end
         end
       end
-      expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
-      expect(method_names).to eql([:method_name, :method_name, :method_name, :method_name])
-      expect(method_arg_names).to eql([:foo1, :foo2, :foo1, :foo2])
-      expect(common_method_arg_names).to eql([:bar1, :bar2, :bar1, :bar2])
-      expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name, :dsl_name])
+      expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2])
+      expect(method_names).to eql([:method_name, :method_name])
+      expect(method_arg_names).to eql([:foo1, :foo2])
+      expect(common_method_arg_names).to eql([:bar1, :bar2])
+      expect(dsl_names).to eql([:dsl_name, :dsl_name])
     end
   end
 
@@ -113,7 +112,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       end
     end
 
-    it "parses for each use of the DSL method, and repeats this for GrandchildClass which extends ChildClass1" do
+    it "parses for each use of the DSL method" do
       child_classes = []
       method_names = []
       dsl_names = []
@@ -128,10 +127,10 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
           end
         end
       end
-      expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
-      expect(method_names).to eql([:common_method_name, :common_method_name, :common_method_name, :common_method_name])
-      expect(common_method_arg_names).to eql([:bar1, :foo2, :bar1, :foo2])
-      expect(dsl_names).to eql([:dsl_name, :other_dsl_name, :dsl_name, :other_dsl_name])
+      expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2])
+      expect(method_names).to eql([:common_method_name, :common_method_name])
+      expect(common_method_arg_names).to eql([:bar1, :foo2])
+      expect(dsl_names).to eql([:dsl_name, :other_dsl_name])
     end
   end
 
@@ -145,7 +144,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       end
     end
 
-    it "parses for each use of the DSL method, and repeats this for GrandchildClass which extends ChildClass1" do
+    it "parses for each use of the DSL method" do
       child_classes = []
       method_names = []
       dsl_names = []
@@ -160,10 +159,10 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
           end
         end
       end
-      expect(child_classes).to eql([GrandchildClass, ChildClass2, ChildClass1])
-      expect(method_names).to eql([:common_method_name, :common_method_name, :common_method_name])
-      expect(common_method_arg_names).to eql([:bar1, :foo2, :bar1])
-      expect(dsl_names).to eql([:dsl_name, :other_dsl_name, :dsl_name])
+      expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2])
+      expect(method_names).to eql([:common_method_name, :common_method_name])
+      expect(common_method_arg_names).to eql([:bar1, :foo2])
+      expect(dsl_names).to eql([:dsl_name, :other_dsl_name])
     end
   end
 end
