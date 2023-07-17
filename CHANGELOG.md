@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/craigulliott/dsl_compose/compare/v1.12.0...v1.13.0) (2023-07-17)
+
+
+### Features
+
+* added for_final_children_of, for_inherited_dsl and for_dsl_or_inherited_dsl methods to the parser ([#35](https://github.com/craigulliott/dsl_compose/issues/35)) ([b01a629](https://github.com/craigulliott/dsl_compose/commit/b01a629e1b18540cbbd90ba53090b41b8fb41dfd))
+
 ## [1.12.0](https://github.com/craigulliott/dsl_compose/compare/v1.11.0...v1.12.0) (2023-07-13)
 
 
