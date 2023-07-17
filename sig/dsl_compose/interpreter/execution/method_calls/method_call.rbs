@@ -4,11 +4,12 @@ module DSLCompose
     class Execution
       class MethodCalls
         class MethodCall
-          @dsl_method: DSL::DSLMethod
-          @arguments: Arguments
+          attr_reader dsl_method: DSL::DSLMethod
+          attr_reader arguments: Arguments
 
           def initialize: (DSL::DSLMethod dsl_method, *untyped args) -> void
           def method_name: -> Symbol
+          def to_h: -> Hash[untyped, untyped]
         end
       end
     end

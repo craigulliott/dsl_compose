@@ -4,6 +4,7 @@ module DSLCompose
   class DSL
     class Arguments
       class Argument
+        RESERVED_ARGUMENT_NAMES: Array[Symbol]
 
         attr_reader name: Symbol
         attr_reader type: argument_type
@@ -27,7 +28,8 @@ module DSLCompose
         attr_reader is_a_validation: IsAValidation
 
         def initialize: (Symbol name, bool required, argument_type `type`, ?array: bool) -> void
-        def set_description: (String description) -> untyped
+        def set_description: (String description) -> void
+        def has_description?: () -> bool
         def required?: -> bool
         def optional?: -> bool
 
@@ -57,6 +59,9 @@ module DSLCompose
         end
 
         class InvalidTypeError < StandardError
+        end
+
+        class ArgumentNameReservedError < StandardError
         end
 
         class InvalidNameError < StandardError

@@ -2,10 +2,10 @@
 module DSLCompose
   class Parser
     class ForChildrenOfParser
-      @base_class: Object
-      @child_class: Object
+      @base_class: singleton(Object)
+      @child_class: singleton(Object)
 
-      def initialize: (Object base_class) -> void
+      def initialize: (singleton(Object) base_class, bool final_children_only) -> void
 
       # overriding this method because steep doesn't
       # correctly infer that a block is being passed to this method
@@ -14,7 +14,7 @@ module DSLCompose
       ) -> void
 
       private
-      def for_dsl: (Array[Symbol] dsl_names) -> untyped
+      def for_dsl: (Array[Symbol] dsl_names, ?on_current_class: bool, ?on_ancestor_class: bool) -> untyped
 
       class AllBlockParametersMustBeKeywordParametersError < StandardError
         end

@@ -42,8 +42,8 @@ module DSLCompose
 
     # Returns an array of all executions for a given name and class. This includes
     # any ancestors of the provided class
-    def class_dsl_executions klass, dsl_name
-      @executions.filter { |e| e.dsl.name == dsl_name && (e.klass == klass || klass < e.klass) }
+    def class_dsl_executions klass, dsl_name, on_current_class, on_ancestor_class
+      @executions.filter { |e| e.dsl.name == dsl_name && ((on_current_class && e.klass == klass) || (on_ancestor_class && klass < e.klass)) }
     end
 
     # removes all executions from the interpreter, this is primarily used from

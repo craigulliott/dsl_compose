@@ -28,20 +28,20 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       ChildClass2.dsl_name :foo2, :bar
     end
 
-    it "parses for each use of the DSL, and not for GrandchildClass which extends ChildClass1" do
+    it "parses for each use of the DSL, and once more for GrandchildClass which extends ChildClass1" do
       child_classes = []
       dsl_names = []
       dsl_arg_names = []
       TestParser.for_children_of BaseClass do |child_class:|
         child_classes << child_class
-        for_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
+        for_dsl_or_inherited_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
           dsl_names << dsl_name
           dsl_arg_names << dsl_arg_name
         end
       end
       expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2, GrandchildClass])
-      expect(dsl_names).to eql([:dsl_name, :dsl_name])
-      expect(dsl_arg_names).to eql([[:foo1], [:foo2]])
+      expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name])
+      expect(dsl_arg_names).to eql([[:foo1], [:foo2], [:foo1]])
     end
   end
 
@@ -51,20 +51,20 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       ChildClass1.dsl_name :foo2, :bar
     end
 
-    it "parses for each use of the DSL, and not for GrandchildClass which extends ChildClass1" do
+    it "parses for each use of the DSL, and twice more for GrandchildClass which extends ChildClass1" do
       child_classes = []
       dsl_names = []
       dsl_arg_names = []
       TestParser.for_children_of BaseClass do |child_class:|
         child_classes << child_class
-        for_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
+        for_dsl_or_inherited_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
           dsl_names << dsl_name
           dsl_arg_names << dsl_arg_name
         end
       end
       expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2, GrandchildClass])
-      expect(dsl_names).to eql([:dsl_name, :dsl_name])
-      expect(dsl_arg_names).to eql([[:foo1], [:foo2]])
+      expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name, :dsl_name])
+      expect(dsl_arg_names).to eql([[:foo1], [:foo2], [:foo1], [:foo2]])
     end
   end
 
@@ -74,20 +74,20 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       ChildClass1.other_dsl_name common_dsl_arg_name: :foo2
     end
 
-    it "accepts an array of DSL names and parses for each use of the DSL and any common DSL parameters, and not for GrandchildClass which extends ChildClass1" do
+    it "accepts an array of DSL names and parses for each use of the DSL and any common DSL parameters, and again for GrandchildClass which extends ChildClass1" do
       child_classes = []
       dsl_names = []
       dsl_arg_names = []
       TestParser.for_children_of BaseClass do |child_class:|
         child_classes << child_class
-        for_dsl [:dsl_name, :other_dsl_name] do |dsl_name:, common_dsl_arg_name:|
+        for_dsl_or_inherited_dsl [:dsl_name, :other_dsl_name] do |dsl_name:, common_dsl_arg_name:|
           dsl_names << dsl_name
           dsl_arg_names << common_dsl_arg_name
         end
       end
       expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2, GrandchildClass])
-      expect(dsl_names).to eql([:dsl_name, :other_dsl_name])
-      expect(dsl_arg_names).to eql([:bar, :foo2])
+      expect(dsl_names).to eql([:dsl_name, :other_dsl_name, :dsl_name, :other_dsl_name])
+      expect(dsl_arg_names).to eql([:bar, :foo2, :bar, :foo2])
     end
   end
 
@@ -97,26 +97,26 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       ChildClass2.other_dsl_name common_dsl_arg_name: :foo2
     end
 
-    it "accepts an array of DSL names and parses for each use of the DSL and any common DSL parameters, and not for GrandchildClass which extends ChildClass1" do
+    it "accepts an array of DSL names and parses for each use of the DSL and any common DSL parameters, and once more for GrandchildClass which extends ChildClass1" do
       child_classes = []
       dsl_names = []
       dsl_arg_names = []
       TestParser.for_children_of BaseClass do |child_class:|
         child_classes << child_class
-        for_dsl [:dsl_name, :other_dsl_name] do |dsl_name:, common_dsl_arg_name:|
+        for_dsl_or_inherited_dsl [:dsl_name, :other_dsl_name] do |dsl_name:, common_dsl_arg_name:|
           dsl_names << dsl_name
           dsl_arg_names << common_dsl_arg_name
         end
       end
       expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2, GrandchildClass])
-      expect(dsl_names).to eql([:dsl_name, :other_dsl_name])
-      expect(dsl_arg_names).to eql([:bar, :foo2])
+      expect(dsl_names).to eql([:dsl_name, :other_dsl_name, :dsl_name])
+      expect(dsl_arg_names).to eql([:bar, :foo2, :bar])
     end
 
     it "raises an error if trying to access an argument name which is not shared between both DSLs" do
       expect {
         TestParser.for_children_of BaseClass do |child_class:|
-          for_dsl [:dsl_name, :other_dsl_name] do |dsl_name:, dsl_arg_name:|
+          for_dsl_or_inherited_dsl [:dsl_name, :other_dsl_name] do |dsl_name:, dsl_arg_name:|
           end
         end
       }.to raise_error ArgumentError
@@ -142,7 +142,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       dsl_args = []
       TestParser.for_children_of BaseClassWhichAcceptsAClassArgument do |child_class:|
         child_classes << child_class
-        for_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
+        for_dsl_or_inherited_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
           dsl_names << dsl_name
           dsl_args << dsl_arg_name
         end

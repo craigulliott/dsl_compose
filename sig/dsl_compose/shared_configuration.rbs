@@ -17,5 +17,8 @@ module DSLCompose
 
     class InvalidSharedConfigurationNameError < StandardError
     end
+
+    class NoBlockProvidedError < StandardError
+    end
   end
 end

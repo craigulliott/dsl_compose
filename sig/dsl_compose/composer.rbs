@@ -7,7 +7,14 @@ module DSLCompose
 
     def self.define_dsl: (Symbol name) -> void
 
-    class ComposerAlreadyInstalled < StandardError
+    class ComposerAlreadyInstalledError < StandardError
     end
+
+    class MethodAlreadyExistsWithThisDSLNameError < StandardError
+    end
+
+    class GetDSLExecutionResultsMethodAlreadyExistsError < StandardError
+    end
+
   end
 end

@@ -11,8 +11,17 @@ module DSLCompose
           def initialize: (untyped required_count, untyped provided_count) -> void
         end
 
+        class TooManyArgumentsError < StandardError
+        end
+
+        class OptionalArgumentsShouldBeHashError < StandardError
+        end
+
         class InvalidArgumentTypeError < StandardError
-            end
+        end
+
+        class ArrayNotValidError < StandardError
+        end
       end
     end
   end

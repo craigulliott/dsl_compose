@@ -17,11 +17,11 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser do
     create_class :TestParser, DSLCompose::Parser
   end
 
-  it "successfully parses the DSL and returns each child class whether the DSL was used or not" do
+  it "successfully parses the DSL and returns child classes which are at the end of their anchestor chain whether the DSL was used on them or not" do
     child_classes = []
-    TestParser.for_children_of BaseClass do |child_class:|
+    TestParser.for_final_children_of BaseClass do |child_class:|
       child_classes << child_class
     end
-    expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2, GrandchildClass])
+    expect(child_classes).to eql([ChildClass2, GrandchildClass])
   end
 end

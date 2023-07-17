@@ -35,7 +35,7 @@ module DSLCompose
       # parser.for_children_of BaseClass do |child_class:|
       #    # this will yield for ChildClass and GrandchildClass
       # and
-      def initialize base_class, &block
+      def initialize base_class, final_children_only, &block
         # assert the provided class has the DSLCompose::Composer module installed
         unless base_class.respond_to? :dsls
           raise ClassDoesNotUseDSLComposeError, base_class
@@ -49,7 +49,7 @@ module DSLCompose
         end
 
         # if any arguments were provided, then assert that they are valid
-        if block.parameters.any?
+        if block&.parameters&.any?
           # all parameters must be keyword arguments
           if block.parameters.filter { |p| p.first != :keyreq }.any?
             raise AllBlockParametersMustBeKeywordParametersError, "All block parameters must be keyword parameters, i.e. `for_children_of FooClass do |base_class:|`"
@@ -57,14 +57,17 @@ module DSLCompose
         end
 
         # yeild the block for all descendents of the provided base_class
-        ObjectSpace.each_object(Class).select { |klass| klass < base_class }.each do |child_class|
+        Descendents.new(base_class, final_children_only).classes.each do |child_class|
+          # determine which arguments to send to the block
           args = {}
           if BlockArguments.accepts_argument?(:child_class, &block)
             args[:child_class] = child_class
           end
+
           # set the child_class in an instance variable so that method calls to
           # `for_dsl` from within the block will have access to it
           @child_class = child_class
+
           # yield the block in the context of this class
           instance_exec(**args, &block)
         end
@@ -85,14 +88,38 @@ module DSLCompose
       #     ...
       #   end
       # end
-      def for_dsl dsl_names, &block
+      #
+      # If `on_current_class` is true, then the block will be yielded to for each DSL
+      # which was used directly on the current class. If `oncurrent_class` is false,
+      # then the block will not be yielded to for any DSL which was used directly on.
+      # If `on_ancestor_class` is true, then the block will be yielded to for each DSL
+      # which was used on any class in the current classes ancestry. If `on_ancestor_class`
+      # is false, then the block will not be yielded to for any DSL which was used on
+      # any class in the current classes ancestry.
+      def for_dsl dsl_names, on_current_class: true, on_ancestor_class: false, &block
         child_class = @child_class
 
         unless child_class
           raise NoChildClassError, "No child_class was found, please call this method from within a `for_children_of` block"
         end
 
-        ForDSLParser.new(@base_class, child_class, dsl_names, &block)
+        ForDSLParser.new(@base_class, child_class, dsl_names, on_current_class, on_ancestor_class, &block)
+      end
+
+      # this is a wrapper for the `for_dsl` method, but it provides a value of true
+      # for the `on_ancestor_class` argument and a value of false for the `on_current_class`
+      # argument. This will cause the parser to only yeild for dsls which were used on
+      # a class which is in the current classes ancestry, but not on the current class
+      def for_inherited_dsl dsl_names, &block
+        for_dsl dsl_names, on_current_class: false, on_ancestor_class: true, &block
+      end
+
+      # this is a wrapper for the `for_dsl` method, but it provides a value of true
+      # for the `on_ancestor_class` argument and a value of true for the `on_current_class`
+      # argument. This will cause the parser to yeild for dsls which were used on either
+      # the current class or any class in its ancestry
+      def for_dsl_or_inherited_dsl dsl_names, &block
+        for_dsl dsl_names, on_current_class: true, on_ancestor_class: true, &block
       end
     end
   end

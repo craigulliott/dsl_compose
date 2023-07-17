@@ -20,7 +20,7 @@ module DSLCompose
         # of the provided name is used by the child class.
         #
         # base_class and child_class are set from the ForChildrenOfParser
-        def initialize base_class, child_class, dsl_names, &block
+        def initialize base_class, child_class, dsl_names, on_current_class, on_ancestor_class, &block
           @base_class = base_class
           @child_class = child_class
           @dsl_names = dsl_names
@@ -31,7 +31,7 @@ module DSLCompose
           end
 
           # if any arguments were provided, then assert that they are valid
-          if block.parameters.any?
+          if block&.parameters&.any?
             # all parameters must be keyword arguments
             if block.parameters.filter { |p| p.first != :keyreq }.any?
               raise AllBlockParametersMustBeKeywordParametersError, "All block parameters must be keyword parameters, i.e. `for_dsl :dsl_name do |dsl_name:|`"
@@ -62,7 +62,7 @@ module DSLCompose
           dsl_names.each do |dsl_name|
             # a dsl can be execued multiple times on a class, so we find all of the executions
             # here and then yield the block once for each execution
-            base_class.dsls.class_dsl_executions(child_class, dsl_name).each do |dsl_execution|
+            base_class.dsls.class_dsl_executions(child_class, dsl_name, on_current_class, on_ancestor_class).each do |dsl_execution|
               # we only provide the requested arguments to the block, this allows
               # us to use keyword arguments to force a naming convention on these arguments
               # and to validate their use
