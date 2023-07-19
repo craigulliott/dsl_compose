@@ -312,6 +312,24 @@ RSpec.describe DSLCompose::Interpreter do
         expect(interpreter.to_h(dsl.name)).to eql({})
       end
     end
+
+    describe "when a parser_usage_note has been added for this class" do
+      before(:each) do
+        interpreter.add_parser_usage_note TestClass, "a note"
+      end
+
+      it "does not throw an error" do
+        expect {
+          interpreter.clear
+        }.to_not raise_error
+      end
+
+      it "clears the parser_usage_notes (evidenced by parser_usage_notes returning an empty array)" do
+        expect(interpreter.parser_usage_notes(TestClass)).to eql(["a note"])
+        interpreter.clear
+        expect(interpreter.parser_usage_notes(TestClass)).to eql([])
+      end
+    end
   end
 
   describe :executions_by_class do

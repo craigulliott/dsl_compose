@@ -67,7 +67,7 @@ module DSLCompose
     # next test.
     def clear
       @executions = []
-      @parser_usage_notes ||= {}
+      @parser_usage_notes = {}
     end
 
     def to_h dsl_name
