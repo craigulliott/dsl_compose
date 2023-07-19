@@ -1,12 +1,5 @@
 # Changelog
 
-## [1.14.4](https://github.com/craigulliott/dsl_compose/compare/v1.14.3...v1.14.4) (2023-07-19)
-
-
-### Bug Fixes
-
-* switching to ruby 3.1 and getting rid of dependency on ObjectSpace ([#47](https://github.com/craigulliott/dsl_compose/issues/47)) ([1905bb9](https://github.com/craigulliott/dsl_compose/commit/1905bb948dd4a517e50b6498c830ad20bd4a4e42))
-
 ## [1.14.3](https://github.com/craigulliott/dsl_compose/compare/v1.14.2...v1.14.3) (2023-07-19)
 
 
