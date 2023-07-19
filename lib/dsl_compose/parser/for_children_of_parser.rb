@@ -121,6 +121,13 @@ module DSLCompose
       def for_dsl_or_inherited_dsl dsl_names, &block
         for_dsl dsl_names, on_current_class: true, on_ancestor_class: true, &block
       end
+
+      # takes a description of what this parser does and stores it against the DSL definition
+      # of the current @child_class, this is used to generate documentation for what the parser
+      # has done with the DSL
+      def description description
+        @base_class.dsls.add_parser_usage_note @child_class, description
+      end
     end
   end
 end

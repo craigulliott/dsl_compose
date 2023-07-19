@@ -1,6 +1,7 @@
 # Classes
 module DSLCompose
   class Interpreter
+    @parser_usage_notes: Hash[singleton(Object), Array[String]]
     attr_reader executions: Array[Execution]
     def initialize: -> void
     def execute_dsl: (untyped klass, DSL dsl, *untyped args) -> Execution
@@ -8,5 +9,7 @@ module DSLCompose
     def dsl_executions: (Symbol dsl_name) -> Array[Execution]
     def to_h: (Symbol dsl_name) -> Hash[Symbol, Hash[Symbol, Array[Hash[Symbol, Symbol]]]]
     def executions_by_class: () -> Hash[Symbol, Hash[Symbol, Array[Hash[Symbol, Symbol]]]]
+    def add_parser_usage_note: (singleton(Object) klass, String notes) -> void
+    def parser_usage_notes: (singleton(Object) klass) -> Array[String]
   end
 end

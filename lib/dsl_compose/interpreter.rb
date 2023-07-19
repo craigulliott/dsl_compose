@@ -13,6 +13,21 @@ module DSLCompose
       @executions = []
     end
 
+    # the parser can provide usage notes for how this dsl is being used, these are used to
+    # generate documentation
+    def add_parser_usage_note child_class, note
+      @parser_usage_notes ||= {}
+      @parser_usage_notes[child_class] ||= []
+      @parser_usage_notes[child_class] << DSLCompose::FixHeredocIndentation.fix_heredoc_indentation(note)
+    end
+
+    # return the list of notes which describe how the parsers are using this DSL
+    def parser_usage_notes child_class
+      @parser_usage_notes ||= {}
+      @parser_usage_notes[child_class] ||= []
+      @parser_usage_notes[child_class]
+    end
+
     # Execute/process a dynamically defined DSL on a class.
     # `klass` is the class in which the DSL is being used, not
     # the class in which the DSL was defined.

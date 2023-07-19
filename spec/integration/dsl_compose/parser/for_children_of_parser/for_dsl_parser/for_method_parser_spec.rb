@@ -32,6 +32,27 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
     create_class :TestParser, DSLCompose::Parser
   end
 
+  describe "where a DSL with a method, has the method called once" do
+    before(:each) do
+      ChildClass1.dsl_name do
+        method_name :foo, :bar
+      end
+    end
+
+    it "adds a parser note for the dsl method with the dsl method args" do
+      TestParser.for_children_of BaseClass do |child_class:|
+        for_dsl :dsl_name do |dsl_name:|
+          for_method :method_name do |method_name:, method_arg_name:, common_method_arg_name:|
+            description <<-DESCRIPTION
+              Notes on what this parser is doing, this is used for generating documentation
+            DESCRIPTION
+          end
+        end
+      end
+      expect(BaseClass.dsls.class_executions(ChildClass1).first.method_calls.method_calls.first.parser_usage_notes).to eql(["Notes on what this parser is doing, this is used for generating documentation"])
+    end
+  end
+
   describe "where a DSL is used three times, but a method is only called once" do
     before(:each) do
       ChildClass1.dsl_name

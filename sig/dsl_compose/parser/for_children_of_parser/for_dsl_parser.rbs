@@ -20,7 +20,7 @@ module DSLCompose
         def for_method: (Array[Symbol] method_names) -> void
 
         class AllBlockParametersMustBeKeywordParametersError < StandardError
-            end
+        end
 
         class NoBlockProvided < StandardError
         end
@@ -29,7 +29,7 @@ module DSLCompose
         end
 
         class DSLNamesShouldBeSymbolsError < StandardError
-            end
+        end
       end
     end
   end
