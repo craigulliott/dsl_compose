@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/craigulliott/dsl_compose/compare/v1.13.1...v1.14.0) (2023-07-19)
+
+
+### Features
+
+* Parsers can push notes back to the DSLs to explain how each DSL is being used. These notes can be used in generated documentation. ([#39](https://github.com/craigulliott/dsl_compose/issues/39)) ([053fa50](https://github.com/craigulliott/dsl_compose/commit/053fa50bcbc2180b2f788b5a3bba11576804f206))
+
 ## [1.13.1](https://github.com/craigulliott/dsl_compose/compare/v1.13.0...v1.13.1) (2023-07-19)
 
 
