@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/craigulliott/dsl_compose/compare/v1.14.0...v1.14.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* Clearing the parser_usage_notes when also clearing the DSLs. ([#41](https://github.com/craigulliott/dsl_compose/issues/41)) ([bbdb445](https://github.com/craigulliott/dsl_compose/commit/bbdb445ed9fa4b495f8aa5bf0b889707680858d0))
+
 ## [1.14.0](https://github.com/craigulliott/dsl_compose/compare/v1.13.1...v1.14.0) (2023-07-19)
 
 
