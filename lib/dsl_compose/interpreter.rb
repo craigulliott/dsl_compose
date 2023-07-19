@@ -61,11 +61,13 @@ module DSLCompose
       @executions.filter { |e| e.dsl.name == dsl_name && ((on_current_class && e.klass == klass) || (on_ancestor_class && klass < e.klass)) }
     end
 
-    # removes all executions from the interpreter, this is primarily used from
-    # within a test suite when dynamically creating classes for tests and then
-    # wanting to clear the interpreter before the next test.
+    # removes all executions from the interpreter, and any parser_usage_notes
+    # this is primarily used from within a test suite when dynamically creating
+    # classes for tests and then wanting to clear the interpreter before the
+    # next test.
     def clear
       @executions = []
+      @parser_usage_notes ||= {}
     end
 
     def to_h dsl_name

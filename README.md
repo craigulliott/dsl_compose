@@ -247,6 +247,16 @@ MyParser < DSLCompose::Parser
   # which extend the provided base class, but do not have their own children) then
   # use `for_final_children_of` instead of `for_children_of`
   for_children_of SomeBaseClass do |child_class:|
+    description <<-DESCRIPTION
+      You can optionally provide a description of anything specific that your parser
+      does in this block, this description will be used when generating documentation
+
+      This description accepts markdown.
+
+      Do not add a description here if the parser does not have any business logic here
+      other than making calls to `for_dsl`, `for_dsl_or_inherited_dsl` or `for_inherited_dsl`
+    DESCRIPTION
+
     # `for_dsl` accepts a DSL name or an array of DSL names and will yield it's
     # provided block once for each time a DSL of that name has been used
     # directly on the child_class.
@@ -266,6 +276,16 @@ MyParser < DSLCompose::Parser
     # consider a DSL to have been executed on the actual class it was used, and
     # any classes which are descendants of that class
     for_dsl [:dsl1, :dsl2] do |dsl_name:, a_dsl_argument:|
+      description <<-DESCRIPTION
+        You can optionally provide a description of anything specific that your parser
+        does in this block, this description will be used when generating documentation.
+
+        This description accepts markdown.
+
+        Do not add a description here if the parser does not have any business logic here
+        other than making calls to `for_method`
+      DESCRIPTION
+
       # `for_method` accepts a method name or an array of method names and will
       # yield it's provided block once for each time a method with this name is
       # executed within the DSL.
@@ -277,6 +297,13 @@ MyParser < DSLCompose::Parser
       # are provided then the requested dsl argument must be present on all DSLs
       # otherwise an error will be raised.
       for_method :some_method_name do |method_name:, a_method_argument:|
+        description <<-DESCRIPTION
+          You can optionally provide a description of anything specific that your parser
+          does in this block, this description will be used when generating documentation.
+
+          This description accepts markdown.
+        DESCRIPTION
+
         # your business logic goes here
         ...
       end
