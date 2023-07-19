@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/craigulliott/dsl_compose/compare/v2.0.0...v2.0.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* ensuring the class is still defined and at the global Object scope, this prevents recently deleted classes from showing up before they have been garbage collected ([#51](https://github.com/craigulliott/dsl_compose/issues/51)) ([52111e3](https://github.com/craigulliott/dsl_compose/commit/52111e3647e8f9d26dcbea706dbe6977bf67c426))
+
 ## [2.0.0](https://github.com/craigulliott/dsl_compose/compare/v1.14.4...v2.0.0) (2023-07-19)
 
 
