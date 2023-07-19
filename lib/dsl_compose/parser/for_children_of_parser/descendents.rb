@@ -34,13 +34,17 @@ module DSLCompose
 
         # recursively get all sub classes of the provided base class
         def subclasses base_class
-          base_class.subclasses.map { |subclass|
+          base_class.subclasses.filter { |subclass| class_is_still_defined? subclass }.map { |subclass|
             [subclass] + subclasses(subclass)
           }.flatten
         end
 
         def has_descendents base_class
-          base_class.subclasses.count > 0
+          base_class.subclasses.count { |subclass| class_is_still_defined? subclass } > 0
+        end
+
+        def class_is_still_defined? klass
+          Object.const_defined?(klass.name) && Object.const_get(klass.name).equal?(klass)
         end
       end
     end
