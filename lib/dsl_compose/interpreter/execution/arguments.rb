@@ -44,6 +44,13 @@ module DSLCompose
             raise TooManyArgumentsError, "Too many arguments provided"
           end
 
+          # assume all optonal arguments are nil. If actual values were provided, then they will be set below
+          if arguments.optional_arguments.any?
+            arguments.optional_arguments.each do |optional_argument|
+              @arguments[optional_argument.name] = nil
+            end
+          end
+
           # asset that, if provided, then the optional argument (always the last one) is a Hash
           if has_optional_arguments && optional_arg.nil? === false
             unless optional_arg.is_a? Hash
