@@ -14,9 +14,9 @@ module DSLCompose
           extending_classes = ObjectSpace.each_object(Class).select { |klass| klass < @base_class }
 
           # sort the results, classes are ordered first by the depth of their namespace, and second
-          # by their name
+          # by the presence of decendents and finally by their name
           extending_classes.sort_by! do |child_class|
-            "#{child_class.name.split("::").count}_#{child_class.name}"
+            "#{child_class.name.split("::").count}_#{has_descendents(child_class) ? 0 : 1}_#{child_class.name}"
           end
 
           # if this is not a final child, but we are processing final children only, then skip it
