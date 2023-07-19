@@ -66,6 +66,18 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       expect(dsl_names).to eql([:dsl_name, :dsl_name])
       expect(dsl_arg_names).to eql([[:foo1], [:foo2]])
     end
+
+    it "adds a parser note for both uses of the DSL, but not for GrandchildClass which extends ChildClass1" do
+      TestParser.for_children_of BaseClass do |child_class:|
+        for_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
+          description <<-DESCRIPTION
+            Notes on what this parser is doing, this is used for generating documentation
+          DESCRIPTION
+        end
+      end
+
+      expect(BaseClass.dsls.class_executions(ChildClass1).map(&:parser_usage_notes)).to eql([["Notes on what this parser is doing, this is used for generating documentation"], ["Notes on what this parser is doing, this is used for generating documentation"]])
+    end
   end
 
   describe "for different DSLs used on the same child class" do

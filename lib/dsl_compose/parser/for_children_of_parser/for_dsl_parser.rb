@@ -108,6 +108,13 @@ module DSLCompose
         def for_method method_names, &block
           ForMethodParser.new(@base_class, @child_class, @dsl_execution, method_names, &block)
         end
+
+        # takes a description of what this parser does and stores it against the DSL definition
+        # of the current @child_class, this is used to generate documentation for what the parser
+        # has done with the DSL
+        def description description
+          @dsl_execution.add_parser_usage_note description
+        end
       end
     end
   end

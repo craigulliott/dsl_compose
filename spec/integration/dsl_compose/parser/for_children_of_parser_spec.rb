@@ -24,4 +24,15 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser do
     end
     expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2, GrandchildClass])
   end
+
+  it "successfully parses the DSL and adds a parser note" do
+    TestParser.for_children_of BaseClass do |child_class:|
+      description <<-DESCRIPTION
+        Notes on what this parser is doing, this is used for generating documentation
+      DESCRIPTION
+    end
+    expect(BaseClass.dsls.parser_usage_notes(ChildClass1)).to eql(["Notes on what this parser is doing, this is used for generating documentation"])
+    expect(BaseClass.dsls.parser_usage_notes(ChildClass2)).to eql(["Notes on what this parser is doing, this is used for generating documentation"])
+    expect(BaseClass.dsls.parser_usage_notes(GrandchildClass)).to eql(["Notes on what this parser is doing, this is used for generating documentation"])
+  end
 end

@@ -83,10 +83,21 @@ module DSLCompose
                   end
                 end
 
+                # set the method_call in an instance variable so that method calls to `description`
+                # from within the block will have access to it
+                @method_call = method_call
+
                 # yeild the block in the context of this class
                 instance_exec(**args, &block)
               end
             end
+          end
+
+          # takes a description of what this parser does and stores it against the DSL definition
+          # of the current @child_class, this is used to generate documentation for what the parser
+          # has done with the DSL
+          def description description
+            @method_call.add_parser_usage_note description
           end
         end
       end

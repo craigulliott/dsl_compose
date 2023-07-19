@@ -9,6 +9,7 @@ module DSLCompose
           @dsl_execution: Interpreter::Execution
           @method_names: Array[Symbol]
           @method_name: Symbol
+          @method_call: Interpreter::Execution::MethodCalls::MethodCall
 
           def initialize: (singleton(Object) base_class, singleton(Object) child_class, Interpreter::Execution dsl_execution, Array[Symbol] method_names) -> void
 
@@ -19,7 +20,7 @@ module DSLCompose
           ) -> void
 
           class AllBlockParametersMustBeKeywordParametersError < StandardError
-                end
+          end
 
           class NoBlockProvided < StandardError
           end
@@ -28,7 +29,7 @@ module DSLCompose
           end
 
           class MethodNamesShouldBeSymbolsError < StandardError
-                end
+          end
         end
       end
     end

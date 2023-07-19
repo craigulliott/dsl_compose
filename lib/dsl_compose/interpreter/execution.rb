@@ -36,6 +36,19 @@ module DSLCompose
         end
       end
 
+      # the parser can provide usage notes for how this dsl is being used, these are used to
+      # generate documentation
+      def add_parser_usage_note note
+        @parser_usage_notes ||= []
+        @parser_usage_notes << DSLCompose::FixHeredocIndentation.fix_heredoc_indentation(note)
+      end
+
+      # return the list of notes which describe how the parsers are using this DSL
+      def parser_usage_notes
+        @parser_usage_notes ||= []
+        @parser_usage_notes
+      end
+
       private
 
       # catch and process any method calls within the DSL block

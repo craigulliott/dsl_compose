@@ -2,6 +2,8 @@
 module DSLCompose
   class Interpreter
     class Execution
+      @parser_usage_notes: Array[String]
+
       attr_reader dsl: DSL
       attr_reader klass: Object
       attr_reader method_calls: MethodCalls

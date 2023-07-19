@@ -37,6 +37,30 @@ RSpec.describe DSLCompose::Interpreter do
     end
   end
 
+  describe :parser_usage_notes do
+    it "returns an empty array" do
+      expect(interpreter.parser_usage_notes(TestClass)).to eql([])
+    end
+
+    describe "when a parser usage note has been added" do
+      before(:each) do
+        interpreter.add_parser_usage_note TestClass, "a note about this parser"
+      end
+
+      it "returns an array whch contains the expected parser note" do
+        expect(interpreter.parser_usage_notes(TestClass)).to eql(["a note about this parser"])
+      end
+    end
+  end
+
+  describe :add_parser_usage_note do
+    it "adds a parser note" do
+      expect(interpreter.parser_usage_notes(TestClass)).to eql([])
+      interpreter.add_parser_usage_note TestClass, "a note about this parser"
+      expect(interpreter.parser_usage_notes(TestClass)).to eql(["a note about this parser"])
+    end
+  end
+
   describe :class_executions do
     it "returns an empty array" do
       expect(interpreter.class_executions(TestClass)).to be_kind_of Array
@@ -98,6 +122,144 @@ RSpec.describe DSLCompose::Interpreter do
           expect(interpreter.dsl_executions(dsl.name)).to be_kind_of Array
           expect(interpreter.dsl_executions(dsl.name).count).to eq 1
           expect(interpreter.dsl_executions(dsl.name).first).to be_kind_of DSLCompose::Interpreter::Execution
+        end
+      end
+    end
+  end
+
+  describe :class_dsl_executions do
+    describe "when on_current_class is true and on_ancestor_class is true" do
+      it "returns an empty array" do
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_kind_of Array
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_empty
+      end
+
+      describe "when an excecution has occured for a different dsl" do
+        let(:different_dsl) { DSLCompose::DSL.new :different_dsl_name, TestClass }
+
+        before(:each) do
+          create_class :DifferentTestClass
+
+          interpreter.execute_dsl DifferentTestClass, different_dsl
+        end
+
+        it "returns an empty array" do
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_kind_of Array
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_empty
+        end
+
+        describe "when an excecution has occured for this dsl" do
+          before(:each) do
+            interpreter.execute_dsl TestClass, dsl
+          end
+
+          it "returns an array with the expected executions" do
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_kind_of Array
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true).count).to eq 1
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true).first).to be_kind_of DSLCompose::Interpreter::Execution
+          end
+
+          describe "when an excecution has occured for this dsl on a class which is an ansestor of the provided class" do
+            before(:each) do
+              create_class :ChildClass, TestClass
+            end
+
+            it "returns an array with the expected executions" do
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true)).to be_kind_of Array
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true).count).to eq 1
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true).first).to be_kind_of DSLCompose::Interpreter::Execution
+            end
+          end
+        end
+      end
+    end
+
+    describe "when on_current_class is false and on_ancestor_class is true" do
+      it "returns an empty array" do
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_kind_of Array
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_empty
+      end
+
+      describe "when an excecution has occured for a different dsl" do
+        let(:different_dsl) { DSLCompose::DSL.new :different_dsl_name, TestClass }
+
+        before(:each) do
+          create_class :DifferentTestClass
+
+          interpreter.execute_dsl DifferentTestClass, different_dsl
+        end
+
+        it "returns an empty array" do
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_kind_of Array
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_empty
+        end
+
+        describe "when an excecution has occured for this dsl" do
+          before(:each) do
+            interpreter.execute_dsl TestClass, dsl
+          end
+
+          it "returns an empty array" do
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_kind_of Array
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_empty
+          end
+
+          describe "when an excecution has occured for this dsl on a class which is an ansestor of the provided class" do
+            before(:each) do
+              create_class :ChildClass, TestClass
+            end
+
+            it "returns an array with the expected executions" do
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true)).to be_kind_of Array
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true).count).to eq 1
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true).first).to be_kind_of DSLCompose::Interpreter::Execution
+            end
+          end
+        end
+      end
+    end
+
+    describe "when on_current_class is true and on_ancestor_class is false" do
+      it "returns an empty array" do
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_kind_of Array
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_empty
+      end
+
+      describe "when an excecution has occured for a different dsl" do
+        let(:different_dsl) { DSLCompose::DSL.new :different_dsl_name, TestClass }
+
+        before(:each) do
+          create_class :DifferentTestClass
+
+          interpreter.execute_dsl DifferentTestClass, different_dsl
+        end
+
+        it "returns an empty array" do
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_kind_of Array
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_empty
+        end
+
+        describe "when an excecution has occured for this dsl" do
+          before(:each) do
+            interpreter.execute_dsl TestClass, dsl
+          end
+
+          it "returns an array with the expected executions" do
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_kind_of Array
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false).count).to eq 1
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false).first).to be_kind_of DSLCompose::Interpreter::Execution
+          end
+
+          describe "when an excecution has occured for this dsl on a class which is an ansestor of the provided class" do
+            before(:each) do
+              create_class :ChildClass, TestClass
+            end
+
+            it "returns an empty array" do
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, true, false)).to be_kind_of Array
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, true, false)).to be_empty
+            end
+          end
         end
       end
     end

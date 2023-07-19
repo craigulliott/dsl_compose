@@ -76,7 +76,7 @@ module DSLCompose
           raise DescriptionAlreadyExistsError, "The description has already been set"
         end
 
-        @description = description
+        @description = FixHeredocIndentation.fix_heredoc_indentation description
       end
 
       # Returns `true` if this DSL has a description, else false.
