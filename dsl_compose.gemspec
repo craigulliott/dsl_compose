@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Ruby gem to add dynamic DSLs to classes"
   spec.description = "Ruby gem to add dynamic DSLs to classes. DSLs are added to classes by including the DSLCompose module, and then calling the add_dsl singleton method within the class or a child class."
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.1.4"
+  spec.required_ruby_version = ">= 3.0.0"
 
   spec.metadata["source_code_uri"] = "https://github.com/craigulliott/dsl_compose/"
   spec.metadata["changelog_uri"] = "https://github.com/craigulliott/dsl_compose/blob/main/CHANGELOG.md"
