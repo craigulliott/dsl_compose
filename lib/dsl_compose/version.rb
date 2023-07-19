@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module DSLCompose
-  VERSION = "1.14.4"
+  VERSION = "1.14.3"
 end
