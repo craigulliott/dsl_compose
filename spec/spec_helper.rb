@@ -26,13 +26,6 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  # Run the garbage collector before each test. This is nessessary because
-  # we use `ObjectSpace` to determine class hieracy, and deleted classes will
-  # still exist in ObjectSpace until the garbage collector runs
-  config.before(:each) do
-    ObjectSpace.garbage_collect
-  end
-
   # after each spec, clear all the DSLs so that we can start fresh each time
   config.after(:each) do
     DSLCompose::DSLs.reset
