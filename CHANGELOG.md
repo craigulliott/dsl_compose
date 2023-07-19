@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/craigulliott/dsl_compose/compare/v1.14.4...v2.0.0) (2023-07-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* Removing dependency on ObjectSpace because of the problems it creates with garbage collection and test suites which dynamically create and destroy classes. This required bumping the minimum version of ruby to 3.1.4 ([#49](https://github.com/craigulliott/dsl_compose/issues/49))
+
+### Bug Fixes
+
+* Removing dependency on ObjectSpace because of the problems it creates with garbage collection and test suites which dynamically create and destroy classes. This required bumping the minimum version of ruby to 3.1.4 ([#49](https://github.com/craigulliott/dsl_compose/issues/49)) ([b63d8cf](https://github.com/craigulliott/dsl_compose/commit/b63d8cf9698dfc161cb910bd86e7f8d71961b9b1))
+
 ## [1.14.3](https://github.com/craigulliott/dsl_compose/compare/v1.14.2...v1.14.3) (2023-07-19)
 
 

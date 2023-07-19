@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dsl_compose (1.14.3)
+    dsl_compose (2.0.0)
 
 GEM
   remote: https://rubygems.org/
