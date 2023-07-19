@@ -8,6 +8,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       include DSLCompose::Composer
       define_dsl :dsl_name do
         requires :arg_name, :symbol
+        optional :unused_argument, :symbol
       end
     end
 
@@ -70,6 +71,14 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
     it "optionally passes dsl argument values to the provided block" do
       an = nil
       DSLCompose::Parser::ForChildrenOfParser::ForDSLParser.new BaseClass, ChildClass, :dsl_name, true, true do |arg_name:|
+        an = arg_name
+      end
+      expect(an).to eq(:foo)
+    end
+
+    it "passes nil values for unused optional dsl argument values to the provided block" do
+      an = nil
+      DSLCompose::Parser::ForChildrenOfParser::ForDSLParser.new BaseClass, ChildClass, :dsl_name, true, true do |arg_name:, unused_argument:|
         an = arg_name
       end
       expect(an).to eq(:foo)
