@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.3](https://github.com/craigulliott/dsl_compose/compare/v1.14.2...v1.14.3) (2023-07-19)
+
+
+### Bug Fixes
+
+* for_children_of returns classes with dependencies before classes without any dependencies, this fixes a bug where the parser is used to create other classes, and classes with dependencies need to be created first ([#45](https://github.com/craigulliott/dsl_compose/issues/45)) ([ffc481d](https://github.com/craigulliott/dsl_compose/commit/ffc481d8cdcc85483bfc3829ac3eacd3f44ec657))
+
 ## [1.14.2](https://github.com/craigulliott/dsl_compose/compare/v1.14.1...v1.14.2) (2023-07-19)
 
 
