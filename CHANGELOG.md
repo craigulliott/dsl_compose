@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/craigulliott/dsl_compose/compare/v1.13.0...v1.13.1) (2023-07-19)
+
+
+### Bug Fixes
+
+* unused optional arguments no longer raise an error within the parser ([#37](https://github.com/craigulliott/dsl_compose/issues/37)) ([99cd04b](https://github.com/craigulliott/dsl_compose/commit/99cd04b83387c7940e364dc86d527fdb51152405))
+
 ## [1.13.0](https://github.com/craigulliott/dsl_compose/compare/v1.12.0...v1.13.0) (2023-07-17)
 
 
