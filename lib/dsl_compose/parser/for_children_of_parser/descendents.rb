@@ -11,7 +11,7 @@ module DSLCompose
 
         def classes
           # all objects which extend the provided base class
-          extending_classes = ObjectSpace.each_object(Class).select { |klass| klass < @base_class }
+          extending_classes = subclasses @base_class
 
           # sort the results, classes are ordered first by the depth of their namespace, and second
           # by the presence of decendents and finally by their name
@@ -32,8 +32,15 @@ module DSLCompose
 
         private
 
+        # recursively get all sub classes of the provided base class
+        def subclasses base_class
+          base_class.subclasses.map { |subclass|
+            [subclass] + subclasses(subclass)
+          }.flatten
+        end
+
         def has_descendents base_class
-          ObjectSpace.each_object(Class).count { |klass| klass < base_class } > 0
+          base_class.subclasses.count > 0
         end
       end
     end
