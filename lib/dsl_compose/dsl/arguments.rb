@@ -22,6 +22,11 @@ module DSLCompose
         @arguments = {}
       end
 
+      # returns true if there are any arguments, otherwise returns false
+      def any?
+        @arguments.values.any?
+      end
+
       # Returns an array of all this DSLMethods Argument objects.
       def arguments
         @arguments.values

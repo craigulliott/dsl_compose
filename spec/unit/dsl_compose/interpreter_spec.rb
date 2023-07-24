@@ -37,6 +37,14 @@ RSpec.describe DSLCompose::Interpreter do
     end
   end
 
+  describe :add_parser_usage_note do
+    it "adds a parser note" do
+      expect(interpreter.parser_usage_notes(TestClass)).to eql([])
+      interpreter.add_parser_usage_note TestClass, "a note about this parser"
+      expect(interpreter.parser_usage_notes(TestClass)).to eql(["a note about this parser"])
+    end
+  end
+
   describe :parser_usage_notes do
     it "returns an empty array" do
       expect(interpreter.parser_usage_notes(TestClass)).to eql([])
@@ -53,12 +61,8 @@ RSpec.describe DSLCompose::Interpreter do
     end
   end
 
-  describe :add_parser_usage_note do
-    it "adds a parser note" do
-      expect(interpreter.parser_usage_notes(TestClass)).to eql([])
-      interpreter.add_parser_usage_note TestClass, "a note about this parser"
-      expect(interpreter.parser_usage_notes(TestClass)).to eql(["a note about this parser"])
-    end
+  describe :execute_dsl do
+    # the parser execution is tested only through the integration tests
   end
 
   describe :class_executions do
@@ -159,7 +163,7 @@ RSpec.describe DSLCompose::Interpreter do
             expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true).first).to be_kind_of DSLCompose::Interpreter::Execution
           end
 
-          describe "when an excecution has occured for this dsl on a class which is an ansestor of the provided class" do
+          describe "when an excecution has occured for this dsl on a class which is an ancestor of the provided class" do
             before(:each) do
               create_class :ChildClass, TestClass
             end
@@ -204,7 +208,7 @@ RSpec.describe DSLCompose::Interpreter do
             expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_empty
           end
 
-          describe "when an excecution has occured for this dsl on a class which is an ansestor of the provided class" do
+          describe "when an excecution has occured for this dsl on a class which is an ancestor of the provided class" do
             before(:each) do
               create_class :ChildClass, TestClass
             end
@@ -250,7 +254,7 @@ RSpec.describe DSLCompose::Interpreter do
             expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false).first).to be_kind_of DSLCompose::Interpreter::Execution
           end
 
-          describe "when an excecution has occured for this dsl on a class which is an ansestor of the provided class" do
+          describe "when an excecution has occured for this dsl on a class which is an ancestor of the provided class" do
             before(:each) do
               create_class :ChildClass, TestClass
             end
@@ -265,25 +269,63 @@ RSpec.describe DSLCompose::Interpreter do
     end
   end
 
-  describe :to_h do
-    it "returns an empty object" do
-      expect(interpreter.to_h(dsl.name)).to eql({})
-    end
+  describe :get_last_dsl_execution do
+    describe "when there is a single dsl execution on the provided class" do
+      let(:execution) { interpreter.execute_dsl TestClass, dsl }
 
-    describe "when an excecution has occured for this class" do
       before(:each) do
-        interpreter.execute_dsl TestClass, dsl
+        execution
       end
 
-      it "returns a object, keyed by class, with keys for arguments and method calls" do
-        expect(interpreter.to_h(dsl.name)).to eql(
-          {
-            TestClass => {
-              arguments: {},
-              method_calls: {}
-            }
-          }
-        )
+      it "returns the execution" do
+        expect(interpreter.get_last_dsl_execution(TestClass, dsl.name)).to eq(execution)
+      end
+
+      describe "when there is a second dsl execution on the provided class" do
+        let(:second_execution) { interpreter.execute_dsl TestClass, dsl }
+
+        before(:each) do
+          second_execution
+        end
+
+        it "returns the most recent (second) execution" do
+          expect(interpreter.get_last_dsl_execution(TestClass, dsl.name)).to eq(second_execution)
+        end
+      end
+
+      describe "when there is a second execution from a different DSL on the provided class" do
+        let(:different_dsl) { DSLCompose::DSL.new :different_dsl_name, TestClass }
+        let(:second_execution) { interpreter.execute_dsl TestClass, different_dsl }
+
+        before(:each) do
+          second_execution
+        end
+
+        it "returns the expected execution" do
+          expect(interpreter.get_last_dsl_execution(TestClass, dsl.name)).to eq(execution)
+        end
+
+        describe "when the provided class is an ancestor of the class which the DSL was executed on" do
+          before(:each) do
+            create_class :ChildClass, TestClass
+          end
+
+          it "returns the expected execution" do
+            expect(interpreter.get_last_dsl_execution(ChildClass, dsl.name)).to eq(execution)
+          end
+
+          describe "when the child class has it's own execution of the DSL" do
+            let(:child_class_execution) { interpreter.execute_dsl ChildClass, dsl }
+
+            before(:each) do
+              child_class_execution
+            end
+
+            it "returns the expected execution" do
+              expect(interpreter.get_last_dsl_execution(ChildClass, dsl.name)).to eq(child_class_execution)
+            end
+          end
+        end
       end
     end
   end
@@ -328,6 +370,29 @@ RSpec.describe DSLCompose::Interpreter do
         expect(interpreter.parser_usage_notes(TestClass)).to eql(["a note"])
         interpreter.clear
         expect(interpreter.parser_usage_notes(TestClass)).to eql([])
+      end
+    end
+  end
+
+  describe :to_h do
+    it "returns an empty object" do
+      expect(interpreter.to_h(dsl.name)).to eql({})
+    end
+
+    describe "when an excecution has occured for this class" do
+      before(:each) do
+        interpreter.execute_dsl TestClass, dsl
+      end
+
+      it "returns a object, keyed by class, with keys for arguments and method calls" do
+        expect(interpreter.to_h(dsl.name)).to eql(
+          {
+            TestClass => {
+              arguments: {},
+              method_calls: {}
+            }
+          }
+        )
       end
     end
   end

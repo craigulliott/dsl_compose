@@ -312,6 +312,82 @@ MyParser < DSLCompose::Parser
 end
 ```
 
+In addition to parser classes (or as a useful tool within parser classes) you can access the results of DSL execution via the class (or via a descendent of the class) where the DSL was originally defined.
+
+```ruby
+# Create a new Reader object.
+#
+# Reader objects build and return ExecutionReader classes which expose a
+# simple API to access the arguments, methods and method arguments which
+# were provided when using a DSL.
+#
+# In the example below, MyClass is a class, or descendent of a class which
+# had a DSL defined on it with the name :my_dsl.
+#
+# An error will be raised if a DSL with the provided name was never defined
+# on MyClass or any of its ancestors.
+reader = DSLCompose::Reader.new MyClass, :my_dsl
+
+# `reader.last_execution` will return an ExecutionReader which represents
+# the last time the DSL was used.
+#
+# If the dsl has been executed once or more on the provided class, then
+# the last (most recent) execution will be returned. If the DSL was not
+# executed on the provided class, then we traverse up the classes ancestors
+# and look for the last (most recent) time it was executed on each ancestor.
+#
+# If no execution of the DSL is found, then nil will be returned
+execution = reader.last_execution
+
+# `execution.arguments` returns an ArgumentsReader object which allows access
+# via dot notation to to any argument values provided to the DSL
+execution.arguments.my_dsl_argument # returns the value provided for the argument, or nil
+
+# `execution.method_called?` will return true if the method with the provided
+# name was called, if a method with this name does exist, but was not called
+# then false will be returned. If a method with this name does not exist, then
+# an error will be raised.
+execution.method_called? :my_dsl_method # returns true/false
+
+# You can directly access the argument values for methods by calling the
+# ExecutionReader object with the same method name as the defined method on
+# your DSL.
+#
+# If your method was defined as unique via `add_unique_method` then this will
+# return a single ArgumentsReader which represents the arguments provided to
+# your method.
+#
+# Note that `execution.my_dsl_method` will return nil if the method was
+# not used in this DSL execution, so you should either check this first
+# with `method_called?` or use ruby's safe navigation operator (`.&`). If
+# you want to enforce use of this method, then it should be marked as
+# required when your DSL was originally defined.
+execution.my_dsl_method.my_dsl_method_argument
+
+# If your method was not defined as unique, then this will return an array
+# representing each time the method was used. If the method was never used
+# then an empty array will be returned
+execution.my_dsl_method.each do |arguments|
+  arguments.my_dsl_method_argument # returns the value provided for the argument, or nil
+end
+
+# Returns an array of ExecutionReaders to represent each time the DSL was used
+# on ancestors of the provided class.
+# Returns an array of ExecutionReaders to represent each time the DSL was used
+# on the ancestors of the provided class, but not on the provided class itself.
+# The executions will be returned in the order they were executed, which is the
+# earliest ancestor first and if the DSL was used more than once on a class then
+# the order they were used.
+executions = reader.ancestor_executions
+
+# Returns an array of ExecutionReaders to represent each time the DSL was used
+# on the provided class or ancestors of the provided class. The executions will
+# be returned in the order they were executed, which is the earliest ancestor first
+# and if the DSL was used more than once on a class then the order they were used.
+executions = reader.all_executions
+
+```
+
 
 ## Argument validations
 

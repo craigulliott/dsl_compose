@@ -4,6 +4,9 @@ module DSLCompose
   # The class is reponsible for parsing and executing a dynamic DSL (dynamic DSLs are
   # created using the DSLCompose::DSL class).
   class Interpreter
+    class DSLExecutionNotFoundError < StandardError
+    end
+
     # A dynamic DSL can be used multiple times on the same class, each time the DSL is used
     # a corresponding execution will be created. The execution contains the resulting configuration
     # from that particular use of the DSL.
@@ -59,6 +62,22 @@ module DSLCompose
     # any ancestors of the provided class
     def class_dsl_executions klass, dsl_name, on_current_class, on_ancestor_class
       @executions.filter { |e| e.dsl.name == dsl_name && ((on_current_class && e.klass == klass) || (on_ancestor_class && klass < e.klass)) }
+    end
+
+    # returns the most recent, closest single execution of a dsl with the
+    # provided name for the provided class
+    #
+    # If the dsl has been executed once or more on the provided class, then
+    # the last (most recent) execution will be returned. If the DSL was not
+    # executed on the provided class, then we traverse up the classes ancestors
+    # until we reach the ancestor where the DSL was originally defined and test
+    # each of them and return the first most recent execution of the DSL.
+    # If no execution of the DSL is found, then nil will be returned
+    def get_last_dsl_execution klass, dsl_name
+      # note that this method does not need to do any special sorting, the required
+      # order for getting the most recent execution is already guaranteed because
+      # parent classes in ruby always have to be evaluated before their descendents
+      class_dsl_executions(klass, dsl_name, true, true).last
     end
 
     # removes all executions from the interpreter, and any parser_usage_notes

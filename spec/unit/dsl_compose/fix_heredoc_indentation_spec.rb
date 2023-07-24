@@ -11,17 +11,15 @@ RSpec.describe DSLCompose::FixHeredocIndentation do
       Foo
       Bar
 
-      New Paragraph should be maintained
-
-      Should collapse to a single line with special chars $
+      Should work fine with special chars $
       * and so on
 
-      It should not collapse lines which have additional indentation
+      It should not remove too much indentation from lines which have additional indentation
         Such as this
 
       TEST_STRING
 
-      expected_string = "Foo Bar\n\nNew Paragraph should be maintained\n\nShould collapse to a single line with special chars $ * and so on\n\nIt should not collapse lines which have additional indentation\n  Such as this"
+      expected_string = "Foo\nBar\n\nShould work fine with special chars $\n* and so on\n\nIt should not remove too much indentation from lines which have additional indentation\n  Such as this"
 
       expect(DSLCompose::FixHeredocIndentation.fix_heredoc_indentation(test_string)).to eq(expected_string)
     end

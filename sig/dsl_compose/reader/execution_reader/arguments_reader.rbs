@@ -1,0 +1,15 @@
+# Classes
+module DSLCompose
+  class Reader
+    class ExecutionReader
+      class ArgumentsReader
+        @arguments: DSL::Arguments
+        @argument_values: Interpreter::Execution::Arguments
+
+        def initialize: (DSL::Arguments arguments, Interpreter::Execution::Arguments argument_values) -> void
+        def method_missing: (Symbol method_name) -> (ArgumentsReader | nil)
+        def respond_to_missing?: (Symbol method_name) -> bool
+      end
+    end
+  end
+end

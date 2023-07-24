@@ -2,9 +2,10 @@ module DSLCompose
   # A small helper to fix indentation and clean up whitespace in
   # strings which were created with rubys heredoc syntax.
   module FixHeredocIndentation
-    # This method is used to fix the indentation of heredoc strings.
-    # It will remove the leading whitespace from each line of the string
-    # and remove the leading newline from the string.
+    # This method is used to trim empty lines from the start and end of
+    # a block of markdown, it will also fix the indentation of heredoc
+    # strings by removing the leading whitespace from the first line, and
+    # that same amount of white space from every other line
     def self.fix_heredoc_indentation string
       # replace all tabs with spaces
       string = string.gsub(/\t/, "  ")
@@ -14,10 +15,7 @@ module DSLCompose
       string = string.gsub(/( *\n)+\Z/, "")
       # removes the number of leading spaces on the first line, from
       # all the other lines
-      string = string.gsub(/^#{string[/\A */]}/, "")
-      # collapse lines which are next to each other onto the same line
-      # because they are really the same paragraph
-      string.gsub(/([^ \n])\n([^ \n])/, '\1 \2')
+      string.gsub(/^#{string[/\A */]}/, "")
     end
   end
 end

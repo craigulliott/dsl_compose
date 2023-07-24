@@ -107,6 +107,21 @@ module DSLCompose
       @dsl_methods.values
     end
 
+    # does this DSL have any methods
+    def has_methods?
+      dsl_methods.any?
+    end
+
+    # does this DSL have any required methods
+    def has_required_methods?
+      required_dsl_methods.any?
+    end
+
+    # does this DSL have any optional methods
+    def has_optional_methods?
+      optional_dsl_methods.any?
+    end
+
     # Returns an array of only the required DSLMethods in this DSL.
     def required_dsl_methods
       dsl_methods.filter(&:required?)
