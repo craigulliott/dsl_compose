@@ -1,0 +1,17 @@
+# Classes
+module DSLCompose
+  class Reader
+    class ExecutionReader
+      @execution: Interpreter::Execution
+
+      def initialize: (Interpreter::Execution execution) -> void
+      def arguments: -> ArgumentsReader
+      def method_called?: (Symbol method_name) -> bool
+      def method_missing: (Symbol method_name) -> (nil | ArgumentsReader | Array[ArgumentsReader])
+      def respond_to_missing?: (Symbol method_name) -> bool
+
+      class InvalidExecution < StandardError
+      end
+    end
+  end
+end

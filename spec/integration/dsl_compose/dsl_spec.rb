@@ -24,6 +24,18 @@ RSpec.describe DSLCompose::DSL do
     expect(TestClass.dsls.to_h(:dsl_name).count).to eq(1)
   end
 
+  it "returns the expected execution object when evaluating a DSL" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name
+    end
+
+    TestClass.dsl_name do
+    end
+
+    expect(TestClass.dsl_name).to be_a(DSLCompose::Interpreter::Execution)
+  end
+
   it "allows calling the same DSL twice for a class, because DSL definitions can be extended/combined" do
     create_class :TestClass do
       include DSLCompose::Composer

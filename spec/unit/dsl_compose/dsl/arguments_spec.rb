@@ -39,6 +39,24 @@ RSpec.describe DSLCompose::DSL::Arguments do
     end
   end
 
+  describe :any? do
+    it "returns false" do
+      expect(arguments.any?).to be false
+    end
+
+    describe "when Arguments have been added" do
+      let(:new_argument) { arguments.add_argument :argument_name, true, :integer }
+
+      before(:each) do
+        new_argument
+      end
+
+      it "returns true" do
+        expect(arguments.any?).to be true
+      end
+    end
+  end
+
   describe :required_arguments do
     it "returns an empty array" do
       expect(arguments.required_arguments).to be_a(Array)

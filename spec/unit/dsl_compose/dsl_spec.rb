@@ -132,6 +132,24 @@ RSpec.describe DSLCompose::DSL do
     end
   end
 
+  describe :has_methods? do
+    it "returns false because no methods have been added" do
+      expect(dsl.has_methods?).to be false
+    end
+
+    describe "when methods have been added" do
+      let(:new_method) { dsl.add_method :method_name, true, true }
+
+      before(:each) do
+        new_method
+      end
+
+      it "returns true" do
+        expect(dsl.has_methods?).to be true
+      end
+    end
+  end
+
   describe :required_dsl_methods do
     it "returns an empty array" do
       expect(dsl.required_dsl_methods).to be_a(Array)
@@ -201,6 +219,66 @@ RSpec.describe DSLCompose::DSL do
           expect(dsl.optional_dsl_methods.first).to be(optional_method)
           expect(dsl.optional_dsl_methods.last.name).to eq(:another_optional_method_name)
           expect(dsl.optional_dsl_methods.last).to be(another_optional_method)
+        end
+      end
+    end
+  end
+
+  describe :has_required_methods? do
+    it "returns false" do
+      expect(dsl.has_required_methods?).to be false
+    end
+
+    describe "when an optional method has been added" do
+      before(:each) do
+        dsl.add_method :optional_method_name, true, false
+      end
+
+      it "returns false" do
+        expect(dsl.has_required_methods?).to be false
+      end
+
+      describe "when required methods have been added" do
+        let(:required_method) { dsl.add_method :required_method_name, true, true }
+        let(:another_required_method) { dsl.add_method :another_required_method_name, true, true }
+
+        before(:each) do
+          required_method
+          another_required_method
+        end
+
+        it "returns true" do
+          expect(dsl.has_required_methods?).to be true
+        end
+      end
+    end
+  end
+
+  describe :has_optional_methods? do
+    it "returns false" do
+      expect(dsl.has_optional_methods?).to be false
+    end
+
+    describe "when a required method has been added" do
+      before(:each) do
+        dsl.add_method :required_method_name, true, true
+      end
+
+      it "returns false" do
+        expect(dsl.has_optional_methods?).to be false
+      end
+
+      describe "when optional methods have been added" do
+        let(:optional_method) { dsl.add_method :optional_method_name, true, false }
+        let(:another_optional_method) { dsl.add_method :another_optional_method_name, true, false }
+
+        before(:each) do
+          optional_method
+          another_optional_method
+        end
+
+        it "returns true" do
+          expect(dsl.has_optional_methods?).to be true
         end
       end
     end

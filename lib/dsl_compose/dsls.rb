@@ -32,8 +32,8 @@ module DSLCompose
       @dsls
     end
 
-    # return a DSL with a provided name for the provided class, if the DSL doesn't
-    # exist then it will be automatically created
+    # if a DSL witg the provided name exists for the provided class, then return true
+    # else return false
     def self.class_dsl_exists? klass, name
       @dsls.key?(klass) && @dsls[klass].key?(name)
     end

@@ -1,0 +1,18 @@
+# Classes
+module DSLCompose
+  class Reader
+    @klass: Class
+    @dsl_name: Symbol
+    @dsl: DSL
+    @dsl_defining_class: Class
+
+    def initialize: (untyped klass, Symbol dsl_name) -> void
+    def last_execution: -> Interpreter::Execution
+    def executions: -> Array[Interpreter::Execution]
+    def ancestor_executions: -> Array[Interpreter::Execution]
+    def all_executions: -> Array[Interpreter::Execution]
+
+    class DSLNotFound < StandardError
+    end
+  end
+end
