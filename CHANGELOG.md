@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/craigulliott/dsl_compose/compare/v2.0.1...v2.1.0) (2023-07-24)
+
+
+### Features
+
+* created a Reader class which can be used to access the resulting configuration from executing DSLs ([#53](https://github.com/craigulliott/dsl_compose/issues/53)) ([6e18eb7](https://github.com/craigulliott/dsl_compose/commit/6e18eb736611193b4fad8dac380cdd760095760f))
+
 ## [2.0.1](https://github.com/craigulliott/dsl_compose/compare/v2.0.0...v2.0.1) (2023-07-19)
 
 
