@@ -168,7 +168,7 @@ You can use `import_shared` anywhere within your DSL definition, you can even us
 Child classes can then use your new DSL
 
 ```ruby
-class Bar << Foo
+class Bar < Foo
 
   your_dsl :first_dsl_argument, do
     your_method "first_method_argument", optional_argument: 123
@@ -239,7 +239,7 @@ A parser class can be used to process complicated DSLs. In the example below, a 
 
 ```ruby
 # create your own parser by creating a new class which extends DSLCompose::Parser
-MyParser < DSLCompose::Parser
+class MyParser < DSLCompose::Parser
   # `for_children_of` will process SomeBaseClass and yield the provided
   # block once for every class which extends SomeBaseClass.
   #
@@ -312,7 +312,7 @@ MyParser < DSLCompose::Parser
 end
 ```
 
-In addition to parser classes (or as a useful tool within parser classes) you can access the results of DSL execution via the class (or via a descendent of the class) where the DSL was originally defined.
+In addition to parser classes (or as a useful tool within parser classes) you can access the results of DSL execution with a Reader class.
 
 ```ruby
 # Create a new Reader object.
