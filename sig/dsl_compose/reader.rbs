@@ -7,10 +7,10 @@ module DSLCompose
     @dsl_defining_class: Class
 
     def initialize: (untyped klass, Symbol dsl_name) -> void
-    def last_execution: -> Interpreter::Execution
-    def executions: -> Array[Interpreter::Execution]
-    def ancestor_executions: -> Array[Interpreter::Execution]
-    def all_executions: -> Array[Interpreter::Execution]
+    def last_execution: -> ExecutionReader
+    def executions: -> Array[ExecutionReader]
+    def ancestor_executions: -> Array[ExecutionReader]
+    def all_executions: -> Array[ExecutionReader]
 
     class DSLNotFound < StandardError
     end

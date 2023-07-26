@@ -15,6 +15,8 @@ module DSLCompose
       class MethodDoesNotExist < StandardError
       end
 
+      attr_reader :execution
+
       def initialize execution
         raise InvalidExecution unless execution.is_a? Interpreter::Execution
         @execution = execution

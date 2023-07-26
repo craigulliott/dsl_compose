@@ -44,6 +44,12 @@ RSpec.describe DSLCompose::Reader::ExecutionReader do
     end
   end
 
+  describe :execution do
+    it "returns the expected execution" do
+      expect(reader.execution).to eq(execution)
+    end
+  end
+
   describe :arguments do
     it "returns an ArgsReader object" do
       expect(reader.arguments).to be_a DSLCompose::Reader::ExecutionReader::ArgumentsReader

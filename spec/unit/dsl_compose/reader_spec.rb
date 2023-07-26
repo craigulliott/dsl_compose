@@ -73,8 +73,9 @@ RSpec.describe DSLCompose::Reader do
         execution
       end
 
-      it "returns the expected execution" do
-        expect(reader.last_execution).to eq execution
+      it "returns a reader for the expected execution" do
+        expect(reader.last_execution).to be_a(DSLCompose::Reader::ExecutionReader)
+        expect(reader.last_execution.execution).to eq execution
       end
 
       describe "when the DSL is used again" do
@@ -88,8 +89,9 @@ RSpec.describe DSLCompose::Reader do
           second_execution
         end
 
-        it "returns the last, most recent execution" do
-          expect(reader.last_execution).to eq second_execution
+        it "returns a reader for last, most recent execution" do
+          expect(reader.last_execution).to be_a(DSLCompose::Reader::ExecutionReader)
+          expect(reader.last_execution.execution).to eq second_execution
         end
       end
 
@@ -104,8 +106,9 @@ RSpec.describe DSLCompose::Reader do
           second_execution
         end
 
-        it "returns the last, most recent execution on the provided class and ignores the execution on the child class" do
-          expect(reader.last_execution).to eq execution
+        it "returns a reader for the last, most recent execution on the provided class and ignores the execution on the child class" do
+          expect(reader.last_execution).to be_a(DSLCompose::Reader::ExecutionReader)
+          expect(reader.last_execution.execution).to eq execution
         end
       end
     end
@@ -127,15 +130,15 @@ RSpec.describe DSLCompose::Reader do
           execution
         end
 
-        it "a reader for the BaseClass returns no executions" do
+        it "a reader for the BaseClass returns no execution readers" do
           expect(DSLCompose::Reader.new(BaseClass, :dsl_name).executions).to eql []
         end
 
         it "a reader for this class returns only the exections which occured on it" do
-          expect(DSLCompose::Reader.new(ChildClass, :dsl_name).executions).to eql [execution]
+          expect(DSLCompose::Reader.new(ChildClass, :dsl_name).executions.map(&:execution)).to eql [execution]
         end
 
-        it "a reader for a new class which extends this class returns no executions" do
+        it "a reader for a new class which extends this class returns no execution readers" do
           expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).executions).to eql []
         end
 
@@ -151,14 +154,14 @@ RSpec.describe DSLCompose::Reader do
           end
 
           it "a reader for the BaseClass returns only the exections which occured on it" do
-            expect(DSLCompose::Reader.new(BaseClass, :dsl_name).executions).to eql [base_class_execution]
+            expect(DSLCompose::Reader.new(BaseClass, :dsl_name).executions.map(&:execution)).to eql [base_class_execution]
           end
 
           it "a reader for this class returns only the exections which occured on it" do
-            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).executions).to eql [execution]
+            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).executions.map(&:execution)).to eql [execution]
           end
 
-          it "a reader for a new class which extends this class returns no executions" do
+          it "a reader for a new class which extends this class returns no execution readers" do
             expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).executions).to eql []
           end
 
@@ -174,15 +177,15 @@ RSpec.describe DSLCompose::Reader do
             end
 
             it "a reader for the BaseClass returns only the exections which occured on it" do
-              expect(DSLCompose::Reader.new(BaseClass, :dsl_name).executions).to eql [base_class_execution]
+              expect(DSLCompose::Reader.new(BaseClass, :dsl_name).executions.map(&:execution)).to eql [base_class_execution]
             end
 
             it "a reader for this class returns only the exections which occured on it" do
-              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).executions).to eql [execution]
+              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).executions.map(&:execution)).to eql [execution]
             end
 
-            it "a reader for a new class which extends this class returns no executions" do
-              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).executions).to eql [grandchild_class_execution]
+            it "a reader for a new class which extends this class returns no execution readers" do
+              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).executions.map(&:execution)).to eql [grandchild_class_execution]
             end
           end
         end
@@ -206,16 +209,16 @@ RSpec.describe DSLCompose::Reader do
           execution
         end
 
-        it "a reader for the BaseClass returns no executions" do
+        it "a reader for the BaseClass returns no execution readers" do
           expect(DSLCompose::Reader.new(BaseClass, :dsl_name).ancestor_executions).to eql []
         end
 
-        it "a reader for this class returns no executions" do
+        it "a reader for this class returns no execution readers" do
           expect(DSLCompose::Reader.new(ChildClass, :dsl_name).ancestor_executions).to eql []
         end
 
         it "a reader for a new class which extends this class returns the execution which was performed on its direct ancestor" do
-          expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).ancestor_executions).to eql [execution]
+          expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).ancestor_executions.map(&:execution)).to eql [execution]
         end
 
         describe "when the DSL is used on the BaseClass" do
@@ -229,16 +232,16 @@ RSpec.describe DSLCompose::Reader do
             base_class_execution
           end
 
-          it "a reader for the BaseClass returns no executions" do
+          it "a reader for the BaseClass returns no execution readers" do
             expect(DSLCompose::Reader.new(BaseClass, :dsl_name).ancestor_executions).to eql []
           end
 
           it "a reader for this class returns the execution which was performed on its direct ancestor" do
-            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).ancestor_executions).to eql [base_class_execution]
+            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).ancestor_executions.map(&:execution)).to eql [base_class_execution]
           end
 
           it "a reader for a new class which extends this class returns the execution which was performed on its ancestors" do
-            expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).ancestor_executions).to eql [execution, base_class_execution]
+            expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).ancestor_executions.map(&:execution)).to eql [execution, base_class_execution]
           end
 
           describe "when the DSL is used on another class which extends the original class" do
@@ -252,16 +255,16 @@ RSpec.describe DSLCompose::Reader do
               grandchild_class_execution
             end
 
-            it "a reader for the BaseClass returns no executions" do
+            it "a reader for the BaseClass returns no execution readers" do
               expect(DSLCompose::Reader.new(BaseClass, :dsl_name).ancestor_executions).to eql []
             end
 
             it "a reader for this class returns the execution which was performed on its direct ancestor" do
-              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).ancestor_executions).to eql [base_class_execution]
+              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).ancestor_executions.map(&:execution)).to eql [base_class_execution]
             end
 
             it "a reader for a new class which extends this class returns the execution which was performed on its ancestors" do
-              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).ancestor_executions).to eql [execution, base_class_execution]
+              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).ancestor_executions.map(&:execution)).to eql [execution, base_class_execution]
             end
           end
         end
@@ -285,16 +288,16 @@ RSpec.describe DSLCompose::Reader do
           execution
         end
 
-        it "a reader for the BaseClass returns no executions" do
+        it "a reader for the BaseClass returns no execution readers" do
           expect(DSLCompose::Reader.new(BaseClass, :dsl_name).all_executions).to eql []
         end
 
         it "a reader for this class returns the execution which occured on it" do
-          expect(DSLCompose::Reader.new(ChildClass, :dsl_name).all_executions).to eql [execution]
+          expect(DSLCompose::Reader.new(ChildClass, :dsl_name).all_executions.map(&:execution)).to eql [execution]
         end
 
         it "a reader for a new class which extends this class returns the execution which occured on its direct ancestor" do
-          expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).all_executions).to eql [execution]
+          expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).all_executions.map(&:execution)).to eql [execution]
         end
 
         describe "when the DSL is used on the BaseClass" do
@@ -309,15 +312,15 @@ RSpec.describe DSLCompose::Reader do
           end
 
           it "a reader for the BaseClass returns the execution which occured on it" do
-            expect(DSLCompose::Reader.new(BaseClass, :dsl_name).all_executions).to eql [base_class_execution]
+            expect(DSLCompose::Reader.new(BaseClass, :dsl_name).all_executions.map(&:execution)).to eql [base_class_execution]
           end
 
           it "a reader for this class returns the execution which occured on it and its direct ancestor" do
-            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).all_executions).to eql [execution, base_class_execution]
+            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).all_executions.map(&:execution)).to eql [execution, base_class_execution]
           end
 
           it "a reader for a new class which extends this class returns the execution which was performed on its ancestors" do
-            expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).all_executions).to eql [execution, base_class_execution]
+            expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).all_executions.map(&:execution)).to eql [execution, base_class_execution]
           end
 
           describe "when the DSL is used on another class which extends the original class" do
@@ -331,16 +334,16 @@ RSpec.describe DSLCompose::Reader do
               grandchild_class_execution
             end
 
-            it "a reader for the BaseClass returns no executions" do
-              expect(DSLCompose::Reader.new(BaseClass, :dsl_name).all_executions).to eql [base_class_execution]
+            it "a reader for the BaseClass returns no execution readers" do
+              expect(DSLCompose::Reader.new(BaseClass, :dsl_name).all_executions.map(&:execution)).to eql [base_class_execution]
             end
 
             it "a reader for this class returns the execution which occured on it and its direct ancestor" do
-              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).all_executions).to eql [execution, base_class_execution]
+              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).all_executions.map(&:execution)).to eql [execution, base_class_execution]
             end
 
             it "a reader for a new class which extends this class returns the execution which occured on it and its ancestors" do
-              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).all_executions).to eql [execution, base_class_execution, grandchild_class_execution]
+              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).all_executions.map(&:execution)).to eql [execution, base_class_execution, grandchild_class_execution]
             end
           end
         end
