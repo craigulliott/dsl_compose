@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/craigulliott/dsl_compose/compare/v2.1.0...v2.1.1) (2023-07-26)
+
+
+### Bug Fixes
+
+* fixed bug where Execution classes were being returned from within the Reader but ExecutionReader classes were expected ([#56](https://github.com/craigulliott/dsl_compose/issues/56)) ([546cdaf](https://github.com/craigulliott/dsl_compose/commit/546cdaf323f3fc3be6ad09a47e5f99c3a59a50e2))
+
 ## [2.1.0](https://github.com/craigulliott/dsl_compose/compare/v2.0.1...v2.1.0) (2023-07-24)
 
 
