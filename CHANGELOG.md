@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/craigulliott/dsl_compose/compare/v2.1.1...v2.2.0) (2023-07-27)
+
+
+### Features
+
+* Added a ReaderBase which can be extended to create custom reader classes. Also added dsl_used?, dsl_used_on_ancestors? and dsl_used_on_class_or_ancestors? helper methods to the Reader class ([6507e4a](https://github.com/craigulliott/dsl_compose/commit/6507e4a082c9a0d7e63c580a17bcb8eb2bd940ea))
+
 ## [2.1.1](https://github.com/craigulliott/dsl_compose/compare/v2.1.0...v2.1.1) (2023-07-26)
 
 
