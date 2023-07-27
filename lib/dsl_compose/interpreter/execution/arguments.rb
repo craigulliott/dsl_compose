@@ -91,6 +91,13 @@ module DSLCompose
                   end
                   optional_argument.validate_integer! value
 
+                when :float
+                  # float allows either floats or integers
+                  unless value.is_a?(Float) || value.is_a?(Integer)
+                    raise InvalidArgumentTypeError, "`#{value}` is not an Float or Integer"
+                  end
+                  optional_argument.validate_float! value
+
                 when :symbol
                   unless value.is_a? Symbol
                     raise InvalidArgumentTypeError, "`#{value}` is not a Symbol"
@@ -174,6 +181,13 @@ module DSLCompose
                   raise InvalidArgumentTypeError, "`#{value}` is not an Integer"
                 end
                 required_argument.validate_integer! value
+
+              when :float
+                # float allows either floats or integers
+                unless value.is_a?(Float) || value.is_a?(Integer)
+                  raise InvalidArgumentTypeError, "`#{value}` is not an Float or Integer"
+                end
+                required_argument.validate_float! value
 
               when :symbol
                 unless value.is_a? Symbol

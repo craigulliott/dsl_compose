@@ -362,6 +362,12 @@ module DSLCompose
             (length_validation.nil? || length_validation.validate!(value))
         end
 
+        # returns true if every provided float validation also returns true
+        def validate_float! value
+          # floats are validated with the same set of validators as integers
+          validate_integer! value
+        end
+
         # returns true if every provided symbol validation also returns true
         def validate_symbol! value
           (format_validation.nil? || format_validation.validate!(value)) &&

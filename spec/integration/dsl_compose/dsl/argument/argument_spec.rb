@@ -25,6 +25,56 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     )
   end
 
+  describe "for DSL with a method which has a required integer argument with a validation" do
+    before(:each) do
+      create_class :TestClass do
+        include DSLCompose::Composer
+        define_dsl :dsl_name do
+          requires :required_option_name, :integer do
+            validate_greater_than 0
+          end
+        end
+      end
+    end
+
+    it "evaluates a DSL with a valid argument without raising an error" do
+      expect {
+        TestClass.dsl_name 10
+      }.to_not raise_error
+    end
+
+    it "raises an error when evaluating a DSL with an invalid argument" do
+      expect {
+        TestClass.dsl_name 0
+      }.to raise_error DSLCompose::DSL::Arguments::Argument::GreaterThanValidation::ValidationFailedError
+    end
+  end
+
+  describe "for DSL with a method which has a required float argument with a validation" do
+    before(:each) do
+      create_class :TestClass do
+        include DSLCompose::Composer
+        define_dsl :dsl_name do
+          requires :required_option_name, :float do
+            validate_greater_than 0.5
+          end
+        end
+      end
+    end
+
+    it "evaluates a DSL with a valid argument without raising an error" do
+      expect {
+        TestClass.dsl_name 1
+      }.to_not raise_error
+    end
+
+    it "raises an error when evaluating a DSL with an invalid argument" do
+      expect {
+        TestClass.dsl_name 0
+      }.to raise_error DSLCompose::DSL::Arguments::Argument::GreaterThanValidation::ValidationFailedError
+    end
+  end
+
   it "successfully evaluates a DSL with a method which has a required argument and a block provided" do
     create_class :TestClass do
       include DSLCompose::Composer

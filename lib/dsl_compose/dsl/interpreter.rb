@@ -51,7 +51,7 @@ module DSLCompose
       # adds a new optional argument to the DSLMethod
       #
       # name must be a symbol
-      # `type` can be either :integer, :boolean, :float, :string or :symbol
+      # `type` can be either :integer, :boolean, :float, :string, :symbol, :class or :object
       # `block` contains the argument definition and will be evaluated seperately
       # by the Argument::Interpreter
       def optional name, type, array: false, &block
@@ -61,7 +61,7 @@ module DSLCompose
       # adds a new required argument to the DSLMethod
       #
       # name must be a symbol
-      # `type` can be either :integer, :boolean, :float, :string or :symbol
+      # `type` can be either :integer, :boolean, :float, :string, :symbol, :class or :object
       # `block` contains the argument definition and will be evaluated seperately
       # by the Argument::Interpreter
       def requires name, type, array: false, &block
