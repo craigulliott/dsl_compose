@@ -1,0 +1,17 @@
+# Classes
+module DSLCompose
+  class ReaderBase
+    attr_reader base_class: singleton(Object)
+    attr_reader dsl_name: Symbol
+    attr_reader reader: Reader
+    def initialize: (singleton(Object) base_class) -> void
+
+    private
+    def dsl_name_from_class_name: (singleton(ReaderBase) reader_class) -> Symbol
+    def last_execution: -> (Reader::ExecutionReader | nil)
+    def last_execution!: -> Reader::ExecutionReader
+    def executions: -> Array[Reader::ExecutionReader]
+    def ancestor_executions: -> Array[Reader::ExecutionReader]
+    def all_executions: -> Array[Reader::ExecutionReader]
+  end
+end

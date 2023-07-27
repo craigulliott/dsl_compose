@@ -11,6 +11,9 @@ module DSLCompose
     class DSLNotFound < StandardError
     end
 
+    class NoDSLExecutionFound < StandardError
+    end
+
     # given a class and the DSL name, finds and creates a reference to the DSL
     # and the ancestor class where the DSL was originally defined
     def initialize klass, dsl_name
@@ -42,6 +45,24 @@ module DSLCompose
       end
     end
 
+    # Returns true if dsl has been executed once or more on the provided class,
+    # otherwise returns false.
+    def dsl_used?
+      executions.any?
+    end
+
+    # Returns true if dsl has been executed once or more on one of the ancestors
+    # of the provided class, otherwise returns false.
+    def dsl_used_on_ancestors?
+      ancestor_executions.any?
+    end
+
+    # Returns true if dsl has been executed once or more on the provided class or
+    # any of its ancestors, otherwise returns false.
+    def dsl_used_on_class_or_ancestors?
+      all_executions.any?
+    end
+
     # Returns an ExecutionReader class which exposes a simple API to access the
     # arguments, methods and method arguments provided when using this DSL.
     #
@@ -52,6 +73,15 @@ module DSLCompose
     # If no execution of the DSL is found, then nil will be returned
     def last_execution
       ExecutionReader.new(@dsl_defining_class.dsls.get_last_dsl_execution(@klass, @dsl_name))
+    end
+
+    # A wrapper for last_execution which raises an error if no execution exists
+    def last_execution!
+      execution = @dsl_defining_class.dsls.get_last_dsl_execution(@klass, @dsl_name)
+      if execution.nil?
+        raise NoDSLExecutionFound, "No execution of the `#{@dsl_name}` dsl was found on `#{@klass}` or any of its ancestors"
+      end
+      ExecutionReader.new execution
     end
 
     # Returns an array of ExecutionReaders to represent each time the DSL was used

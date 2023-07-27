@@ -32,6 +32,8 @@ require "dsl_compose/reader"
 require "dsl_compose/reader/execution_reader"
 require "dsl_compose/reader/execution_reader/arguments_reader"
 
+require "dsl_compose/reader_base"
+
 require "dsl_compose/interpreter/execution/method_calls/method_call"
 require "dsl_compose/interpreter/execution/method_calls"
 require "dsl_compose/interpreter/execution/arguments"

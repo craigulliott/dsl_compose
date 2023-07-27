@@ -11,6 +11,9 @@ module DSLCompose
     def executions: -> Array[ExecutionReader]
     def ancestor_executions: -> Array[ExecutionReader]
     def all_executions: -> Array[ExecutionReader]
+    def dsl_used?: -> bool
+    def dsl_used_on_ancestors?: -> bool
+    def dsl_used_on_class_or_ancestors?: -> bool
 
     class DSLNotFound < StandardError
     end

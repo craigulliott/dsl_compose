@@ -114,6 +114,35 @@ RSpec.describe DSLCompose::Reader do
     end
   end
 
+  describe :last_execution! do
+    describe "when provided a class which has a DSL defined on it" do
+      let(:reader) { DSLCompose::Reader.new BaseClass, :dsl_name }
+
+      it "raises an error because the DSL has not been used" do
+        expect {
+          reader.last_execution!
+        }.to raise_error DSLCompose::Reader::NoDSLExecutionFound
+      end
+
+      describe "when the DSL has been used" do
+        let(:execution) {
+          BaseClass.dsl_name :my_dsl_arg do
+            method_name :my_dsl_method_arg
+          end
+        }
+
+        before(:each) do
+          execution
+        end
+
+        it "returns a reader for the expected execution" do
+          expect(reader.last_execution!).to be_a(DSLCompose::Reader::ExecutionReader)
+          expect(reader.last_execution!.execution).to eq execution
+        end
+      end
+    end
+  end
+
   describe :executions do
     describe "when a BaseClass has a DSL defined on it" do
       # note, the ChildClass used below is created at the top of this file
@@ -344,6 +373,243 @@ RSpec.describe DSLCompose::Reader do
 
             it "a reader for a new class which extends this class returns the execution which occured on it and its ancestors" do
               expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).all_executions.map(&:execution)).to eql [execution, base_class_execution, grandchild_class_execution]
+            end
+          end
+        end
+      end
+    end
+  end
+
+  describe :dsl_used? do
+    describe "when a BaseClass has a DSL defined on it" do
+      # note, the ChildClass used below is created at the top of this file
+      # and already extends BaseClass (where the DSL is defined)
+
+      describe "when a class extends this class and uses the DSL" do
+        let(:execution) {
+          ChildClass.dsl_name :my_dsl_arg do
+            method_name :my_dsl_method_arg
+          end
+        }
+
+        before(:each) do
+          execution
+        end
+
+        it "a reader for the BaseClass returns false" do
+          expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used?).to be false
+        end
+
+        it "a reader for this class returns true" do
+          expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used?).to be true
+        end
+
+        it "a reader for a new class which extends this class returns false" do
+          expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used?).to be false
+        end
+
+        describe "when the DSL is used on the BaseClass" do
+          let(:base_class_execution) {
+            BaseClass.dsl_name :my_dsl_arg do
+              method_name :my_dsl_method_arg
+            end
+          }
+
+          before(:each) do
+            base_class_execution
+          end
+
+          it "a reader for the BaseClass returns true" do
+            expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used?).to be true
+          end
+
+          it "a reader for this class returns true" do
+            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used?).to be true
+          end
+
+          it "a reader for a new class which extends this class returns false" do
+            expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used?).to be false
+          end
+
+          describe "when the DSL is used on another class which extends the original class" do
+            let(:grandchild_class_execution) {
+              GrandchildClass.dsl_name :my_dsl_arg do
+                method_name :my_dsl_method_arg
+              end
+            }
+
+            before(:each) do
+              grandchild_class_execution
+            end
+
+            it "a reader for the BaseClass returns true" do
+              expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used?).to be true
+            end
+
+            it "a reader for this class returns true" do
+              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used?).to be true
+            end
+
+            it "a reader for a new class which extends this class returns false" do
+              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used?).to be true
+            end
+          end
+        end
+      end
+    end
+  end
+
+  describe :dsl_used_on_ancestors? do
+    describe "when a BaseClass has a DSL defined on it" do
+      # note, the ChildClass used below is created at the top of this file
+      # and already extends BaseClass (where the DSL is defined)
+
+      describe "when a class extends this class and uses the DSL" do
+        let(:execution) {
+          ChildClass.dsl_name :my_dsl_arg do
+            method_name :my_dsl_method_arg
+          end
+        }
+
+        before(:each) do
+          execution
+        end
+
+        it "a reader for the BaseClass returns false" do
+          expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used_on_ancestors?).to be false
+        end
+
+        it "a reader for this class returns false" do
+          expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used_on_ancestors?).to be false
+        end
+
+        it "a reader for a new class which extends this class returns true" do
+          expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used_on_ancestors?).to be true
+        end
+
+        describe "when the DSL is used on the BaseClass" do
+          let(:base_class_execution) {
+            BaseClass.dsl_name :my_dsl_arg do
+              method_name :my_dsl_method_arg
+            end
+          }
+
+          before(:each) do
+            base_class_execution
+          end
+
+          it "a reader for the BaseClass returns false" do
+            expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used_on_ancestors?).to be false
+          end
+
+          it "a reader for this class returns true" do
+            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used_on_ancestors?).to be true
+          end
+
+          it "a reader for a new class which extends this class returns true" do
+            expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used_on_ancestors?).to be true
+          end
+
+          describe "when the DSL is used on another class which extends the original class" do
+            let(:grandchild_class_execution) {
+              GrandchildClass.dsl_name :my_dsl_arg do
+                method_name :my_dsl_method_arg
+              end
+            }
+
+            before(:each) do
+              grandchild_class_execution
+            end
+
+            it "a reader for the BaseClass returns false" do
+              expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used_on_ancestors?).to be false
+            end
+
+            it "a reader for this class returns true" do
+              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used_on_ancestors?).to be true
+            end
+
+            it "a reader for a new class which extends this class returns true" do
+              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used_on_ancestors?).to be true
+            end
+          end
+        end
+      end
+    end
+  end
+
+  describe :dsl_used_on_class_or_ancestors? do
+    describe "when a BaseClass has a DSL defined on it" do
+      # note, the ChildClass used below is created at the top of this file
+      # and already extends BaseClass (where the DSL is defined)
+
+      describe "when a class extends this class and uses the DSL" do
+        let(:execution) {
+          ChildClass.dsl_name :my_dsl_arg do
+            method_name :my_dsl_method_arg
+          end
+        }
+
+        before(:each) do
+          execution
+        end
+
+        it "a reader for the BaseClass returns false" do
+          expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be false
+        end
+
+        it "a reader for this class returns true" do
+          expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be true
+        end
+
+        it "a reader for a new class which extends this class returns true" do
+          expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be true
+        end
+
+        describe "when the DSL is used on the BaseClass" do
+          let(:base_class_execution) {
+            BaseClass.dsl_name :my_dsl_arg do
+              method_name :my_dsl_method_arg
+            end
+          }
+
+          before(:each) do
+            base_class_execution
+          end
+
+          it "a reader for the BaseClass returns true" do
+            expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be true
+          end
+
+          it "a reader for this class returns true" do
+            expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be true
+          end
+
+          it "a reader for a new class which extends this class returns true" do
+            expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be true
+          end
+
+          describe "when the DSL is used on another class which extends the original class" do
+            let(:grandchild_class_execution) {
+              GrandchildClass.dsl_name :my_dsl_arg do
+                method_name :my_dsl_method_arg
+              end
+            }
+
+            before(:each) do
+              grandchild_class_execution
+            end
+
+            it "a reader for the BaseClass returns false" do
+              expect(DSLCompose::Reader.new(BaseClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be true
+            end
+
+            it "a reader for this class returns true" do
+              expect(DSLCompose::Reader.new(ChildClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be true
+            end
+
+            it "a reader for a new class which extends this class returns true" do
+              expect(DSLCompose::Reader.new(GrandchildClass, :dsl_name).dsl_used_on_class_or_ancestors?).to be true
             end
           end
         end

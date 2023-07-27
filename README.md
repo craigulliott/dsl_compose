@@ -339,10 +339,6 @@ reader = DSLCompose::Reader.new MyClass, :my_dsl
 # If no execution of the DSL is found, then nil will be returned
 execution = reader.last_execution
 
-# `execution.arguments` returns an ArgumentsReader object which allows access
-# via dot notation to to any argument values provided to the DSL
-execution.arguments.my_dsl_argument # returns the value provided for the argument, or nil
-
 # `execution.method_called?` will return true if the method with the provided
 # name was called, if a method with this name does exist, but was not called
 # then false will be returned. If a method with this name does not exist, then
@@ -387,6 +383,106 @@ executions = reader.ancestor_executions
 # be returned in the order they were executed, which is the earliest ancestor first
 # and if the DSL was used more than once on a class then the order they were used.
 executions = reader.all_executions
+
+# Returns true if dsl has been executed once or more on the provided class,
+# otherwise returns false.
+was_used = reader.dsl_used?
+
+# Returns true if dsl has been executed once or more on one of the ancestors
+# of the provided class, otherwise returns false.
+was_used = reader.dsl_used_on_ancestors?
+
+# Returns true if dsl has been executed once or more on the provided class or
+# any of its ancestors, otherwise returns false.
+was_used = reader.dsl_used_on_class_or_ancestors?
+
+# `execution.arguments` returns an ArgumentsReader object which allows access
+# via dot notation to to any argument values provided to the DSL
+execution.arguments.my_dsl_argument # returns the value provided for the argument, or nil
+```
+
+A ReaderBase class is also provided. You can extend this class to create your own Reader objects and provide a much cleaner interface to your specific DSLs.
+
+```ruby
+# This is an example DSL for configuring which database and schema should be used
+# by classes which extend a BaseModel (it's from a hypothetical ORM).
+class BaseModel
+  # define a DSL which can be used on descendants of this class
+  # to determine which database should be used
+  define_dsl :database_configuration do
+    requires :server_type, :symbol do
+      validate_in [:postgres, :mysql]
+    end
+    requires :server_name, :symbol
+    optional :database_name, :symbol
+  end
+  # define a DSL to set the schema which should be used
+  define_dsl :schema do
+    requires :schema_name, :symbol
+  end
+end
+
+# A hypothetical model which extends BaseModel and uses this DSL
+class User < BaseModel
+  # Use the primary postgres server and the default database_name (because
+  # we are not using the optional `database_name: :foo` argument).
+  database_configuration :postgres, :primary
+  # Persist this models data in the `users` schema.
+  schema :users
+end
+
+# An example reader which could be created to provide a more concise
+# interface to this DSL.
+# Because this DSL Reader is named DatabaseConfigurationDSLReader it
+# will automatically refer to the dsl named :database_configuration.
+class DatabaseConfigurationDSLReader < DSLCompose::ReaderBase
+  # The three methods below provide a more concise access to the DSLs
+  # arguments. If the DSL was never used on the provided class, or any
+  # of it's ancestors, then an error will be raised. This error will
+  # be raised because we are using `last_execution!` instead of `last_execution`.
+  def server_type
+    last_execution!.arguments.server_type
+  end
+
+  def server_name
+    last_execution!.arguments.server_name
+  end
+
+  def database_name
+    last_execution!.arguments.database_name
+  end
+
+  # Returns true or false, depending on if the optional database_name
+  # attribute was used when executing the DSL. If the DSL was never
+  # used on the provided class, or any of it's ancestors, then an error will
+  # be raised (because of the bang method).
+  def has_database_name?
+    last_execution!.arguments.database_name != nil
+  end
+
+  # This method is provided as an example of how to reference other DSLs within
+  # your reader.
+  def schema_name
+    last_execution_of_schema&.arguments&.schema_name || :public
+  end
+
+  private
+
+  # This method is used by the schema_name method above, and is included as an
+  # example of how to reference other DSLs within your Reader.
+  def last_execution_of_schema
+    # Note that there is no bang method here (no "!" after last_execution), so it
+    # will return nil if the DSL was not used.
+    @schema_reader ||= DSLCompose::Reader.new(@base_class, :schema).last_execution
+  end
+end
+
+# Use our DatabaseConfigurationDSLReader when parsing this class to
+# enjoy a more concise API for accessing our DSL values
+reader = DatabaseConfigurationDSLReader.new(User)
+reader.server_type # :postgres
+reader.has_database_name? # false
+reader.schema_name # :users
 
 ```
 
