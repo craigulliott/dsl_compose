@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/craigulliott/dsl_compose/compare/v2.2.0...v2.2.1) (2023-07-27)
+
+
+### Bug Fixes
+
+* last_execution was raising error instead of returning nil  when no executions were found ([bedef1e](https://github.com/craigulliott/dsl_compose/commit/bedef1ec606801a4507ce77c39a33d14cb79818f))
+
 ## [2.2.0](https://github.com/craigulliott/dsl_compose/compare/v2.1.1...v2.2.0) (2023-07-27)
 
 
