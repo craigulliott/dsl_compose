@@ -372,7 +372,9 @@ execution.my_dsl_method.each do |arguments|
 end
 
 # Returns an array of ExecutionReaders to represent each time the DSL was used
-# on ancestors of the provided class.
+# on the provided class.
+executions = reader.executions
+
 # Returns an array of ExecutionReaders to represent each time the DSL was used
 # on the ancestors of the provided class, but not on the provided class itself.
 # The executions will be returned in the order they were executed, which is the
