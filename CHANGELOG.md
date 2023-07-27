@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/craigulliott/dsl_compose/compare/v2.2.1...v2.2.2) (2023-07-27)
+
+
+### Bug Fixes
+
+* argument type :float was not accepting values and did not have validations ([243eff1](https://github.com/craigulliott/dsl_compose/commit/243eff1d0d0cc48602cc626e8a91cdc45b4f9955))
+
 ## [2.2.1](https://github.com/craigulliott/dsl_compose/compare/v2.2.0...v2.2.1) (2023-07-27)
 
 
