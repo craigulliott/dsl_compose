@@ -60,55 +60,61 @@ RSpec.describe DSLCompose::Reader do
   end
 
   describe :last_execution do
-    describe "when provided a class which has a DSL defined and used on it" do
+    describe "when provided a class which has a DSL defined on it" do
       let(:reader) { DSLCompose::Reader.new BaseClass, :dsl_name }
 
-      let(:execution) {
-        BaseClass.dsl_name :my_dsl_arg do
-          method_name :my_dsl_method_arg
-        end
-      }
-
-      before(:each) do
-        execution
+      it "returns nil" do
+        expect(reader.last_execution).to be nil
       end
 
-      it "returns a reader for the expected execution" do
-        expect(reader.last_execution).to be_a(DSLCompose::Reader::ExecutionReader)
-        expect(reader.last_execution.execution).to eq execution
-      end
-
-      describe "when the DSL is used again" do
-        let(:second_execution) {
+      describe "when the DSL has been used" do
+        let(:execution) {
           BaseClass.dsl_name :my_dsl_arg do
             method_name :my_dsl_method_arg
           end
         }
 
         before(:each) do
-          second_execution
+          execution
         end
 
-        it "returns a reader for last, most recent execution" do
-          expect(reader.last_execution).to be_a(DSLCompose::Reader::ExecutionReader)
-          expect(reader.last_execution.execution).to eq second_execution
-        end
-      end
-
-      describe "when the DSL is used again but on a descendent of the provided class" do
-        let(:second_execution) {
-          ChildClass.dsl_name :my_dsl_arg do
-            method_name :my_dsl_method_arg
-          end
-        }
-
-        before(:each) do
-          second_execution
-        end
-
-        it "returns a reader for the last, most recent execution on the provided class and ignores the execution on the child class" do
+        it "returns a reader for the expected execution" do
           expect(reader.last_execution).to be_a(DSLCompose::Reader::ExecutionReader)
           expect(reader.last_execution.execution).to eq execution
+        end
+
+        describe "when the DSL is used again" do
+          let(:second_execution) {
+            BaseClass.dsl_name :my_dsl_arg do
+              method_name :my_dsl_method_arg
+            end
+          }
+
+          before(:each) do
+            second_execution
+          end
+
+          it "returns a reader for last, most recent execution" do
+            expect(reader.last_execution).to be_a(DSLCompose::Reader::ExecutionReader)
+            expect(reader.last_execution.execution).to eq second_execution
+          end
+        end
+
+        describe "when the DSL is used again but on a descendent of the provided class" do
+          let(:second_execution) {
+            ChildClass.dsl_name :my_dsl_arg do
+              method_name :my_dsl_method_arg
+            end
+          }
+
+          before(:each) do
+            second_execution
+          end
+
+          it "returns a reader for the last, most recent execution on the provided class and ignores the execution on the child class" do
+            expect(reader.last_execution).to be_a(DSLCompose::Reader::ExecutionReader)
+            expect(reader.last_execution.execution).to eq execution
+          end
         end
       end
     end

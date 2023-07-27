@@ -66,22 +66,23 @@ module DSLCompose
     # Returns an ExecutionReader class which exposes a simple API to access the
     # arguments, methods and method arguments provided when using this DSL.
     #
-    # If the dsl has been executed once or more on the provided class, then
-    # the last (most recent) execution will be returned. If the DSL was not
+    # If the dsl has been executed once or more on the provided class, then a reader
+    # for the last (most recent) execution will be returned. If the DSL was not
     # executed on the provided class, then we traverse up the classes ancestors
     # and look for the last time it was executed on each ancestor.
     # If no execution of the DSL is found, then nil will be returned
     def last_execution
-      ExecutionReader.new(@dsl_defining_class.dsls.get_last_dsl_execution(@klass, @dsl_name))
+      execution = @dsl_defining_class.dsls.get_last_dsl_execution(@klass, @dsl_name)
+      if execution.nil?
+        nil
+      else
+        ExecutionReader.new execution
+      end
     end
 
     # A wrapper for last_execution which raises an error if no execution exists
     def last_execution!
-      execution = @dsl_defining_class.dsls.get_last_dsl_execution(@klass, @dsl_name)
-      if execution.nil?
-        raise NoDSLExecutionFound, "No execution of the `#{@dsl_name}` dsl was found on `#{@klass}` or any of its ancestors"
-      end
-      ExecutionReader.new execution
+      last_execution || (raise NoDSLExecutionFound, "No execution of the `#{@dsl_name}` dsl was found on `#{@klass}` or any of its ancestors")
     end
 
     # Returns an array of ExecutionReaders to represent each time the DSL was used

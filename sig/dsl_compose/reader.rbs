@@ -7,7 +7,8 @@ module DSLCompose
     @dsl_defining_class: Class
 
     def initialize: (untyped klass, Symbol dsl_name) -> void
-    def last_execution: -> ExecutionReader
+    def last_execution: -> (ExecutionReader | nil)
+    def last_execution!: -> ExecutionReader
     def executions: -> Array[ExecutionReader]
     def ancestor_executions: -> Array[ExecutionReader]
     def all_executions: -> Array[ExecutionReader]
