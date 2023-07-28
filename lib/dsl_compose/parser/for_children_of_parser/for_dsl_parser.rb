@@ -109,6 +109,16 @@ module DSLCompose
           ForMethodParser.new(@base_class, @child_class, @dsl_execution, method_names, &block)
         end
 
+        # Given a method name, will return true if the method was called within the current DSL
+        # execution, otherwise it will return false
+        def method_called? method_name
+          # get the dsl method from the current dsl execution, this
+          # will raise an error if the method does not exist
+          dsl_method = @dsl_execution.dsl.dsl_method(method_name)
+          # was this method called within the current DSL execution?
+          @dsl_execution.method_calls.method_called? dsl_method.name
+        end
+
         # takes a description of what this parser does and stores it against the DSL definition
         # of the current @child_class, this is used to generate documentation for what the parser
         # has done with the DSL

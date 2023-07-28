@@ -286,6 +286,12 @@ class MyParser < DSLCompose::Parser
         other than making calls to `for_method`
       DESCRIPTION
 
+      # Within a `for_dsl` block you can determine if a specific DSL method was used
+      # with the `method_called?` method. This method will return true if the method was
+      # used, otherwise it will return false. If a method with the provided name does not
+      # exist for the DSL, then an error will be raised.
+      was_some_method_name_used = method_called? :some_method_name
+
       # `for_method` accepts a method name or an array of method names and will
       # yield it's provided block once for each time a method with this name is
       # executed within the DSL.
