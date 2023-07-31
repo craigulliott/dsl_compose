@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/craigulliott/dsl_compose/compare/v2.2.2...v2.3.0) (2023-07-28)
+
+
+### Features
+
+* added a method_called? helper method to the DSL parser ([48e68a8](https://github.com/craigulliott/dsl_compose/commit/48e68a8d799e297d3433f3d2a6bccb7a077dd9af))
+
 ## [2.2.2](https://github.com/craigulliott/dsl_compose/compare/v2.2.1...v2.2.2) (2023-07-27)
 
 
