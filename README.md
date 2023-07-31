@@ -274,8 +274,13 @@ class MyParser < DSLCompose::Parser
     # then the requested dsl argument must be present on all DSLs otherwise an
     # error will be raised. The parser is aware of class inheritance, and will
     # consider a DSL to have been executed on the actual class it was used, and
-    # any classes which are descendants of that class
-    for_dsl [:dsl1, :dsl2] do |dsl_name:, a_dsl_argument:|
+    # any classes which are descendants of that class.
+    #
+    # You can also request an ExecutionReader object here by including the
+    # argument `:reader`. The resulting reader object will allow to to access the methods
+    # which were called within this use of your DSL. There is more documentation about
+    # Reader classes below.
+    for_dsl [:dsl1, :dsl2] do |dsl_name:, a_dsl_argument:, reader:|
       description <<-DESCRIPTION
         You can optionally provide a description of anything specific that your parser
         does in this block, this description will be used when generating documentation.

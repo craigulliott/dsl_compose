@@ -67,8 +67,13 @@ module DSLCompose
               # us to use keyword arguments to force a naming convention on these arguments
               # and to validate their use
               args = {}
+              # the dsl name (if it's requested)
               if BlockArguments.accepts_argument?(:dsl_name, &block)
                 args[:dsl_name] = dsl_execution.dsl.name
+              end
+              # an ExecutionReader object to access the exections methods (if it's requested)
+              if BlockArguments.accepts_argument?(:reader, &block)
+                args[:reader] = Reader::ExecutionReader.new(dsl_execution)
               end
               # add any arguments that were provided to the DSL
               dsl_execution.arguments.arguments.each do |name, value|
