@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/craigulliott/dsl_compose/compare/v2.4.0...v2.5.0) (2023-08-01)
+
+
+### Features
+
+* you can call validators which accept arrays (such as `validate_in`) multiple times and they will be combined ([e1b4411](https://github.com/craigulliott/dsl_compose/commit/e1b441176768726cecd828e303781a57d4e36750))
+
 ## [2.4.0](https://github.com/craigulliott/dsl_compose/compare/v2.3.0...v2.4.0) (2023-07-31)
 
 
