@@ -230,10 +230,6 @@ module DSLCompose
         end
 
         def validate_in values
-          if @in_validation
-            raise ValidationAlreadyExistsError, "The validation `in` has already been applied to this method option."
-          end
-
           unless values.is_a? Array
             raise ValidationInvalidArgumentError, values
           end
@@ -242,14 +238,15 @@ module DSLCompose
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
-          @in_validation = InValidation.new values
+          # if this validation has already been applied, then add the values to the existing validation
+          if @in_validation
+            @in_validation.add_values values
+          else
+            @in_validation = InValidation.new values
+          end
         end
 
         def validate_not_in values
-          if @not_in_validation
-            raise ValidationAlreadyExistsError, "The validation `not_in` has already been applied to this method option."
-          end
-
           unless values.is_a? Array
             raise ValidationInvalidArgumentError, values
           end
@@ -258,14 +255,15 @@ module DSLCompose
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
-          @not_in_validation = NotInValidation.new values
+          # if this validation has already been applied, then add the values to the existing validation
+          if @not_in_validation
+            @not_in_validation.add_values values
+          else
+            @not_in_validation = NotInValidation.new values
+          end
         end
 
         def validate_end_with value
-          if @end_with_validation
-            raise ValidationAlreadyExistsError, "The validation `end_with` has already been applied to this method option."
-          end
-
           unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
             raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
           end
@@ -274,14 +272,15 @@ module DSLCompose
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
-          @end_with_validation = EndWithValidation.new value
+          # if this validation has already been applied, then add the values to the existing validation
+          if @end_with_validation
+            @end_with_validation.add_values value
+          else
+            @end_with_validation = EndWithValidation.new value
+          end
         end
 
         def validate_not_end_with value
-          if @not_end_with_validation
-            raise ValidationAlreadyExistsError, "The validation `not_end_with` has already been applied to this method option."
-          end
-
           unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
             raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
           end
@@ -290,14 +289,15 @@ module DSLCompose
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
-          @not_end_with_validation = NotEndWithValidation.new value
+          # if this validation has already been applied, then add the values to the existing validation
+          if @not_end_with_validation
+            @not_end_with_validation.add_values value
+          else
+            @not_end_with_validation = NotEndWithValidation.new value
+          end
         end
 
         def validate_start_with value
-          if @start_with_validation
-            raise ValidationAlreadyExistsError, "The validation `start_with` has already been applied to this method option."
-          end
-
           unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
             raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
           end
@@ -306,14 +306,15 @@ module DSLCompose
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
-          @start_with_validation = StartWithValidation.new value
+          # if this validation has already been applied, then add the values to the existing validation
+          if @start_with_validation
+            @start_with_validation.add_values value
+          else
+            @start_with_validation = StartWithValidation.new value
+          end
         end
 
         def validate_not_start_with value
-          if @not_start_with_validation
-            raise ValidationAlreadyExistsError, "The validation `not_start_with` has already been applied to this method option."
-          end
-
           unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
             raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
           end
@@ -322,7 +323,12 @@ module DSLCompose
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
-          @not_start_with_validation = NotStartWithValidation.new value
+          # if this validation has already been applied, then add the values to the existing validation
+          if @not_start_with_validation
+            @not_start_with_validation.add_values value
+          else
+            @not_start_with_validation = NotStartWithValidation.new value
+          end
         end
 
         def validate_length maximum: nil, minimum: nil, is: nil

@@ -12,6 +12,11 @@ module DSLCompose
           end
 
           def initialize values
+            @values = []
+            add_values values
+          end
+
+          def add_values values
             # if the provided values is a symbol, then convert it to an array
             if values.is_a? Symbol
               values = [values]
@@ -27,7 +32,7 @@ module DSLCompose
               raise ValidationFailedError, "The value `#{values}` provided to this validator must be a Symbol or an Array of Symbols"
             end
 
-            @values = values
+            @values += values
           end
 
           def validate! value

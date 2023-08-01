@@ -12,11 +12,16 @@ module DSLCompose
           end
 
           def initialize values
+            @values = []
+            add_values values
+          end
+
+          def add_values values
             unless values.is_a?(Array)
               raise InvalidValueError, "The value `#{values}` provided to this validator must be of type Array"
             end
 
-            @values = values
+            @values += values
           end
 
           def validate! value

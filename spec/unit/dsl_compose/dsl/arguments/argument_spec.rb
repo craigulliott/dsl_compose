@@ -134,8 +134,9 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
   end
 
   describe :validate_greater_than do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       integer_argument.validate_greater_than 2
+      expect(integer_argument.greater_than_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -152,8 +153,9 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
   end
 
   describe :validate_greater_than_or_equal_to do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       integer_argument.validate_greater_than_or_equal_to 2
+      expect(integer_argument.greater_than_or_equal_to_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -170,8 +172,9 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
   end
 
   describe :validate_less_than do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       integer_argument.validate_less_than 2
+      expect(integer_argument.less_than_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -188,8 +191,9 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
   end
 
   describe :validate_less_than_or_equal_to do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       integer_argument.validate_less_than_or_equal_to 2
+      expect(integer_argument.less_than_or_equal_to_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -206,8 +210,9 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
   end
 
   describe :validate_format do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       symbol_argument.validate_format(/[a-z]/)
+      expect(symbol_argument.format_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -224,8 +229,9 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
   end
 
   describe :validate_equal_to do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       symbol_argument.validate_equal_to(false)
+      expect(symbol_argument.equal_to_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -242,8 +248,9 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
   end
 
   describe :validate_in do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       symbol_argument.validate_in([1])
+      expect(symbol_argument.in_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -251,17 +258,17 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
         symbol_argument.validate_in([1])
       end
 
-      it "raises an error" do
-        expect {
-          symbol_argument.validate_in([1])
-        }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
+      it "does not raise an error because it combines the values" do
+        symbol_argument.validate_in([2])
+        expect(symbol_argument.in_validation.instance_variable_get(:@values)).to eql([1, 2])
       end
     end
   end
 
   describe :validate_not_in do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       symbol_argument.validate_not_in([1])
+      expect(symbol_argument.not_in_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -269,17 +276,17 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
         symbol_argument.validate_not_in([1])
       end
 
-      it "raises an error" do
-        expect {
-          symbol_argument.validate_not_in([1])
-        }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
+      it "does not raise an error because it combines the values" do
+        symbol_argument.validate_not_in([2])
+        expect(symbol_argument.not_in_validation.instance_variable_get(:@values)).to eql([1, 2])
       end
     end
   end
 
   describe :validate_end_with do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       symbol_argument.validate_end_with(:_foo)
+      expect(symbol_argument.end_with_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -287,35 +294,35 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
         symbol_argument.validate_end_with(:_foo)
       end
 
-      it "raises an error" do
-        expect {
-          symbol_argument.validate_end_with(:_foo)
-        }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
+      it "does not raise an error because it combines the values" do
+        symbol_argument.validate_end_with(:_bar)
+        expect(symbol_argument.end_with_validation.instance_variable_get(:@values)).to eql([:_foo, :_bar])
       end
     end
   end
 
   describe :validate_not_end_with do
-    it "sets the validation without raising an error" do
-      symbol_argument.validate_end_with(:_foo)
+    it "sets the validation" do
+      symbol_argument.validate_not_end_with(:_foo)
+      expect(symbol_argument.not_end_with_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
       before(:each) do
-        symbol_argument.validate_end_with(:_foo)
+        symbol_argument.validate_not_end_with(:_foo)
       end
 
-      it "raises an error" do
-        expect {
-          symbol_argument.validate_end_with(:_foo)
-        }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
+      it "does not raise an error because it combines the values" do
+        symbol_argument.validate_not_end_with(:_bar)
+        expect(symbol_argument.not_end_with_validation.instance_variable_get(:@values)).to eql([:_foo, :_bar])
       end
     end
   end
 
   describe :validate_start_with do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       symbol_argument.validate_start_with(:foo_)
+      expect(symbol_argument.start_with_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
@@ -323,35 +330,35 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
         symbol_argument.validate_start_with(:foo_)
       end
 
-      it "raises an error" do
-        expect {
-          symbol_argument.validate_start_with(:foo_)
-        }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
+      it "does not raise an error because it combines the values" do
+        symbol_argument.validate_start_with(:bar_)
+        expect(symbol_argument.start_with_validation.instance_variable_get(:@values)).to eql([:foo_, :bar_])
       end
     end
   end
 
   describe :validate_not_start_with do
-    it "sets the validation without raising an error" do
-      symbol_argument.validate_start_with(:foo_)
+    it "sets the validation" do
+      symbol_argument.validate_not_start_with(:foo_)
+      expect(symbol_argument.not_start_with_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
       before(:each) do
-        symbol_argument.validate_start_with(:foo_)
+        symbol_argument.validate_not_start_with(:foo_)
       end
 
-      it "raises an error" do
-        expect {
-          symbol_argument.validate_start_with(:foo_)
-        }.to raise_error(DSLCompose::DSL::Arguments::Argument::ValidationAlreadyExistsError)
+      it "does not raise an error because it combines the values" do
+        symbol_argument.validate_not_start_with(:bar_)
+        expect(symbol_argument.not_start_with_validation.instance_variable_get(:@values)).to eql([:foo_, :bar_])
       end
     end
   end
 
   describe :validate_length do
-    it "sets the validation without raising an error" do
+    it "sets the validation" do
       symbol_argument.validate_length(is: 5)
+      expect(symbol_argument.length_validation).to_not be_nil
     end
 
     describe "when this validation has already been set" do
