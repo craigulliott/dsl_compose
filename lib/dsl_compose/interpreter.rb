@@ -21,7 +21,7 @@ module DSLCompose
     def add_parser_usage_note child_class, note
       @parser_usage_notes ||= {}
       @parser_usage_notes[child_class] ||= []
-      @parser_usage_notes[child_class] << DSLCompose::FixHeredocIndentation.fix_heredoc_indentation(note)
+      @parser_usage_notes[child_class] << note
     end
 
     # return the list of notes which describe how the parsers are using this DSL

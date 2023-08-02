@@ -43,7 +43,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       TestParser.for_children_of BaseClass do |child_class:|
         for_dsl :dsl_name do |dsl_name:|
           for_method :method_name do |method_name:, method_arg_name:, common_method_arg_name:|
-            description <<-DESCRIPTION
+            description <<~DESCRIPTION
               Notes on what this parser is doing, this is used for generating documentation
             DESCRIPTION
           end

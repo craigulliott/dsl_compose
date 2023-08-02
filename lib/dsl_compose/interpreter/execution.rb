@@ -40,7 +40,7 @@ module DSLCompose
       # generate documentation
       def add_parser_usage_note note
         @parser_usage_notes ||= []
-        @parser_usage_notes << DSLCompose::FixHeredocIndentation.fix_heredoc_indentation(note)
+        @parser_usage_notes << note
       end
 
       # return the list of notes which describe how the parsers are using this DSL

@@ -42,7 +42,7 @@ class Foo
   define_dsl :your_dsl do
 
     # A description of your DSL
-    description <<-DESCRIPTION
+    description <<~DESCRIPTION
       Add a description of your DSL here, this description will be
       used when generating the documentation for your DSL.
 
@@ -191,7 +191,7 @@ class MyClientLibrary
     description "Configure the settings for MyClientLibrary"
 
     add_unique_method :api_key, required: true do
-      description <<-DESCRIPTION
+      description <<~DESCRIPTION
         Your API key.
 
         API keys can be generated from your developer
@@ -247,7 +247,7 @@ class MyParser < DSLCompose::Parser
   # which extend the provided base class, but do not have their own children) then
   # use `for_final_children_of` instead of `for_children_of`
   for_children_of SomeBaseClass do |child_class:|
-    description <<-DESCRIPTION
+    description <<~DESCRIPTION
       You can optionally provide a description of anything specific that your parser
       does in this block, this description will be used when generating documentation
 
@@ -281,7 +281,7 @@ class MyParser < DSLCompose::Parser
     # which were called within this use of your DSL. There is more documentation about
     # Reader classes below.
     for_dsl [:dsl1, :dsl2] do |dsl_name:, a_dsl_argument:, reader:|
-      description <<-DESCRIPTION
+      description <<~DESCRIPTION
         You can optionally provide a description of anything specific that your parser
         does in this block, this description will be used when generating documentation.
 
@@ -308,7 +308,7 @@ class MyParser < DSLCompose::Parser
       # are provided then the requested dsl argument must be present on all DSLs
       # otherwise an error will be raised.
       for_method :some_method_name do |method_name:, a_method_argument:|
-        description <<-DESCRIPTION
+        description <<~DESCRIPTION
           You can optionally provide a description of anything specific that your parser
           does in this block, this description will be used when generating documentation.
 

@@ -70,7 +70,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
     it "adds a parser note for both uses of the DSL, but not for GrandchildClass which extends ChildClass1" do
       TestParser.for_children_of BaseClass do |child_class:|
         for_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
-          description <<-DESCRIPTION
+          description <<~DESCRIPTION
             Notes on what this parser is doing, this is used for generating documentation
           DESCRIPTION
         end

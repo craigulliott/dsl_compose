@@ -27,7 +27,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser do
 
   it "successfully parses the DSL and adds a parser note" do
     TestParser.for_children_of BaseClass do |child_class:|
-      description <<-DESCRIPTION
+      description <<~DESCRIPTION
         Notes on what this parser is doing, this is used for generating documentation
       DESCRIPTION
     end
