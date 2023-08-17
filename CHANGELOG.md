@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.1](https://github.com/craigulliott/dsl_compose/compare/v2.5.0...v2.5.1) (2023-08-17)
+
+
+### Bug Fixes
+
+* defaulting optional boolean values to false instead of nil in the parser ([3a4b4d7](https://github.com/craigulliott/dsl_compose/commit/3a4b4d7df315e60dca0e66af37d77b800dc6be2c))
+* stripping white space off descriptions ([93ba9d2](https://github.com/craigulliott/dsl_compose/commit/93ba9d21f57a4f58f70f24a44cd58121741da8d0))
+
 ## [2.5.0](https://github.com/craigulliott/dsl_compose/compare/v2.4.0...v2.5.0) (2023-08-01)
 
 
