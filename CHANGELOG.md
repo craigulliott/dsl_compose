@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.2](https://github.com/craigulliott/dsl_compose/compare/v2.5.1...v2.5.2) (2023-08-17)
+
+
+### Bug Fixes
+
+* optional array arguments default to empty arrays rather than nil ([8a74ad6](https://github.com/craigulliott/dsl_compose/commit/8a74ad671f5d74c3ab7deb6f09c2cfa7c3557d1c))
+
 ## [2.5.1](https://github.com/craigulliott/dsl_compose/compare/v2.5.0...v2.5.1) (2023-08-17)
 
 
