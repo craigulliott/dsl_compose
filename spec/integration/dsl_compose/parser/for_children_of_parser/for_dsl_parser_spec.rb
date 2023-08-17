@@ -194,4 +194,34 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       expect(dsl_args).to eql([false])
     end
   end
+
+  describe "for a DSL with an optional array argument" do
+    before(:each) do
+      create_class :BaseClassWithOptionalArgument do
+        include DSLCompose::Composer
+        define_dsl :dsl_name do
+          optional :dsl_arg_name, :symbol, array: true
+        end
+      end
+
+      create_class :ChildOfBaseClassWithOptionalArgument, BaseClassWithOptionalArgument
+      ChildOfBaseClassWithOptionalArgument.dsl_name
+    end
+
+    it "parses the DSL and defaults the optional argument to an empty array rather than nil" do
+      child_classes = []
+      dsl_names = []
+      dsl_args = []
+      TestParser.for_children_of BaseClassWithOptionalArgument do |child_class:|
+        child_classes << child_class
+        for_dsl :dsl_name do |dsl_name:, dsl_arg_name:|
+          dsl_names << dsl_name
+          dsl_args << dsl_arg_name
+        end
+      end
+      expect(child_classes).to eql([ChildOfBaseClassWithOptionalArgument])
+      expect(dsl_names).to eql([:dsl_name])
+      expect(dsl_args).to eql([[]])
+    end
+  end
 end

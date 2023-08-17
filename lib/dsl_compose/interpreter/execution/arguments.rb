@@ -48,7 +48,15 @@ module DSLCompose
           # If actual values were provided, then they will be set further below.
           if arguments.optional_arguments.any?
             arguments.optional_arguments.each do |optional_argument|
-              @arguments[optional_argument.name] = (optional_argument.type == :boolean) ? false : nil
+              # assume it is nil
+              @arguments[optional_argument.name] = nil
+              # unless the argument is an array or a boolean, in which case it defaults
+              # to an empty array or false
+              if optional_argument.array
+                @arguments[optional_argument.name] = []
+              elsif optional_argument.type == :boolean
+                @arguments[optional_argument.name] = false
+              end
             end
           end
 
