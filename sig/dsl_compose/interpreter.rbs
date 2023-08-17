@@ -9,7 +9,13 @@ module DSLCompose
     def dsl_executions: (Symbol dsl_name) -> Array[Execution]
     def to_h: (Symbol dsl_name) -> Hash[Symbol, Hash[Symbol, Array[Hash[Symbol, Symbol]]]]
     def executions_by_class: () -> Hash[Symbol, Hash[Symbol, Array[Hash[Symbol, Symbol]]]]
-    def add_parser_usage_note: (singleton(Object) klass, String notes) -> void
+    def add_parser_usage_note: (singleton(Object) klass, String note) -> void
     def parser_usage_notes: (singleton(Object) klass) -> Array[String]
+
+    class InvalidDescriptionError < StandardError
+    end
+
+    class DSLExecutionNotFoundError < StandardError
+    end
   end
 end

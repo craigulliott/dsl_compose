@@ -74,7 +74,7 @@ module DSLCompose
     # `description` must be a string with a length greater than 0.
     # The `description` can only be set once per DSL
     def set_description description
-      unless description.is_a?(String) && description.length > 0
+      unless description.is_a?(String) && description.strip.length > 0
         raise InvalidDescriptionError, "The DSL description `#{description}` is invalid, it must be of type string and have length greater than 0"
       end
 
@@ -82,7 +82,7 @@ module DSLCompose
         raise DescriptionAlreadyExistsError, "The DSL description has already been set"
       end
 
-      @description = description
+      @description = description.strip
     end
 
     # Returns `true` if this DSL has a description, else false.

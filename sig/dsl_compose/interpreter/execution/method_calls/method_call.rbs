@@ -4,6 +4,9 @@ module DSLCompose
     class Execution
       class MethodCalls
         class MethodCall
+          class InvalidDescriptionError < StandardError
+          end
+
           @method_call: MethodCall
           @parser_usage_notes: Array[String]
 
@@ -12,6 +15,9 @@ module DSLCompose
 
           def initialize: (DSL::DSLMethod dsl_method, *untyped args) -> void
           def method_name: -> Symbol
+          def add_parser_usage_note: (String note) -> void
+          def parser_usage_notes: () -> Array[String]
+
           def to_h: -> Hash[untyped, untyped]
         end
       end

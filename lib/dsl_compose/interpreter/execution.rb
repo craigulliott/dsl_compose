@@ -9,6 +9,9 @@ module DSLCompose
       class RequiredMethodNotCalledError < StandardError
       end
 
+      class InvalidDescriptionError < StandardError
+      end
+
       attr_reader :dsl
       attr_reader :klass
       attr_reader :method_calls
@@ -39,8 +42,12 @@ module DSLCompose
       # the parser can provide usage notes for how this dsl is being used, these are used to
       # generate documentation
       def add_parser_usage_note note
+        unless note.is_a?(String) && note.strip.length > 0
+          raise InvalidDescriptionError, "The parser usage description `#{note}` is invalid, it must be of type string and have length greater than 0"
+        end
+
         @parser_usage_notes ||= []
-        @parser_usage_notes << note
+        @parser_usage_notes << note.strip
       end
 
       # return the list of notes which describe how the parsers are using this DSL

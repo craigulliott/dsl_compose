@@ -51,8 +51,6 @@ require "dsl_compose/composer"
 
 require "dsl_compose/class_coerce"
 
-require "dsl_compose/fix_heredoc_indentation"
-
 require "dsl_compose/shared_configuration"
 
 require "dsl_compose/dsls"

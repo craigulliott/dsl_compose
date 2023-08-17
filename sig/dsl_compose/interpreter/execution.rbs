@@ -11,6 +11,8 @@ module DSLCompose
 
       def initialize: (Object klass, DSL dsl, *untyped args) -> void
       def instance_eval: () -> void
+      def add_parser_usage_note: (String note) -> void
+      def parser_usage_notes: () -> Array[String]
 
       private
       def method_missing: (Symbol method_name, *untyped args) -> untyped

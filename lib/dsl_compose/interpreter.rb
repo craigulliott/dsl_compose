@@ -7,6 +7,9 @@ module DSLCompose
     class DSLExecutionNotFoundError < StandardError
     end
 
+    class InvalidDescriptionError < StandardError
+    end
+
     # A dynamic DSL can be used multiple times on the same class, each time the DSL is used
     # a corresponding execution will be created. The execution contains the resulting configuration
     # from that particular use of the DSL.
@@ -19,9 +22,12 @@ module DSLCompose
     # the parser can provide usage notes for how this dsl is being used, these are used to
     # generate documentation
     def add_parser_usage_note child_class, note
+      unless note.is_a?(String) && note.strip.length > 0
+        raise InvalidDescriptionError, "The parser usage description `#{note}` is invalid, it must be of type string and have length greater than 0"
+      end
       @parser_usage_notes ||= {}
       @parser_usage_notes[child_class] ||= []
-      @parser_usage_notes[child_class] << note
+      @parser_usage_notes[child_class] << note.strip
     end
 
     # return the list of notes which describe how the parsers are using this DSL
