@@ -44,10 +44,11 @@ module DSLCompose
             raise TooManyArgumentsError, "Too many arguments provided"
           end
 
-          # assume all optonal arguments are nil. If actual values were provided, then they will be set below
+          # Assume all optonal arguments are nil (except booleans, which default to false).
+          # If actual values were provided, then they will be set further below.
           if arguments.optional_arguments.any?
             arguments.optional_arguments.each do |optional_argument|
-              @arguments[optional_argument.name] = nil
+              @arguments[optional_argument.name] = (optional_argument.type == :boolean) ? false : nil
             end
           end
 

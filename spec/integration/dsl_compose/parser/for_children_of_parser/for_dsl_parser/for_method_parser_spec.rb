@@ -9,11 +9,11 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       define_dsl :dsl_name do
         add_method :method_name do
           requires :method_arg_name, :symbol
-          requires :common_method_arg_name, :symbol
+          optional :common_method_arg_name, :boolean
         end
         add_method :common_method_name do
           requires :other_method_arg_name, :symbol
-          requires :common_method_arg_name, :symbol
+          optional :common_method_arg_name, :boolean
         end
       end
       define_dsl :other_dsl_name do
@@ -35,7 +35,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
   describe "where a DSL with a method, has the method called once" do
     before(:each) do
       ChildClass1.dsl_name do
-        method_name :foo, :bar
+        method_name :foo, common_method_arg_name: true
       end
     end
 
@@ -53,12 +53,32 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
     end
   end
 
+  describe "where a DSL with a method, has the method called once wihtout providing a value to an optional boolean arguent" do
+    before(:each) do
+      ChildClass1.dsl_name do
+        method_name :foo
+      end
+    end
+
+    it "returns false instead of nil for the optional boolean argument which was not used" do
+      bool_value = nil
+      TestParser.for_children_of BaseClass do |child_class:|
+        for_dsl :dsl_name do |dsl_name:|
+          for_method :method_name do |common_method_arg_name:|
+            bool_value = common_method_arg_name
+          end
+        end
+      end
+      expect(bool_value).to be false
+    end
+  end
+
   describe "where a DSL is used three times, but a method is only called once" do
     before(:each) do
       ChildClass1.dsl_name
       ChildClass1.dsl_name
       ChildClass1.dsl_name do
-        method_name :foo, :bar
+        method_name :foo, common_method_arg_name: true
       end
       ChildClass1.dsl_name
     end
@@ -83,7 +103,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2])
       expect(method_names).to eql([:method_name])
       expect(method_arg_names).to eql([:foo])
-      expect(common_method_arg_names).to eql([:bar])
+      expect(common_method_arg_names).to eql([true])
       expect(dsl_names).to eql([:dsl_name, :dsl_name, :dsl_name, :dsl_name])
     end
   end
@@ -91,10 +111,10 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
   describe "where a DSL method is used twice from the same DSL on the same child class" do
     before(:each) do
       ChildClass1.dsl_name do
-        method_name :foo1, :bar1
+        method_name :foo1, common_method_arg_name: true
       end
       ChildClass1.dsl_name do
-        method_name :foo2, :bar2
+        method_name :foo2, common_method_arg_name: true
       end
     end
 
@@ -118,7 +138,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2])
       expect(method_names).to eql([:method_name, :method_name])
       expect(method_arg_names).to eql([:foo1, :foo2])
-      expect(common_method_arg_names).to eql([:bar1, :bar2])
+      expect(common_method_arg_names).to eql([true, true])
       expect(dsl_names).to eql([:dsl_name, :dsl_name])
     end
   end
@@ -126,7 +146,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
   describe "where a DSL method with the same name is used from two different DSLs on the same child class" do
     before(:each) do
       ChildClass1.dsl_name do
-        common_method_name :foo1, :bar1
+        common_method_name :foo1, common_method_arg_name: true
       end
       ChildClass1.other_dsl_name do
         common_method_name :foo2
@@ -150,7 +170,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       end
       expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2])
       expect(method_names).to eql([:common_method_name, :common_method_name])
-      expect(common_method_arg_names).to eql([:bar1, :foo2])
+      expect(common_method_arg_names).to eql([true, :foo2])
       expect(dsl_names).to eql([:dsl_name, :other_dsl_name])
     end
   end
@@ -158,7 +178,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
   describe "where a DSL method with the same name is used from two different DSLs on different child classes" do
     before(:each) do
       ChildClass1.dsl_name do
-        common_method_name :foo1, :bar1
+        common_method_name :foo1, common_method_arg_name: true
       end
       ChildClass2.other_dsl_name do
         common_method_name :foo2
@@ -182,7 +202,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
       end
       expect(child_classes.sort_by(&:name)).to eql([ChildClass1, ChildClass2])
       expect(method_names).to eql([:common_method_name, :common_method_name])
-      expect(common_method_arg_names).to eql([:bar1, :foo2])
+      expect(common_method_arg_names).to eql([true, :foo2])
       expect(dsl_names).to eql([:dsl_name, :other_dsl_name])
     end
   end
