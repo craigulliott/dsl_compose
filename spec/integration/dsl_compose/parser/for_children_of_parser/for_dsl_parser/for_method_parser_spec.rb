@@ -53,7 +53,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
     end
   end
 
-  describe "where a DSL with a method, has the method called once wihtout providing a value to an optional boolean arguent" do
+  describe "where a DSL with a method, has the method called once without providing a value to an optional boolean arguent" do
     before(:each) do
       ChildClass1.dsl_name do
         method_name :foo

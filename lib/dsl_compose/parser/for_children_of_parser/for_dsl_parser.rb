@@ -67,14 +67,28 @@ module DSLCompose
               # us to use keyword arguments to force a naming convention on these arguments
               # and to validate their use
               args = {}
+
               # the dsl name (if it's requested)
               if BlockArguments.accepts_argument?(:dsl_name, &block)
                 args[:dsl_name] = dsl_execution.dsl.name
               end
+
+              # a hash representation of all the dsl arguments, if requested
+              if BlockArguments.accepts_argument?(:dsl_arguments, &block)
+                args[:dsl_arguments] = {}
+                # process each argument, because we might need to coerce it
+                dsl_execution.arguments.arguments.each do |name, value|
+                  # if this value is a ClassCoerce object, then convert it from its original
+                  # string value to a class
+                  args[:dsl_arguments][name] = value.is_a?(ClassCoerce) ? value.to_class : value
+                end
+              end
+
               # an ExecutionReader object to access the exections methods (if it's requested)
               if BlockArguments.accepts_argument?(:reader, &block)
                 args[:reader] = Reader::ExecutionReader.new(dsl_execution)
               end
+
               # add any arguments that were provided to the DSL
               dsl_execution.arguments.arguments.each do |name, value|
                 if BlockArguments.accepts_argument?(name, &block)
@@ -83,6 +97,7 @@ module DSLCompose
                   args[name] = value.is_a?(ClassCoerce) ? value.to_class : value
                 end
               end
+
               # set the dsl_execution in an instance variable so that method calls to `for_method`
               # from within the block will have access to it
               @dsl_execution = dsl_execution

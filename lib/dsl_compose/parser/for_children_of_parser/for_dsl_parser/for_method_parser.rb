@@ -83,6 +83,17 @@ module DSLCompose
                   end
                 end
 
+                # a hash representation of all the method arguments, if requested
+                if BlockArguments.accepts_argument?(:method_arguments, &block)
+                  args[:method_arguments] = {}
+                  # process each argument, because we might need to coerce it
+                  method_call.arguments.arguments.each do |name, value|
+                    # if this value is a ClassCoerce object, then convert it from its original
+                    # string value to a class
+                    args[:method_arguments][name] = value.is_a?(ClassCoerce) ? value.to_class : value
+                  end
+                end
+
                 # set the method_call in an instance variable so that method calls to `description`
                 # from within the block will have access to it
                 @method_call = method_call

@@ -193,6 +193,22 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       expect(dsl_names).to eql([:dsl_name])
       expect(dsl_args).to eql([false])
     end
+
+    it "parses the DSL and provides a combined arguments object if requested" do
+      child_classes = []
+      dsl_names = []
+      dsl_args = []
+      TestParser.for_children_of BaseClassWithOptionalArgument do |child_class:|
+        child_classes << child_class
+        for_dsl :dsl_name do |dsl_name:, dsl_arguments:|
+          dsl_names << dsl_name
+          dsl_args << dsl_arguments
+        end
+      end
+      expect(child_classes).to eql([ChildOfBaseClassWithOptionalArgument])
+      expect(dsl_names).to eql([:dsl_name])
+      expect(dsl_args).to eql([{dsl_arg_name: false}])
+    end
   end
 
   describe "for a DSL with an optional array argument" do
