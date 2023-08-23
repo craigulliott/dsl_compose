@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://github.com/craigulliott/dsl_compose/compare/v2.5.2...v2.6.0) (2023-08-23)
+
+
+### Features
+
+* optionally request an object containing all the dsl and dsl method args from within the parser ([8abfd64](https://github.com/craigulliott/dsl_compose/commit/8abfd64131e37f620a9443466028c5a81b6f5377))
+
 ## [2.5.2](https://github.com/craigulliott/dsl_compose/compare/v2.5.1...v2.5.2) (2023-08-17)
 
 
