@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.1](https://github.com/craigulliott/dsl_compose/compare/v2.6.0...v2.6.1) (2023-08-29)
+
+
+### Bug Fixes
+
+* renaming `description` to `add_documentation` for dynamically creating documentation from within parsers ([3e24194](https://github.com/craigulliott/dsl_compose/commit/3e2419492e61d94ea7d3c1f34ef4990fc0f6682a))
+
 ## [2.6.0](https://github.com/craigulliott/dsl_compose/compare/v2.5.2...v2.6.0) (2023-08-23)
 
 
