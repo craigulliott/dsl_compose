@@ -59,7 +59,7 @@ module DSLCompose
       private
 
       # catch and process any method calls within the DSL block
-      def method_missing method_name, *args, &block
+      def method_missing(method_name, ...)
         # if the method does not exist, then this will raise a MethodDoesNotExistError
         dsl_method = @dsl.dsl_method method_name
 
@@ -68,7 +68,7 @@ module DSLCompose
           raise MethodIsUniqueError, "This method `#{method_name}` is unique and can only be called once within this DSL"
         end
 
-        @method_calls.add_method_call dsl_method, *args, &block
+        @method_calls.add_method_call(dsl_method, ...)
       end
 
       def respond_to_missing?(method_name, *args)

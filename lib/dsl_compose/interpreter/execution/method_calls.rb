@@ -14,12 +14,12 @@ module DSLCompose
           @method_calls.filter { |mc| mc.method_name == method_name }.any?
         end
 
-        def add_method_call dsl_method, *args, &block
+        def add_method_call(dsl_method, ...)
           # make sure we always have a variable which can be used in the exception message
           dsl_method_name = nil
           dsl_method_name = dsl_method.name
 
-          method_call = MethodCall.new(dsl_method, *args, &block)
+          method_call = MethodCall.new(dsl_method, ...)
           @method_calls << method_call
           method_call
         rescue => e

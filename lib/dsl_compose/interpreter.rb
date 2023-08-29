@@ -40,14 +40,14 @@ module DSLCompose
     # Execute/process a dynamically defined DSL on a class.
     # `klass` is the class in which the DSL is being used, not
     # the class in which the DSL was defined.
-    def execute_dsl klass, dsl, *args, &block
+    def execute_dsl(klass, dsl, ...)
       # make sure we have these variables for the exception message below
       class_name = nil
       class_name = klass.name
       dsl_name = nil
       dsl_name = dsl.name
 
-      execution = Execution.new(klass, dsl, *args, &block)
+      execution = Execution.new(klass, dsl, ...)
       @executions << execution
       execution
     rescue => e

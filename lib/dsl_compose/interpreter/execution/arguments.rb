@@ -148,7 +148,6 @@ module DSLCompose
               else
                 optional_arg_value
               end
-
             rescue => e
               raise e, "Error processing optional argument #{optional_argument_name}: #{e.message}", e.backtrace
             end
@@ -239,7 +238,6 @@ module DSLCompose
             else
               required_arg_value
             end
-
           rescue => e
             raise e, "Error processing required argument #{argument_name}: #{e.message}", e.backtrace
           end
