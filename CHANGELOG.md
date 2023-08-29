@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.0](https://github.com/craigulliott/dsl_compose/compare/v2.6.1...v2.7.0) (2023-08-29)
+
+
+### Features
+
+* adding `namespace` and `title` methods to DSL generation. These help with documentation generation ([1bdf16d](https://github.com/craigulliott/dsl_compose/commit/1bdf16de6c1dc872809cc66d6599c36b3a1f1e99))
+
 ## [2.6.1](https://github.com/craigulliott/dsl_compose/compare/v2.6.0...v2.6.1) (2023-08-29)
 
 
