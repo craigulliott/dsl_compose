@@ -142,8 +142,8 @@ module DSLCompose
         # takes a description of what this parser does and stores it against the DSL definition
         # of the current @child_class, this is used to generate documentation for what the parser
         # has done with the DSL
-        def description description
-          @dsl_execution.add_parser_usage_note description
+        def add_documentation documentation
+          @dsl_execution.add_parser_usage_note documentation
         end
       end
     end
