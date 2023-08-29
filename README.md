@@ -130,6 +130,31 @@ end
 
 ```
 
+The methods `title` and `namespace` are also available at the top level of your DSL definition. These methods can provide useful metadata when generating documentation, but are typically only useful in much larger systems involving many different DSLs.
+
+```ruby
+class Foo
+  include DSLCompose::Composer
+
+  # DSLs have some top level methods which allow you to set some useful
+  # metadata for use when generating documentation.
+  define_dsl :your_dsl do
+    # You can give your DSLs a friendly title.
+    title "My Friendly DSL Title"
+
+    # You can also logically group a set of DSLs together by setting the same
+    # namespace on each of them.
+    namespace :my_namespace
+
+    # You can also describe this DSL.
+    # Unlike `title` and `namespace`, you can set descriptions on all of your
+    # DSL methods and arguments too (as seen in the various examples above)
+    description "A description of your DSL"
+
+  end
+end
+```
+
 ### Shared Configuration
 
 If you are composing many DSLs across one or many classes and these DSLs share common configuration, then you can share configuration between them.
@@ -247,7 +272,7 @@ class MyParser < DSLCompose::Parser
   # which extend the provided base class, but do not have their own children) then
   # use `for_final_children_of` instead of `for_children_of`
   for_children_of SomeBaseClass do |child_class:|
-    description <<~DESCRIPTION
+    add_documentation <<~DESCRIPTION
       You can optionally provide a description of anything specific that your parser
       does in this block, this description will be used when generating documentation
 
@@ -281,7 +306,7 @@ class MyParser < DSLCompose::Parser
     # which were called within this use of your DSL. There is more documentation about
     # Reader classes below.
     for_dsl [:dsl1, :dsl2] do |dsl_name:, a_dsl_argument:, reader:|
-      description <<~DESCRIPTION
+      add_documentation <<~DESCRIPTION
         You can optionally provide a description of anything specific that your parser
         does in this block, this description will be used when generating documentation.
 
@@ -308,7 +333,7 @@ class MyParser < DSLCompose::Parser
       # are provided then the requested dsl argument must be present on all DSLs
       # otherwise an error will be raised.
       for_method :some_method_name do |method_name:, a_method_argument:|
-        description <<~DESCRIPTION
+        add_documentation <<~DESCRIPTION
           You can optionally provide a description of anything specific that your parser
           does in this block, this description will be used when generating documentation.
 

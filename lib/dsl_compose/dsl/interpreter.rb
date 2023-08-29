@@ -28,6 +28,17 @@ module DSLCompose
         @dsl.set_description description
       end
 
+      # sets the namespace of the DSL, this is used
+      # to group DSLs together in documentation
+      def namespace namespace
+        @dsl.set_namespace namespace
+      end
+
+      # sets the title of the DSL
+      def title title
+        @dsl.set_title title
+      end
+
       # adds a new method to the DSL
       #
       # methods flagged as `required` will cause your DSLs to raise an error

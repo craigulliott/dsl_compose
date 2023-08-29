@@ -30,6 +30,30 @@ RSpec.describe DSLCompose::DSL::Interpreter do
     end
   end
 
+  describe "when interpreting a DSLMethod block which sets a namespace" do
+    before(:each) do
+      interpreter.instance_eval do
+        namespace :valid_namespace
+      end
+    end
+
+    it "sets the namespace on the DSL" do
+      expect(dsl.namespace).to eq :valid_namespace
+    end
+  end
+
+  describe "when interpreting a DSLMethod block which sets a title" do
+    before(:each) do
+      interpreter.instance_eval do
+        title "DSL Title"
+      end
+    end
+
+    it "sets the title on the DSL" do
+      expect(dsl.title).to eq "DSL Title"
+    end
+  end
+
   describe "when interpreting a DSLMethod block which adds a method" do
     before(:each) do
       interpreter.instance_eval do

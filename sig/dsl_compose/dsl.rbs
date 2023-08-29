@@ -7,10 +7,16 @@ module DSLCompose
     attr_reader arguments: Arguments
     attr_reader klass: Object
     attr_reader description: String
+    attr_reader namespace: Symbol
+    attr_reader title: String
     def initialize: (Symbol name, Object klass) -> void
     def evaluate_configuration_block: () -> void
     def set_description: (String description) -> String
     def has_description?: -> bool
+    def set_namespace: (Symbol namespace) -> Symbol
+    def has_namespace?: -> bool
+    def set_title: (String title) -> String
+    def has_title?: -> bool
     def add_method: (Symbol name, bool unique, bool required) -> DSLMethod
     def dsl_methods: -> Array[DSLMethod]
     def required_dsl_methods: -> Array[DSLMethod]
@@ -34,6 +40,18 @@ module DSLCompose
     end
 
     class DescriptionAlreadyExistsError < StandardError
+    end
+
+    class InvalidNamespaceError < StandardError
+    end
+
+    class NamespaceAlreadyExistsError < StandardError
+    end
+
+    class InvalidTitleError < StandardError
+    end
+
+    class TitleAlreadyExistsError < StandardError
     end
   end
 end

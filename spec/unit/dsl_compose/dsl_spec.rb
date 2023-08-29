@@ -88,6 +88,96 @@ RSpec.describe DSLCompose::DSL do
     end
   end
 
+  describe :set_namespace do
+    it "sets a valid namespace without raising an error" do
+      dsl.set_namespace :valid_namespace
+    end
+
+    describe "when a namespace has already been set" do
+      before(:each) do
+        dsl.set_namespace :valid_namespace
+      end
+      it "raises an error if you try and set the dsl namespace multiple times" do
+        expect {
+          dsl.set_namespace :valid_namespace
+        }.to raise_error(DSLCompose::DSL::NamespaceAlreadyExistsError)
+      end
+    end
+
+    it "raises an error if you provide a string for the DSL namespace" do
+      expect {
+        dsl.set_namespace "Invalid Namespace"
+      }.to raise_error(DSLCompose::DSL::InvalidNamespaceError)
+    end
+
+    it "raises an error if you provide an unexpected type for the DSL namespace" do
+      expect {
+        dsl.set_namespace 123
+      }.to raise_error(DSLCompose::DSL::InvalidNamespaceError)
+    end
+  end
+
+  describe :has_namespace do
+    it "returns false if a namespace has not been set" do
+      expect(dsl.has_namespace?).to eq(false)
+    end
+
+    describe "when a namespace has been set" do
+      before(:each) do
+        dsl.set_namespace :valid_namespace
+      end
+
+      it "returns true if a namespace has been set" do
+        expect(dsl.has_namespace?).to eq(true)
+      end
+    end
+  end
+
+  describe :set_title do
+    it "sets a valid title without raising an error" do
+      dsl.set_title "DSL Title"
+    end
+
+    describe "when a title has already been set" do
+      before(:each) do
+        dsl.set_title "DSL Title"
+      end
+      it "raises an error if you try and set the dsl title multiple times" do
+        expect {
+          dsl.set_title "DSL Title"
+        }.to raise_error(DSLCompose::DSL::TitleAlreadyExistsError)
+      end
+    end
+
+    it "raises an error if you provide a symbol for the DSL title" do
+      expect {
+        dsl.set_title :invalid_title
+      }.to raise_error(DSLCompose::DSL::InvalidTitleError)
+    end
+
+    it "raises an error if you provide an unexpected type for the DSL title" do
+      expect {
+        dsl.set_title 123
+      }.to raise_error(DSLCompose::DSL::InvalidTitleError)
+    end
+  end
+
+  describe :has_title do
+    it "returns false if a title has not been set" do
+      expect(dsl.has_title?).to eq(false)
+    end
+
+    describe "when a title has been set" do
+      before(:each) do
+        dsl.set_title "DSL Title"
+      end
+
+      it "returns true if a title has been set" do
+        expect(dsl.has_title?).to eq(true)
+      end
+    end
+  end
+
   describe :add_method do
     it "adds a new method definition without raising an error" do
       dsl.add_method :method_name, true, true

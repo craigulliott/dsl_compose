@@ -21,6 +21,18 @@ module DSLCompose
     class DescriptionAlreadyExistsError < StandardError
     end
 
+    class InvalidNamespaceError < StandardError
+    end
+
+    class NamespaceAlreadyExistsError < StandardError
+    end
+
+    class InvalidTitleError < StandardError
+    end
+
+    class TitleAlreadyExistsError < StandardError
+    end
+
     class NoBlockProvidedError < StandardError
     end
 
@@ -31,6 +43,12 @@ module DSLCompose
     # An otional description of this DSL, if provided then it must be a string.
     # The description accepts markdown and is used when generating documentation.
     attr_reader :description
+    # An otional namespace for this DSL, if provided then it must be a Symbol. This
+    # is currently used to group DSLs for the sake of documentation.
+    attr_reader :namespace
+    # An otional namespace for this DSL, if provided then it must be a String. This
+    # is currently used when generating documentation.
+    attr_reader :title
     # an object which represents the argument configuration
     attr_reader :arguments
 
@@ -85,9 +103,53 @@ module DSLCompose
       @description = description.strip
     end
 
+    # Set the namespace for this DSL to the provided value.
+    #
+    # `namespace` must be a Symbol.
+    # The `namespace` can only be set once per DSL
+    # this is currently used for grouping together DSLS for the sake of documentation
+    def set_namespace namespace
+      unless namespace.is_a?(Symbol)
+        raise InvalidNamespaceError, "The DSL namespace `#{namespace}` is invalid, it must be of type Symbol"
+      end
+
+      if has_namespace?
+        raise NamespaceAlreadyExistsError, "The DSL namespace has already been set"
+      end
+
+      @namespace = namespace
+    end
+
+    # Set the title for this DSL to the provided value.
+    #
+    # `title` must be a String with a length greater than 0.
+    # The `title` can only be set once per DSL
+    # this is currently used for documentation
+    def set_title title
+      unless title.is_a?(String) && title.strip.length > 0
+        raise InvalidTitleError, "The DSL title `#{title}` is invalid, it must be of type string and have length greater than 0"
+      end
+
+      if has_title?
+        raise TitleAlreadyExistsError, "The DSL title has already been set"
+      end
+
+      @title = title.strip
+    end
+
     # Returns `true` if this DSL has a description, else false.
     def has_description?
       @description.nil? == false
+    end
+
+    # Returns `true` if this DSL has a namespace, else false.
+    def has_namespace?
+      @namespace.nil? == false
+    end
+
+    # Returns `true` if this DSL has a title, else false.
+    def has_title?
+      @title.nil? == false
     end
 
     # Takes a method name, unique flag, required flag, and a block and creates
