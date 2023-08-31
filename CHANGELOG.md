@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.0](https://github.com/craigulliott/dsl_compose/compare/v2.7.0...v2.8.0) (2023-08-31)
+
+
+### Features
+
+* adding a rerun_all singleton method to re-execute all parsers in the system (useful from within specs) ([d0c4ee3](https://github.com/craigulliott/dsl_compose/commit/d0c4ee3cc41da45e774a17ab9d57990dbbf59603))
+
 ## [2.7.0](https://github.com/craigulliott/dsl_compose/compare/v2.6.1...v2.7.0) (2023-08-29)
 
 
