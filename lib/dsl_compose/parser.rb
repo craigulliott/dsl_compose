@@ -32,17 +32,12 @@ module DSLCompose
     # children of their own)
     def self.for_children_of base_class, final_children_only: false, rerun: false, &block
       unless rerun
-        run = {
+        @runs ||= []
+        @runs << {
           base_class: base_class,
           final_children_only: final_children_only,
           block: block
         }
-
-        @@all_runs ||= []
-        @@all_runs << run
-
-        @runs ||= []
-        @runs << run
       end
 
       # we parse the provided block in the context of the ForChildrenOfParser class
@@ -59,7 +54,7 @@ module DSLCompose
     end
 
     # this method is used to rerun the parser, this is most useful from within a test suite
-    # when you are testing the parser itself
+    # when you are testing the parser or the effects of running the parser
     def self.rerun
       # rerun each parser for this specific class
       @runs&.each do |run|
@@ -70,15 +65,17 @@ module DSLCompose
       end
     end
 
+    # so we know which parsers have run, and in which order
+    def self.inherited subclass
+      @@all_parser_classes ||= []
+      @@all_parser_classes << subclass
+    end
+
     # this method is used to rerun all of the parsers, this is most useful from within a test suite
-    # when you are testing the parser itself
+    # when you are testing the parser or the effects of running the parser
     def self.rerun_all
-      # rerun each parser for all classes (call this method directly on the parser object `DSLCompose::Parser.rerun_all`)
-      @all_runs&.each do |run|
-        base_class = run[:base_class]
-        block = run[:block]
-        final_children_only = run[:final_children_only]
-        for_children_of base_class, rerun: true, final_children_only: final_children_only, &block
+      @@all_parser_classes.each do |parser_class|
+        parser_class.rerun
       end
     end
   end
