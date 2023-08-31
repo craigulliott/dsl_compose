@@ -1,7 +1,7 @@
 # Classes
 module DSLCompose
   class Parser
-    self.@runs: Array[{base_class: singleton(Object), block: untyped, final_children_only: bool}]
+    self.@runs: untyped
 
     def initialize: -> void
     def self.for_children_of: (singleton(Object) base_class, ?final_children_only: bool, ?rerun: bool) -> void
