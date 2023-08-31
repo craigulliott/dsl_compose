@@ -16,8 +16,7 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/craigulliott/dsl_compose/"
   spec.metadata["changelog_uri"] = "https://github.com/craigulliott/dsl_compose/blob/main/CHANGELOG.md"
 
-  spec.files = ["README.md", "LICENSE.txt", "CHANGELOG.md", "CODE_OF_CONDUCT.md"] + Dir["lib/**/*"]
-
+  spec.files = ["README.md", "LICENSE.txt", "CHANGELOG.md", "CODE_OF_CONDUCT.md"] + Dir["lib/**/*"] + Dir["sig/**/*"]
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "class_spec_helper"
