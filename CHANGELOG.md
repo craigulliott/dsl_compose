@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.9.0](https://github.com/craigulliott/dsl_compose/compare/v2.8.0...v2.9.0) (2023-08-31)
+
+
+### Features
+
+* adding rbs signatures to built gem so they are available in other projects ([1733e11](https://github.com/craigulliott/dsl_compose/commit/1733e1103921fd6724cf994ce430ef0f2a1f7806))
+
+
+### Bug Fixes
+
+* improving the rerun_all method so that the list of parsers to rerun does not depend on a parser having previously executed it's for_children_of method ([679d896](https://github.com/craigulliott/dsl_compose/commit/679d896c3efb2c5808b99f7fb996ca66f17d541d))
+
 ## [2.8.0](https://github.com/craigulliott/dsl_compose/compare/v2.7.0...v2.8.0) (2023-08-31)
 
 
