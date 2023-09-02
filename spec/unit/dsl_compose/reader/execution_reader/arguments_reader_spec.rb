@@ -46,6 +46,16 @@ RSpec.describe DSLCompose::Reader::ExecutionReader::ArgumentsReader do
     end
   end
 
+  describe :has_argument? do
+    it "returns true for arguments which do exist" do
+      expect(arguments_reader.has_argument?(:my_dsl_argument)).to be true
+    end
+
+    it "returns false for arguments which do not exist" do
+      expect(arguments_reader.has_argument?(:not_an_argument_name)).to be false
+    end
+  end
+
   # this method does not exist on the class, the class is using `method_missing`
   # to satisfy this method call
   describe :my_dsl_argument do

@@ -8,6 +8,7 @@ module DSLCompose
 
         def initialize: (DSL::Arguments arguments, Interpreter::Execution::Arguments argument_values) -> void
         def method_missing: (Symbol method_name) -> (ArgumentsReader | nil)
+        def has_argument?: (Symbol method_name) -> bool
         def respond_to_missing?: (Symbol method_name) -> bool
       end
     end

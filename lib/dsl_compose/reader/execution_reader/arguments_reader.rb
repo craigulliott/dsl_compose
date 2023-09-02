@@ -27,6 +27,11 @@ module DSLCompose
           @argument_values.arguments[argument.name]
         end
 
+        # returns true if the DSL has an argument with the provided name
+        def has_argument? argument_name
+          @arguments.has_argument? argument_name
+        end
+
         def respond_to_missing? method_name
           @arguments.has_argument? method_name
         end
