@@ -209,6 +209,22 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser do
       expect(dsl_names).to eql([:dsl_name])
       expect(dsl_args).to eql([{dsl_arg_name: false}])
     end
+
+    it "parses the DSL and provides access to the original dsl_execution if requested (useful for passing to custom readers)" do
+      child_classes = []
+      dsl_names = []
+      dsl_args = []
+      TestParser.for_children_of BaseClassWithOptionalArgument do |child_class:|
+        child_classes << child_class
+        for_dsl :dsl_name do |dsl_name:, dsl_execution:|
+          dsl_names << dsl_name
+          dsl_args << dsl_execution
+        end
+      end
+      expect(child_classes).to eql([ChildOfBaseClassWithOptionalArgument])
+      expect(dsl_names).to eql([:dsl_name])
+      expect(dsl_args.first).to be_a DSLCompose::Interpreter::Execution
+    end
   end
 
   describe "for a DSL with an optional array argument" do

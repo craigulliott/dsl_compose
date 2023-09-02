@@ -73,6 +73,11 @@ module DSLCompose
                 args[:dsl_name] = dsl_execution.dsl.name
               end
 
+              # the dsl_execution (if it's requested)
+              if BlockArguments.accepts_argument?(:dsl_execution, &block)
+                args[:dsl_execution] = dsl_execution
+              end
+
               # a hash representation of all the dsl arguments, if requested
               if BlockArguments.accepts_argument?(:dsl_arguments, &block)
                 args[:dsl_arguments] = {}
