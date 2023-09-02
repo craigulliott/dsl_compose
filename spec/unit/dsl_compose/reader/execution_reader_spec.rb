@@ -50,6 +50,12 @@ RSpec.describe DSLCompose::Reader::ExecutionReader do
     end
   end
 
+  describe :dsl_name do
+    it "returns the expected dsl_name" do
+      expect(reader.dsl_name).to eq(:dsl_name)
+    end
+  end
+
   describe :arguments do
     it "returns an ArgsReader object" do
       expect(reader.arguments).to be_a DSLCompose::Reader::ExecutionReader::ArgumentsReader

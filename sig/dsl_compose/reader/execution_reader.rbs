@@ -5,6 +5,7 @@ module DSLCompose
       @execution: Interpreter::Execution
 
       def initialize: (Interpreter::Execution execution) -> void
+      def dsl_name: -> Symbol
       def arguments: -> ArgumentsReader
       def method_called?: (Symbol method_name) -> bool
       def method_missing: (Symbol method_name) -> (nil | ArgumentsReader | Array[ArgumentsReader])

@@ -22,6 +22,11 @@ module DSLCompose
         @execution = execution
       end
 
+      # useful when creating a DSL reader which is usable across multiple DSLs
+      def dsl_name
+        @execution.dsl.name
+      end
+
       # returns an object which represents the arguments available for this DSL and allows
       # accessing their values via methods
       def arguments
