@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.0](https://github.com/craigulliott/dsl_compose/compare/v2.10.0...v2.11.0) (2023-09-02)
+
+
+### Features
+
+* adding :dsl_execution to Parser's list of passable attributes ([ce0facb](https://github.com/craigulliott/dsl_compose/commit/ce0facb41edf46664c7fdf1b010b10f02d0f6902))
+
 ## [2.10.0](https://github.com/craigulliott/dsl_compose/compare/v2.9.0...v2.10.0) (2023-09-02)
 
 
