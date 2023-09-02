@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0](https://github.com/craigulliott/dsl_compose/compare/v2.9.0...v2.10.0) (2023-09-02)
+
+
+### Features
+
+* adding a `has_argument?` method to the DSL reader base class ([4a5db6a](https://github.com/craigulliott/dsl_compose/commit/4a5db6ab258283960fc909bdf46c75837475aa59))
+
 ## [2.9.0](https://github.com/craigulliott/dsl_compose/compare/v2.8.0...v2.9.0) (2023-08-31)
 
 
