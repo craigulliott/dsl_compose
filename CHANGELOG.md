@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.0](https://github.com/craigulliott/dsl_compose/compare/v2.11.0...v2.12.0) (2023-09-02)
+
+
+### Features
+
+* adding dsl_name method to execution reader ([54e8a44](https://github.com/craigulliott/dsl_compose/commit/54e8a44b0f7a6fc2fe81a18cd53d3ebe76257348))
+
 ## [2.11.0](https://github.com/craigulliott/dsl_compose/compare/v2.10.0...v2.11.0) (2023-09-02)
 
 
