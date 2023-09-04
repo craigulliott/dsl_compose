@@ -3,11 +3,11 @@
 require "spec_helper"
 
 RSpec.describe DSLCompose::DSL::Arguments::Argument::Interpreter do
-  let(:integer_argument) { DSLCompose::DSL::Arguments::Argument.new :integer_argument_name, true, :integer }
+  let(:integer_argument) { DSLCompose::DSL::Arguments::Argument.new :integer_argument_name, true, false, :integer }
   let(:integer_argument_interpreter) { DSLCompose::DSL::Arguments::Argument::Interpreter.new integer_argument }
-  let(:symbol_argument) { DSLCompose::DSL::Arguments::Argument.new :symbol_argument_name, true, :symbol }
+  let(:symbol_argument) { DSLCompose::DSL::Arguments::Argument.new :symbol_argument_name, true, false, :symbol }
   let(:symbol_argument_interpreter) { DSLCompose::DSL::Arguments::Argument::Interpreter.new symbol_argument }
-  let(:object_argument) { DSLCompose::DSL::Arguments::Argument.new :object_argument_name, true, :object }
+  let(:object_argument) { DSLCompose::DSL::Arguments::Argument.new :object_argument_name, true, false, :object }
   let(:object_argument_interpreter) { DSLCompose::DSL::Arguments::Argument::Interpreter.new object_argument }
 
   describe :initialize do

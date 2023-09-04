@@ -13,6 +13,9 @@ module DSLCompose
         class InvalidTypeError < StandardError
         end
 
+        class ImpossibleKwargError < StandardError
+        end
+
         class InvalidNameError < StandardError
         end
 
@@ -42,6 +45,10 @@ module DSLCompose
         attr_reader :type
         # if required, then this Argument must be provided when calling its associated DSLMethod.
         attr_reader :required
+        # If true, then this argument must be provided as a keyword argument, this is only appropriate for
+        # required arguments, as optional arguments are always passed as keywork arguments.
+        # arguments.
+        attr_reader :kwarg
         # If true, then this argument accepts an array of values. It will also accept a single value,
         # but that single value will be automatically converted to an array
         attr_reader :array
@@ -71,9 +78,10 @@ module DSLCompose
         # `name` must be a symbol.
         # `required` is a boolean which determines if this Attribute must be provided when
         # calling its associated DSLMethod.
+        # `kwarg` is a boolean which determines if a required Attribute must be provided as a keyword argument.
         # `type` can be either :integer, :boolean, :float, :string or :symbol
         # `block` contains the instructions to further configure this Attribute
-        def initialize name, required, type, array: false, &block
+        def initialize name, required, kwarg, type, array: false, &block
           if name.is_a? Symbol
 
             if RESERVED_ARGUMENT_NAMES.include? name
@@ -92,6 +100,12 @@ module DSLCompose
           end
 
           @required = required ? true : false
+
+          if @required == false && kwarg == true
+            raise ImpossibleKwargError, "Optional arguments must always be provided as keyword arguments. The argument `#{name}` can not be both required: false and kwarg: true."
+          end
+
+          @kwarg = kwarg ? true : false
 
           @array = array ? true : false
 

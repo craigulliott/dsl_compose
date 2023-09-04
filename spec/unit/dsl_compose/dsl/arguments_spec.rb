@@ -20,8 +20,8 @@ RSpec.describe DSLCompose::DSL::Arguments do
     end
 
     describe "when Arguments have been added" do
-      let(:new_argument) { arguments.add_argument :argument_name, true, :integer }
-      let(:another_new_argument) { arguments.add_argument :another_argument_name, true, :integer }
+      let(:new_argument) { arguments.add_argument :argument_name, true, false, :integer }
+      let(:another_new_argument) { arguments.add_argument :another_argument_name, true, false, :integer }
 
       before(:each) do
         new_argument
@@ -45,7 +45,7 @@ RSpec.describe DSLCompose::DSL::Arguments do
     end
 
     describe "when Arguments have been added" do
-      let(:new_argument) { arguments.add_argument :argument_name, true, :integer }
+      let(:new_argument) { arguments.add_argument :argument_name, true, false, :integer }
 
       before(:each) do
         new_argument
@@ -64,8 +64,8 @@ RSpec.describe DSLCompose::DSL::Arguments do
     end
 
     describe "when required arguments have been added" do
-      let(:required_argument) { arguments.add_argument :required_argument_name, true, :symbol }
-      let(:another_required_argument) { arguments.add_argument :another_required_argument_name, true, :symbol }
+      let(:required_argument) { arguments.add_argument :required_argument_name, true, false, :symbol }
+      let(:another_required_argument) { arguments.add_argument :another_required_argument_name, true, false, :symbol }
 
       before(:each) do
         required_argument
@@ -83,7 +83,7 @@ RSpec.describe DSLCompose::DSL::Arguments do
 
       describe "when an optional argument has been added" do
         before(:each) do
-          arguments.add_argument :argument_name, false, :symbol
+          arguments.add_argument :argument_name, false, false, :symbol
         end
 
         it "returns only the required arguments" do
@@ -106,7 +106,7 @@ RSpec.describe DSLCompose::DSL::Arguments do
 
     describe "when an required argument has been added" do
       before(:each) do
-        arguments.add_argument :argument_name, true, :symbol
+        arguments.add_argument :argument_name, true, false, :symbol
       end
 
       it "returns an empty array" do
@@ -115,8 +115,8 @@ RSpec.describe DSLCompose::DSL::Arguments do
       end
 
       describe "when optional arguments have been added" do
-        let(:optional_argument) { arguments.add_argument :optional_argument_name, false, :symbol }
-        let(:another_optional_argument) { arguments.add_argument :another_optional_argument_name, false, :symbol }
+        let(:optional_argument) { arguments.add_argument :optional_argument_name, false, false, :symbol }
+        let(:another_optional_argument) { arguments.add_argument :another_optional_argument_name, false, false, :symbol }
 
         before(:each) do
           optional_argument
@@ -143,7 +143,7 @@ RSpec.describe DSLCompose::DSL::Arguments do
     end
 
     describe "when aan Argument with the requested name has been added" do
-      let(:new_argument) { arguments.add_argument :argument_name, true, :integer }
+      let(:new_argument) { arguments.add_argument :argument_name, true, false, :integer }
 
       before(:each) do
         new_argument
@@ -161,7 +161,7 @@ RSpec.describe DSLCompose::DSL::Arguments do
     end
 
     describe "when aan Argument with the requested name has been added" do
-      let(:new_argument) { arguments.add_argument :argument_name, true, :integer }
+      let(:new_argument) { arguments.add_argument :argument_name, true, false, :integer }
 
       before(:each) do
         new_argument
@@ -175,29 +175,29 @@ RSpec.describe DSLCompose::DSL::Arguments do
 
   describe :add_argument do
     it "adds a new Argument without raising an error" do
-      arguments.add_argument :argument_name, true, :integer
+      arguments.add_argument :argument_name, true, false, :integer
     end
 
     describe "when an Argument of the same name already exists" do
       before(:each) do
-        arguments.add_argument :argument_name, true, :integer
+        arguments.add_argument :argument_name, true, false, :integer
       end
 
       it "raises an error" do
         expect {
-          arguments.add_argument :argument_name, true, :integer
+          arguments.add_argument :argument_name, true, false, :integer
         }.to raise_error(DSLCompose::DSL::Arguments::ArgumentAlreadyExistsError)
       end
     end
 
     describe "when an optional Argument already exists" do
       before(:each) do
-        arguments.add_argument :optional_argument_name, false, :integer
+        arguments.add_argument :optional_argument_name, false, false, :integer
       end
 
       it "raises an error when adding a required Argument" do
         expect {
-          arguments.add_argument :required_argument_name, true, :integer
+          arguments.add_argument :required_argument_name, true, false, :integer
         }.to raise_error(DSLCompose::DSL::Arguments::ArgumentOrderingError)
       end
     end

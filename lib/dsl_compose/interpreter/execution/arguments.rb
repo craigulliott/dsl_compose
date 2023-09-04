@@ -25,18 +25,38 @@ module DSLCompose
           @arguments = {}
 
           required_argument_count = arguments.required_arguments.count
+          required_non_kwarg_argument_count = arguments.required_arguments.filter { |a| !a.kwarg }.count
           has_optional_arguments = arguments.optional_arguments.any?
 
-          # the first N args, where N = required_argument_count, are the
+          # the first N args, where N = required_non_kwarg_argument_count, are the
           # provided required arguments
-          required_args = args.slice(0, required_argument_count)
-          # the optional arg which comes next is the hash which represents
-          # all the optional arguments
-          optional_arg = args[required_argument_count]
+          required_args = args.slice(0, required_non_kwarg_argument_count)
+
+          # the final argument is the object which contains all the keyword args (these keyword
+          # args could be optional or required)
+          all_kwargs = args[required_non_kwarg_argument_count]
+
+          # process all the required arguments which are kwargs
+          required_kwargs = arguments.required_arguments.filter { |a| a.kwarg }
+          required_kwargs.each do |required_kwarg|
+            if all_kwargs.key? required_kwarg.name
+              # add the keyword argument to the required args
+              required_args << all_kwargs[required_kwarg.name]
+              # delete the required kwarg from the kwargs hash, so that we are
+              # left with only the optional args
+              all_kwargs.delete required_kwarg.name
+            else
+              raise MissingRequiredArgumentsError, "The required kwarg `#{required_kwarg.name}` was not provided"
+            end
+          end
+
+          # at this point, all_kwargs should be a hash which only represents
+          # the optional arguments
+          optional_arg = all_kwargs
 
           # assert that a value is provided for every required argument
           unless required_argument_count == required_args.count
-            raise MissingRequiredArgumentsError, "This requires #{required_argument_count} arguments, but only #{required_args.count} were provided"
+            raise MissingRequiredArgumentsError, "This requires #{required_non_kwarg_argument_count} arguments, but only #{required_args.count} were provided"
           end
 
           # assert that too many arguments have not been provided
@@ -61,7 +81,7 @@ module DSLCompose
           end
 
           # asset that, if provided, then the optional argument (always the last one) is a Hash
-          if has_optional_arguments && optional_arg.nil? === false
+          if has_optional_arguments && !optional_arg.nil?
             unless optional_arg.is_a? Hash
               raise OptionalArgumentsShouldBeHashError, "If provided, then the optional arguments must be last, and be represented as a Hash"
             end
@@ -165,13 +185,13 @@ module DSLCompose
             # to the corresponding class, logic which doesn't happen here in case the class doesnt
             # exist yet)
             required_arg_value = if required_argument.type == :class
-              if args[i].is_a?(Array)
-                args[i].map { |v| ClassCoerce.new v }
+              if required_args[i].is_a?(Array)
+                required_args[i].map { |v| ClassCoerce.new v }
               else
-                ClassCoerce.new args[i]
+                ClassCoerce.new required_args[i]
               end
             else
-              args[i]
+              required_args[i]
             end
 
             if required_arg_value.is_a?(Array) && !required_argument.array

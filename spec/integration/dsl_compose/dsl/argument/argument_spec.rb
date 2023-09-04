@@ -162,6 +162,80 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     )
   end
 
+  it "successfully evaluates a DSL with a method which has a required keyword argument" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        requires :required_option_name, :symbol
+        requires :required_kwarg_option_name, :symbol, kwarg: true
+        optional :optional_option_name, :integer
+      end
+    end
+
+    TestClass.dsl_name :foo, required_kwarg_option_name: :bar, optional_option_name: 123
+
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
+      {
+        TestClass => {
+          arguments: {
+            required_option_name: :foo,
+            optional_option_name: 123,
+            required_kwarg_option_name: :bar
+          },
+          method_calls: {}
+        }
+      }
+    )
+  end
+
+  it "successfully evaluates a DSL with a method which has a required keyword argument which comes after an optional argument (because all optional arguments are also keyword arguments)" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        requires :required_option_name, :symbol
+        requires :required_kwarg_option_name, :symbol, kwarg: true
+        optional :optional_option_name, :integer
+      end
+    end
+
+    TestClass.dsl_name :foo, optional_option_name: 123, required_kwarg_option_name: :bar
+
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
+      {
+        TestClass => {
+          arguments: {
+            required_option_name: :foo,
+            optional_option_name: 123,
+            required_kwarg_option_name: :bar
+          },
+          method_calls: {}
+        }
+      }
+    )
+  end
+
+  it "successfully evaluates a DSL with a method which has a required keyword argument which is also an array" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        requires :required_option_name, :symbol, kwarg: true, array: true
+      end
+    end
+
+    TestClass.dsl_name required_option_name: [:foo, :bar]
+
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
+      {
+        TestClass => {
+          arguments: {
+            required_option_name: [:foo, :bar]
+          },
+          method_calls: {}
+        }
+      }
+    )
+  end
+
   it "successfully evaluates a DSL with a method which has both a required array and an optional array argument" do
     create_class :TestClass do
       include DSLCompose::Composer

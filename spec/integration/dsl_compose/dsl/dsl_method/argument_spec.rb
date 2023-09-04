@@ -139,6 +139,42 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     )
   end
 
+  it "successfully evaluates a DSL with a method which has a required keyword argument" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        add_method :method_name do
+          requires :required_option_name, :symbol
+          requires :required_kwarg_option_name, :symbol, kwarg: true
+          optional :optional_option_name, :integer
+        end
+      end
+    end
+
+    TestClass.dsl_name do
+      method_name :foo, required_kwarg_option_name: :bar, optional_option_name: 456
+    end
+
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
+      {
+        TestClass => {
+          arguments: {},
+          method_calls: {
+            method_name: [
+              {
+                arguments: {
+                  required_option_name: :foo,
+                  optional_option_name: 456,
+                  required_kwarg_option_name: :bar
+                }
+              }
+            ]
+          }
+        }
+      }
+    )
+  end
+
   it "successfully evaluates a DSL with a method which has both a required array and an optional array argument" do
     create_class :TestClass do
       include DSLCompose::Composer

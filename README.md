@@ -114,6 +114,16 @@ class Foo
         validate_greater_than 0
       end
 
+      # Required arguments for both DSLs and DSL methods are assumed to be standard ruby
+      # arguments by default, but can be declared as keyword arguments by passing `kwarg: true`.
+      # This is useful because sometimes keyword arguments can make your DSL more readable. This
+      # option does not exist for optional arguments, because optional arguments are always kwargs.
+      requires :required_keyword_argument, :symbol, kwarg: true do
+        # You should provide descriptions for your arguments. These descriptions will
+        # be used when generating your documentation. This description supports markdown
+        description "A description of the first argument for this method"
+      end
+
       # All optional and required arguments can optionally accept an array of values. When using
       # your final DSL, a single item can be provided but will automatically be converted to an
       # array of items. All items in the array must be of the expected type.

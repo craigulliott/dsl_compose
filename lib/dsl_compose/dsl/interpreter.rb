@@ -66,17 +66,19 @@ module DSLCompose
       # `block` contains the argument definition and will be evaluated seperately
       # by the Argument::Interpreter
       def optional name, type, array: false, &block
-        @dsl.arguments.add_argument name, false, type, array: array, &block
+        @dsl.arguments.add_argument name, false, false, type, array: array, &block
       end
 
       # adds a new required argument to the DSLMethod
       #
       # name must be a symbol
+      # `kwarg` is a boolean which determines if a required Attribute must be provided as a keyword argument.
+      # `array` is a boolean which determines if this argument will accept an array of the given type or a single item
       # `type` can be either :integer, :boolean, :float, :string, :symbol, :class or :object
       # `block` contains the argument definition and will be evaluated seperately
       # by the Argument::Interpreter
-      def requires name, type, array: false, &block
-        @dsl.arguments.add_argument name, true, type, array: array, &block
+      def requires name, type, kwarg: false, array: false, &block
+        @dsl.arguments.add_argument name, true, kwarg, type, array: array, &block
       end
 
       # executes the shared configuration block with the given name within the

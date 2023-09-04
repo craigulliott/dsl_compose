@@ -3,31 +3,31 @@
 require "spec_helper"
 
 RSpec.describe DSLCompose::DSL::Arguments::Argument do
-  let(:integer_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, :integer }
-  let(:symbol_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, :symbol }
+  let(:integer_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, false, :integer }
+  let(:symbol_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, false, :symbol }
 
   describe :initialize do
     it "initializes a new Argument without raising any errors" do
       expect {
-        DSLCompose::DSL::Arguments::Argument.new :argument_name, true, :integer
+        DSLCompose::DSL::Arguments::Argument.new :argument_name, true, false, :integer
       }.to_not raise_error
     end
 
     it "raises an error if using a string instead of a symbol for the Argument name" do
       expect {
-        DSLCompose::DSL::Arguments::Argument.new "argument_name", true, :integer
+        DSLCompose::DSL::Arguments::Argument.new "argument_name", true, false, :integer
       }.to raise_error(DSLCompose::DSL::Arguments::Argument::InvalidNameError)
     end
 
     it "raises an error if using a reserved word for an Argument name" do
       expect {
-        DSLCompose::DSL::Arguments::Argument.new :method_name, true, :integer
+        DSLCompose::DSL::Arguments::Argument.new :method_name, true, false, :integer
       }.to raise_error(DSLCompose::DSL::Arguments::Argument::ArgumentNameReservedError)
     end
 
     it "raises an error if passing an unexpected type for the Argument name" do
       expect {
-        DSLCompose::DSL::Arguments::Argument.new 123, true, :integer
+        DSLCompose::DSL::Arguments::Argument.new 123, true, false, :integer
       }.to raise_error(DSLCompose::DSL::Arguments::Argument::InvalidNameError)
     end
   end
@@ -56,7 +56,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     end
 
     describe "when an argument is created with array: true" do
-      let(:integer_array_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, :integer, array: true }
+      let(:integer_array_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, false, :integer, array: true }
 
       it "returns the expected value" do
         expect(integer_array_argument.array).to eq true
@@ -114,7 +114,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
       expect(integer_argument.required?).to be true
     end
 
-    let(:optional_integer_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, false, :integer }
+    let(:optional_integer_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, false, false, :integer }
 
     it "returns false for required Arguments" do
       expect(optional_integer_argument.required?).to be false
@@ -126,7 +126,7 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
       expect(integer_argument.optional?).to be false
     end
 
-    let(:optional_integer_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, false, :integer }
+    let(:optional_integer_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, false, false, :integer }
 
     it "returns true for required Arguments" do
       expect(optional_integer_argument.optional?).to be true
