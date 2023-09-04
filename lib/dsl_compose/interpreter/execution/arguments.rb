@@ -25,7 +25,7 @@ module DSLCompose
           @arguments = {}
 
           required_argument_count = arguments.required_arguments.count
-          required_non_kwarg_argument_count = arguments.required_arguments.filter { |a| !a.kwarg }.count
+          required_non_kwarg_argument_count = arguments.required_arguments.count { |a| !a.kwarg }
           has_optional_arguments = arguments.optional_arguments.any?
 
           # the first N args, where N = required_non_kwarg_argument_count, are the
