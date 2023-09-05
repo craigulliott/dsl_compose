@@ -24,24 +24,25 @@ module DSLCompose
       # Move up through this classes ancestors until we find the class which defined
       # the DSL with the provided name. When we reach the top of the ancestor chain we
       # exit the loop.
-      while klass
+      k = klass
+      while k
         # if we find a DSL with this name, then store a reference to the DSL and the
         # ancestor class where it was defined
-        if DSLs.class_dsl_exists?(klass, dsl_name)
-          @dsl = DSLs.class_dsl(klass, dsl_name)
-          @dsl_defining_class = klass
+        if DSLs.class_dsl_exists?(k, dsl_name)
+          @dsl = DSLs.class_dsl(k, dsl_name)
+          @dsl_defining_class = k
           # stop once we find the DSL
           break
         end
 
         # the DSL was not found here, so traverse up the provided classes hierachy
         # and keep looking for where this DSL was initially defined
-        klass = klass.superclass
+        k = k.superclass
       end
 
       # if no DSL was found, then raise an error
       if @dsl.nil? && @dsl_defining_class.nil?
-        raise DSLNotFound, "No DSL named `#{dsl_name}` was found for class `#{klass}`"
+        raise DSLNotFound, "No DSL named `#{dsl_name}` was found for class `#{@klass}`"
       end
     end
 
