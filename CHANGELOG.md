@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.1](https://github.com/craigulliott/dsl_compose/compare/v2.13.0...v2.13.1) (2023-09-05)
+
+
+### Bug Fixes
+
+* fixed a nil value in error message caused by overwriting method argument ([dd7848b](https://github.com/craigulliott/dsl_compose/commit/dd7848b3861bff6176c8326f6784fb29f1ba2fdd))
+
 ## [2.13.0](https://github.com/craigulliott/dsl_compose/compare/v2.12.0...v2.13.0) (2023-09-04)
 
 
