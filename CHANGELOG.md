@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.0](https://github.com/craigulliott/dsl_compose/compare/v2.12.0...v2.13.0) (2023-09-04)
+
+
+### Features
+
+* optionally mark required arguments as keyword arguments ([9a1c901](https://github.com/craigulliott/dsl_compose/commit/9a1c90169fb36c550b0577034823579062120647))
+
 ## [2.12.0](https://github.com/craigulliott/dsl_compose/compare/v2.11.0...v2.12.0) (2023-09-02)
 
 
