@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.14.0](https://github.com/craigulliott/dsl_compose/compare/v2.13.1...v2.14.0) (2023-09-06)
+
+
+### Features
+
+* adding start_with/end_with and format validators to classes ([d390d15](https://github.com/craigulliott/dsl_compose/commit/d390d15bf2ebec2340815ff0a372a938072efd0e))
+
 ## [2.13.1](https://github.com/craigulliott/dsl_compose/compare/v2.13.0...v2.13.1) (2023-09-05)
 
 
