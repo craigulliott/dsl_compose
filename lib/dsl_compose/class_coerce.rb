@@ -5,6 +5,8 @@ module DSLCompose
     class UnexpectedClassNameError < StandardError
     end
 
+    attr_reader :class_name
+
     def initialize class_name
       unless class_name.is_a? String
         raise UnexpectedClassNameError, "expected `#{class_name}` to be a String"

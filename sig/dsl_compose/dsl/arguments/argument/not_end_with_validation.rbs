@@ -6,7 +6,7 @@ module DSLCompose
         class NotEndWithValidation
           @values: Array[Symbol]
 
-          def initialize: (Symbol | Array[Symbol]) -> void
+          def initialize: (Symbol | Array[Symbol] | String | Array[String]) -> void
           def validate!: (Symbol | String value) -> true
 
           class InvalidValueError < StandardError

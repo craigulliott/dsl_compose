@@ -225,7 +225,7 @@ module DSLCompose
             raise ValidationInvalidArgumentError, regexp
           end
 
-          unless @type == :string || @type == :symbol
+          unless @type == :string || @type == :symbol || @type == :class
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
           @format_validation = FormatValidation.new regexp
@@ -278,11 +278,11 @@ module DSLCompose
         end
 
         def validate_end_with value
-          unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
-            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
+          unless value.is_a?(Symbol) || value.is_a?(String) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol }) || (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol/String or an Array of Symbols/Strings"
           end
 
-          unless @type == :string || @type == :symbol
+          unless @type == :string || @type == :symbol || @type == :class
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
@@ -295,11 +295,11 @@ module DSLCompose
         end
 
         def validate_not_end_with value
-          unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
-            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
+          unless value.is_a?(Symbol) || value.is_a?(String) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol }) || (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol/String or an Array of Symbols/Strings"
           end
 
-          unless @type == :string || @type == :symbol
+          unless @type == :string || @type == :symbol || @type == :class
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
@@ -312,11 +312,11 @@ module DSLCompose
         end
 
         def validate_start_with value
-          unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
-            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
+          unless value.is_a?(Symbol) || value.is_a?(String) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol }) || (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol/String or an Array of Symbols/Strings"
           end
 
-          unless @type == :string || @type == :symbol
+          unless @type == :string || @type == :symbol || @type == :class
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
@@ -329,11 +329,11 @@ module DSLCompose
         end
 
         def validate_not_start_with value
-          unless value.is_a?(Symbol) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
-            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol or an Array of Symbols"
+          unless value.is_a?(Symbol) || value.is_a?(String) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol }) || (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+            raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol/String or an Array of Symbols/Strings"
           end
 
-          unless @type == :string || @type == :symbol
+          unless @type == :string || @type == :symbol || @type == :class
             raise ValidationIncompatibleError, "The validation type #{@type} is not compatible with this argument type"
           end
 
@@ -421,8 +421,11 @@ module DSLCompose
 
         # returns true if every provided class validation also returns true
         def validate_class! value
-          # there are no class validations
-          true
+          (format_validation.nil? || format_validation.validate!(value.class_name)) &&
+            (end_with_validation.nil? || end_with_validation.validate!(value.class_name)) &&
+            (not_end_with_validation.nil? || not_end_with_validation.validate!(value.class_name)) &&
+            (start_with_validation.nil? || start_with_validation.validate!(value.class_name)) &&
+            (not_start_with_validation.nil? || not_start_with_validation.validate!(value.class_name))
         end
 
         # returns true if every provided object validation also returns true

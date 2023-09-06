@@ -5,6 +5,7 @@ require "spec_helper"
 RSpec.describe DSLCompose::DSL::Arguments::Argument do
   let(:integer_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, false, :integer }
   let(:symbol_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, false, :symbol }
+  let(:class_argument) { DSLCompose::DSL::Arguments::Argument.new :argument_name, true, false, :class }
 
   describe :initialize do
     it "initializes a new Argument without raising any errors" do
@@ -297,6 +298,24 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
       it "does not raise an error because it combines the values" do
         symbol_argument.validate_end_with(:_bar)
         expect(symbol_argument.end_with_validation.instance_variable_get(:@values)).to eql([:_foo, :_bar])
+      end
+    end
+
+    describe "for a class argument" do
+      it "sets the validation" do
+        class_argument.validate_end_with("_foo")
+        expect(class_argument.end_with_validation).to_not be_nil
+      end
+
+      describe "when this validation has already been set" do
+        before(:each) do
+          class_argument.validate_end_with("_foo")
+        end
+
+        it "does not raise an error because it combines the values" do
+          class_argument.validate_end_with("_bar")
+          expect(class_argument.end_with_validation.instance_variable_get(:@values)).to eql(["_foo", "_bar"])
+        end
       end
     end
   end
