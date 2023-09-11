@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.14.1](https://github.com/craigulliott/dsl_compose/compare/v2.14.0...v2.14.1) (2023-09-11)
+
+
+### Bug Fixes
+
+* freezing dsl arguments so that other parts of the code can't change the underlying dsl configuration ([d3373d4](https://github.com/craigulliott/dsl_compose/commit/d3373d494b292241bc17f38e565a2434e5e0d187))
+
 ## [2.14.0](https://github.com/craigulliott/dsl_compose/compare/v2.13.1...v2.14.0) (2023-09-06)
 
 
