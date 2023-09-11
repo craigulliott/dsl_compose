@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.14.2](https://github.com/craigulliott/dsl_compose/compare/v2.14.1...v2.14.2) (2023-09-11)
+
+
+### Bug Fixes
+
+* freezing default arguments so that code within parsers can not modify the underlying values ([12674de](https://github.com/craigulliott/dsl_compose/commit/12674def81b7370f7e06b8036fea308dff95f30d))
+
 ## [2.14.1](https://github.com/craigulliott/dsl_compose/compare/v2.14.0...v2.14.1) (2023-09-11)
 
 
