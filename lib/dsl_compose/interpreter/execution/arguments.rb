@@ -73,7 +73,7 @@ module DSLCompose
               # unless the argument is an array or a boolean, in which case it defaults
               # to an empty array or false
               if optional_argument.array
-                @arguments[optional_argument.name] = []
+                @arguments[optional_argument.name] = [].freeze
               elsif optional_argument.type == :boolean
                 @arguments[optional_argument.name] = false
               end
@@ -164,7 +164,7 @@ module DSLCompose
               # If the argument accepts an array of values, then automatically convert valid singular values
               # into an array.
               @arguments[optional_argument_name] = if optional_argument.array && !optional_arg_value.is_a?(Array)
-                [optional_arg_value]
+                [optional_arg_value].freeze
               else
                 optional_arg_value
               end
@@ -254,7 +254,7 @@ module DSLCompose
             # If the argument accepts an array of values, then automatically convert valid singular values
             # into an array.
             @arguments[argument_name] = if required_argument.array && !required_arg_value.is_a?(Array)
-              [required_arg_value]
+              [required_arg_value].freeze
             else
               required_arg_value
             end
