@@ -101,7 +101,7 @@ module DSLCompose
                   ClassCoerce.new optional_arg[optional_argument_name]
                 end
               else
-                optional_arg[optional_argument_name]
+                optional_arg[optional_argument_name].freeze
               end
 
               if optional_arg_value.is_a?(Array) && !optional_argument.array
@@ -191,7 +191,7 @@ module DSLCompose
                 ClassCoerce.new required_args[i]
               end
             else
-              required_args[i]
+              required_args[i].freeze
             end
 
             if required_arg_value.is_a?(Array) && !required_argument.array

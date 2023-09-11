@@ -278,7 +278,10 @@ module DSLCompose
         end
 
         def validate_end_with value
-          unless value.is_a?(Symbol) || value.is_a?(String) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol }) || (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+          valid_type = value.is_a?(Symbol) || value.is_a?(String)
+          valid_array_of_symbols = (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
+          valid_array_of_strings = (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+          unless valid_type || valid_array_of_symbols || valid_array_of_strings
             raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol/String or an Array of Symbols/Strings"
           end
 
@@ -295,7 +298,10 @@ module DSLCompose
         end
 
         def validate_not_end_with value
-          unless value.is_a?(Symbol) || value.is_a?(String) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol }) || (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+          valid_type = value.is_a?(Symbol) || value.is_a?(String)
+          valid_array_of_symbols = (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
+          valid_array_of_strings = (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+          unless valid_type || valid_array_of_symbols || valid_array_of_strings
             raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol/String or an Array of Symbols/Strings"
           end
 
@@ -312,7 +318,10 @@ module DSLCompose
         end
 
         def validate_start_with value
-          unless value.is_a?(Symbol) || value.is_a?(String) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol }) || (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+          valid_type = value.is_a?(Symbol) || value.is_a?(String)
+          valid_array_of_symbols = (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
+          valid_array_of_strings = (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+          unless valid_type || valid_array_of_symbols || valid_array_of_strings
             raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol/String or an Array of Symbols/Strings"
           end
 
@@ -329,7 +338,10 @@ module DSLCompose
         end
 
         def validate_not_start_with value
-          unless value.is_a?(Symbol) || value.is_a?(String) || (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol }) || (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+          valid_type = value.is_a?(Symbol) || value.is_a?(String)
+          valid_array_of_symbols = (value.is_a?(Array) && value.all? { |value| value.is_a? Symbol })
+          valid_array_of_strings = (value.is_a?(Array) && value.all? { |value| value.is_a? String })
+          unless valid_type || valid_array_of_symbols || valid_array_of_strings
             raise ValidationInvalidArgumentError, "The value `#{value}` provided to this validator must be a Symbol/String or an Array of Symbols/Strings"
           end
 
