@@ -277,6 +277,60 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     }.to raise_error DSLCompose::Interpreter::Execution::Arguments::TooManyArgumentsError
   end
 
+  it "raises an error if evaluating a DSL and passing a scalar argument in place of kwargs (optional arguments)" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        add_method :method_name do
+          requires :required_option_name, :symbol
+          optional :optional_option_name, :integer
+        end
+      end
+    end
+
+    expect {
+      TestClass.dsl_name do
+        method_name :foo, :bar
+      end
+    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::OptionalArgumentsShouldBeHashError
+  end
+
+  it "raises an error if evaluating a DSL and ommiting required kwargs" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        add_method :method_name do
+          requires :required_option_name, :symbol
+          requires :required_kw_arg, :symbol, kwarg: true
+        end
+      end
+    end
+
+    expect {
+      TestClass.dsl_name do
+        method_name :foo
+      end
+    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::MissingRequiredArgumentsError
+  end
+
+  it "raises an error if evaluating a DSL and passing a scalar argument in place of required kwargs" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        add_method :method_name do
+          requires :required_option_name, :symbol
+          requires :required_kw_arg, :symbol, kwarg: true
+        end
+      end
+    end
+
+    expect {
+      TestClass.dsl_name do
+        method_name :foo, :bar
+      end
+    }.to raise_error DSLCompose::Interpreter::Execution::Arguments::MissingRequiredArgumentsError
+  end
+
   it "raises an error if evaluating a DSL and passing an arguments of the wrong type" do
     create_class :TestClass do
       include DSLCompose::Composer

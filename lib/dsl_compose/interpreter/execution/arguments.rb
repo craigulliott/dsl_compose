@@ -38,6 +38,11 @@ module DSLCompose
 
           # process all the required arguments which are kwargs
           required_kwargs = arguments.required_arguments.filter { |a| a.kwarg }
+
+          if required_kwargs.any? && !all_kwargs.is_a?(Hash)
+            raise MissingRequiredArgumentsError, "This has required keyword arguments, but no keyword arguments were provided"
+          end
+
           required_kwargs.each do |required_kwarg|
             if all_kwargs.key? required_kwarg.name
               # add the keyword argument to the required args
