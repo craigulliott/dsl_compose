@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.14.3](https://github.com/craigulliott/dsl_compose/compare/v2.14.2...v2.14.3) (2023-09-27)
+
+
+### Bug Fixes
+
+* better error if passing a scalar arg instead of kwargs ([7a47775](https://github.com/craigulliott/dsl_compose/commit/7a47775e7b13329c82c2497a017d2d67c5c56d75))
+
 ## [2.14.2](https://github.com/craigulliott/dsl_compose/compare/v2.14.1...v2.14.2) (2023-09-11)
 
 
