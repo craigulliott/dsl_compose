@@ -85,9 +85,11 @@ module DSLCompose
       #
       # Argument `name` must be unique within the DSLMethod.
       # `required` must be a boolean, and determines if this argument will be required
+      # `array` is a boolean which determines if this argument will accept an array of the given type or a single item
+      # `default` contains the default value, if one is not provided then nil will be assumed (it is only available for optional arguments)
       # `kwarg` is a boolean which determines if a required Attribute must be provided as a keyword argument.
       # or optional on the method which is exposed in our DSL.
-      def add_argument name, required, kwarg, type, array: false, &block
+      def add_argument name, required, kwarg, type, array: false, default: nil, &block
         if @arguments.key? name
           raise ArgumentAlreadyExistsError, "An argument with the name `#{name}` already exists for this DSL method"
         end
@@ -97,7 +99,7 @@ module DSLCompose
           raise ArgumentOrderingError, "Required arguments can not be added after optional ones"
         end
 
-        @arguments[name] = Argument.new(name, required, kwarg, type, array: array, &block)
+        @arguments[name] = Argument.new(name, required, kwarg, type, array: array, default: default, &block)
       end
     end
   end

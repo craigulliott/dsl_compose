@@ -63,10 +63,12 @@ module DSLCompose
       #
       # name must be a symbol
       # `type` can be either :integer, :boolean, :float, :string, :symbol, :class or :object
+      # `array` is a boolean which determines if this argument will accept an array of the given type or a single item
+      # `default` contains the default value, if one is not provided then nil will be assumed
       # `block` contains the argument definition and will be evaluated seperately
       # by the Argument::Interpreter
-      def optional name, type, array: false, &block
-        @dsl.arguments.add_argument name, false, false, type, array: array, &block
+      def optional name, type, array: false, default: nil, &block
+        @dsl.arguments.add_argument name, false, false, type, array: array, default: default, &block
       end
 
       # adds a new required argument to the DSLMethod

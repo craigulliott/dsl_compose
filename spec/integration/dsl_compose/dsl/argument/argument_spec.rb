@@ -162,6 +162,28 @@ RSpec.describe DSLCompose::DSL::Arguments::Argument do
     )
   end
 
+  it "successfully evaluates a DSL with a optional argument with a default value" do
+    create_class :TestClass do
+      include DSLCompose::Composer
+      define_dsl :dsl_name do
+        optional :optional_option_name, :symbol, default: :foo
+      end
+    end
+
+    TestClass.dsl_name
+
+    expect(TestClass.dsls.to_h(:dsl_name)).to eql(
+      {
+        TestClass => {
+          arguments: {
+            optional_option_name: :foo
+          },
+          method_calls: {}
+        }
+      }
+    )
+  end
+
   it "successfully evaluates a DSL with a method which has a required keyword argument" do
     create_class :TestClass do
       include DSLCompose::Composer

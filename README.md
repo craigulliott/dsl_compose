@@ -106,8 +106,9 @@ class Foo
 
       # You can also add optional arguments to your DSL methods. All optional
       # arguments must be added after required ones. An error will be raised if
-      # you define a required argument after an optional one.
-      optional :optional_argument, :integer do
+      # you define a required argument after an optional one. Optional arguments can
+      # have an default value, if a default is not provided then nil will be assumed.
+      optional :optional_argument, :integer, default: 123 do
         description "A description of an optional argument"
 
         # You can add validation to your arguments. A full list is provided later in this document

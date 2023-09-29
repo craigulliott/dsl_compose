@@ -52,6 +52,8 @@ module DSLCompose
         # If true, then this argument accepts an array of values. It will also accept a single value,
         # but that single value will be automatically converted to an array
         attr_reader :array
+        # The default value for optional arguments, if one is not provided then nil will be assumed.
+        attr_reader :default
         # An otional description of this Attribute, if provided then it must be a string.
         # The description accepts markdown and is used when generating documentation.
         attr_reader :description
@@ -81,7 +83,7 @@ module DSLCompose
         # `kwarg` is a boolean which determines if a required Attribute must be provided as a keyword argument.
         # `type` can be either :integer, :boolean, :float, :string or :symbol
         # `block` contains the instructions to further configure this Attribute
-        def initialize name, required, kwarg, type, array: false, &block
+        def initialize name, required, kwarg, type, array: false, default: nil, &block
           if name.is_a? Symbol
 
             if RESERVED_ARGUMENT_NAMES.include? name
@@ -108,6 +110,13 @@ module DSLCompose
           @kwarg = kwarg ? true : false
 
           @array = array ? true : false
+
+          unless default.nil?
+            if @required
+              raise ImpossibleKwargError, "The argument `#{name}` is required, so can not be given a default value."
+            end
+            @default = default
+          end
 
           # If a block was provided, then we evaluate it using a seperate
           # interpreter class. We do this because the interpreter class contains
