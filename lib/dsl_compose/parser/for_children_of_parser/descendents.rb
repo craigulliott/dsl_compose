@@ -22,7 +22,7 @@ module DSLCompose
 
           # reject any classes which we are skipping
           extending_classes.reject! do |child_class|
-            @skip_classes.include? child_class
+            @skip_classes.include? child_class.name
           end
 
           # if this is not a final child, but we are processing final children only, then skip it

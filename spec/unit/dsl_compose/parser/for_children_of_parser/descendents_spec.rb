@@ -61,7 +61,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
       end
 
       describe "when skipping certain classes" do
-        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, true, [BaseClass1::Admin1] }
+        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, true, ["BaseClass1::Admin1"] }
 
         it "returns the expected classes in the expected order" do
           expect(descendants.classes).to eql([
@@ -106,7 +106,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
       end
 
       describe "when skipping certain classes" do
-        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, false, [BaseClass1::Adult1, BaseClass1::Admin1] }
+        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, false, ["BaseClass1::Adult1", "BaseClass1::Admin1"] }
 
         it "returns the expected classes in the expected order" do
           expect(descendants.classes).to eql([

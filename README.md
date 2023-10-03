@@ -284,7 +284,7 @@ class MyParser < DSLCompose::Parser
   # use `for_final_children_of` instead of `for_children_of`
   #
   # Both `for_children_of` and `for_final_children_of` accept an optional parameter
-  # named skip_classes which accepts an array of classes which should be skipped.
+  # named skip_classes which accepts an array of class names which should be skipped.
   for_children_of SomeBaseClass do |child_class:|
     add_documentation <<~DESCRIPTION
       You can optionally provide a description of anything specific that your parser
