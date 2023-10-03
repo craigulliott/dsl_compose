@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.15.1](https://github.com/craigulliott/dsl_compose/compare/v2.15.0...v2.15.1) (2023-10-03)
+
+
+### Bug Fixes
+
+* sorting classes by ancestry chain (i.e. ancestors before descendants) in the parser ([4e7dd6f](https://github.com/craigulliott/dsl_compose/commit/4e7dd6fd302c50ee3147f76f59a52089fb6f39ee))
+
 ## [2.15.0](https://github.com/craigulliott/dsl_compose/compare/v2.14.3...v2.15.0) (2023-10-03)
 
 
