@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.15.3](https://github.com/craigulliott/dsl_compose/compare/v2.15.2...v2.15.3) (2023-10-03)
+
+
+### Bug Fixes
+
+* updating class sorting method so that it is stable (we were getting different results on ubuntu/the CI server) ([70139a1](https://github.com/craigulliott/dsl_compose/commit/70139a11fa5190c3019e95199656385676a10177))
+
 ## [2.15.2](https://github.com/craigulliott/dsl_compose/compare/v2.15.1...v2.15.2) (2023-10-03)
 
 
