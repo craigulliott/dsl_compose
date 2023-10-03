@@ -27,7 +27,7 @@ module DSLCompose
             elsif a > b
               -1
             else
-              0
+              a.name <=> b.name
             end
           end
 

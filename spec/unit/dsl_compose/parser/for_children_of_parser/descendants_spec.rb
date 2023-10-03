@@ -46,11 +46,11 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendants do
       it "returns the expected classes in the expected order" do
         expect(descendants.classes).to eql([
           BaseClass1::Admin1,
-          BaseClass2::Child1,
-          BaseClass3::Child1,
           BaseClass1::Child1::Grandchild1,
           BaseClass1::Child2::Grandchild1,
-          BaseClass1::Child2::Grandchild2::GreatGrandChild1
+          BaseClass1::Child2::Grandchild2::GreatGrandChild1,
+          BaseClass2::Child1,
+          BaseClass3::Child1
         ])
       end
 
@@ -60,10 +60,10 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendants do
         it "returns the expected classes in the expected order" do
           expect(descendants.classes).to eql([
             BaseClass1::Admin1,
-            BaseClass3::Child1,
             BaseClass1::Child1::Grandchild1,
             BaseClass1::Child2::Grandchild1,
-            BaseClass1::Child2::Grandchild2::GreatGrandChild1
+            BaseClass1::Child2::Grandchild2::GreatGrandChild1,
+            BaseClass3::Child1
           ])
         end
       end
@@ -75,37 +75,37 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendants do
       it "returns the expected classes in the expected order" do
         expect(descendants.classes).to eql([
           BaseClass1,
-          BaseClass1::Child2,
-          BaseClass1::Child2::Grandchild2,
           BaseClass1::Adult1,
-          BaseClass1::Child1,
           BaseClass1::Admin1,
-          BaseClass2::Child1,
-          BaseClass3::Child1,
+          BaseClass1::Child1,
           BaseClass1::Child1::Grandchild1,
+          BaseClass1::Child2,
           BaseClass1::Child2::Grandchild1,
+          BaseClass1::Child2::Grandchild2,
           BaseClass1::Child2::Grandchild2::GreatGrandChild1,
           BaseClass2,
-          BaseClass3
+          BaseClass2::Child1,
+          BaseClass3,
+          BaseClass3::Child1
         ])
       end
 
       describe "when skipping certain classes" do
-        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendants.new BaseClass, false, ["BaseClass1::Adult1", "BaseClass1::Admin1"] }
+        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendants.new BaseClass, false, ["BaseClass1::Adult1", "BaseClass1::Child2::Grandchild2"] }
 
         it "returns the expected classes in the expected order" do
           expect(descendants.classes).to eql([
             BaseClass1,
-            BaseClass1::Child2,
-            BaseClass1::Child2::Grandchild2,
+            BaseClass1::Admin1,
             BaseClass1::Child1,
-            BaseClass2::Child1,
-            BaseClass3::Child1,
             BaseClass1::Child1::Grandchild1,
+            BaseClass1::Child2,
             BaseClass1::Child2::Grandchild1,
             BaseClass1::Child2::Grandchild2::GreatGrandChild1,
             BaseClass2,
-            BaseClass3
+            BaseClass2::Child1,
+            BaseClass3,
+            BaseClass3::Child1
           ])
         end
       end
