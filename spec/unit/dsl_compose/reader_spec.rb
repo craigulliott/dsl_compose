@@ -100,7 +100,7 @@ RSpec.describe DSLCompose::Reader do
           end
         end
 
-        describe "when the DSL is used again but on a descendent of the provided class" do
+        describe "when the DSL is used again but on a descendant of the provided class" do
           let(:second_execution) {
             ChildClass.dsl_name :my_dsl_arg do
               method_name :my_dsl_method_arg

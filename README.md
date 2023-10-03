@@ -371,7 +371,7 @@ In addition to parser classes (or as a useful tool within parser classes) you ca
 # simple API to access the arguments, methods and method arguments which
 # were provided when using a DSL.
 #
-# In the example below, MyClass is a class, or descendent of a class which
+# In the example below, MyClass is a class, or descendant of a class which
 # had a DSL defined on it with the name :my_dsl.
 #
 # An error will be raised if a DSL with the provided name was never defined

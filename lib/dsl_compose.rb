@@ -42,7 +42,7 @@ require "dsl_compose/interpreter"
 
 require "dsl_compose/parser/for_children_of_parser/for_dsl_parser/for_method_parser"
 require "dsl_compose/parser/for_children_of_parser/for_dsl_parser"
-require "dsl_compose/parser/for_children_of_parser/descendents"
+require "dsl_compose/parser/for_children_of_parser/descendants"
 require "dsl_compose/parser/for_children_of_parser"
 require "dsl_compose/parser/block_arguments"
 require "dsl_compose/parser"

@@ -2,7 +2,7 @@
 module DSLCompose
   class Parser
     class ForChildrenOfParser
-      class Descendents
+      class Descendants
         @base_class: singleton(Object)
         @skip_classes: Array[String]
         @final_children_only: bool
@@ -11,7 +11,7 @@ module DSLCompose
         def classes: -> Array[singleton(Object)]
 
         private
-        def has_descendents: (singleton(Object) base_class) -> bool
+        def has_descendants: (singleton(Object) base_class) -> bool
       end
     end
   end

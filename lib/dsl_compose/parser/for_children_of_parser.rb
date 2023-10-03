@@ -56,8 +56,8 @@ module DSLCompose
           end
         end
 
-        # yeild the block for all descendents of the provided base_class
-        Descendents.new(base_class, final_children_only, skip_classes).classes.each do |child_class|
+        # yeild the block for all descendants of the provided base_class
+        Descendants.new(base_class, final_children_only, skip_classes).classes.each do |child_class|
           # determine which arguments to send to the block
           args = {}
           if BlockArguments.accepts_argument?(:child_class, &block)

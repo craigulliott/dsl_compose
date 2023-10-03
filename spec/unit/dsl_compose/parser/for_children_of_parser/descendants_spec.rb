@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
+RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendants do
   before(:each) do
     # note, these are deliberately created in a non natural order, so we can
     # properly test the sorting
@@ -34,14 +34,14 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
   describe :initialize do
     it "initializes the class without error" do
       expect {
-        DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, true
+        DSLCompose::Parser::ForChildrenOfParser::Descendants.new BaseClass, true
       }.to_not raise_error
     end
   end
 
   describe :classes do
     describe "when final_children_only is true" do
-      let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, true }
+      let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendants.new BaseClass, true }
 
       it "returns the expected classes in the expected order" do
         expect(descendants.classes).to eql([
@@ -61,7 +61,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
       end
 
       describe "when skipping certain classes" do
-        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, true, ["BaseClass1::Admin1"] }
+        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendants.new BaseClass, true, ["BaseClass1::Admin1"] }
 
         it "returns the expected classes in the expected order" do
           expect(descendants.classes).to eql([
@@ -82,7 +82,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
     end
 
     describe "when final_children_only is false" do
-      let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, false }
+      let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendants.new BaseClass, false }
 
       it "returns the expected classes in the expected order" do
         expect(descendants.classes).to eql([
@@ -106,7 +106,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
       end
 
       describe "when skipping certain classes" do
-        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, false, ["BaseClass1::Adult1", "BaseClass1::Admin1"] }
+        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendants.new BaseClass, false, ["BaseClass1::Adult1", "BaseClass1::Admin1"] }
 
         it "returns the expected classes in the expected order" do
           expect(descendants.classes).to eql([

@@ -82,7 +82,7 @@ module DSLCompose
     def get_last_dsl_execution klass, dsl_name
       # note that this method does not need to do any special sorting, the required
       # order for getting the most recent execution is already guaranteed because
-      # parent classes in ruby always have to be evaluated before their descendents
+      # parent classes in ruby always have to be evaluated before their descendants
       class_dsl_executions(klass, dsl_name, true, true).last
     end
 
