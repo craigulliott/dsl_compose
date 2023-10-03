@@ -59,6 +59,26 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
           BaseClass1::Child2::Grandchild2::GreatGrandhild1
         ])
       end
+
+      describe "when skipping certain classes" do
+        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, true, [BaseClass1::Admin1] }
+
+        it "returns the expected classes in the expected order" do
+          expect(descendants.classes).to eql([
+            BaseClass1,
+            BaseClass2,
+            BaseClass3,
+            BaseClass1::Child1,
+            BaseClass1::Child2,
+            BaseClass2::Child1,
+            BaseClass3::Child1,
+            BaseClass1::Child1::Grandchild1,
+            BaseClass1::Child2::Grandchild1,
+            BaseClass1::Child2::Grandchild2,
+            BaseClass1::Child2::Grandchild2::GreatGrandhild1
+          ])
+        end
+      end
     end
 
     describe "when final_children_only is false" do
@@ -83,6 +103,26 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::Descendents do
           BaseClass1::Child2::Grandchild2,
           BaseClass1::Child2::Grandchild2::GreatGrandhild1
         ])
+      end
+
+      describe "when skipping certain classes" do
+        let(:descendants) { DSLCompose::Parser::ForChildrenOfParser::Descendents.new BaseClass, false, [BaseClass1::Adult1, BaseClass1::Admin1] }
+
+        it "returns the expected classes in the expected order" do
+          expect(descendants.classes).to eql([
+            BaseClass1,
+            BaseClass2,
+            BaseClass3,
+            BaseClass1::Child1,
+            BaseClass1::Child2,
+            BaseClass2::Child1,
+            BaseClass3::Child1,
+            BaseClass1::Child1::Grandchild1,
+            BaseClass1::Child2::Grandchild1,
+            BaseClass1::Child2::Grandchild2,
+            BaseClass1::Child2::Grandchild2::GreatGrandhild1
+          ])
+        end
       end
     end
   end

@@ -4,7 +4,8 @@ module DSLCompose
     self.@runs: untyped
 
     def initialize: -> void
-    def self.for_children_of: (singleton(Object) base_class, ?final_children_only: bool, ?rerun: bool) -> void
+    def self.for_children_of: (singleton(Object) base_class, ?final_children_only: bool, ?skip_classes: Array[singleton(Object)], ?rerun: bool) -> void
+    def self.for_final_children_of: (singleton(Object) base_class, ?skip_classes: Array[singleton(Object)]) -> void
 
     class NotInitializable < StandardError
     end

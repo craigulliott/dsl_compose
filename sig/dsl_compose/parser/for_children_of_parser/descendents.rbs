@@ -4,9 +4,10 @@ module DSLCompose
     class ForChildrenOfParser
       class Descendents
         @base_class: singleton(Object)
+        @skip_classes: Array[singleton(Object)]
         @final_children_only: bool
 
-        def initialize: (singleton(Object) base_class, bool final_children_only) -> void
+        def initialize: (singleton(Object) base_class, bool final_children_only, ?Array[singleton(Object)] skip_classes) -> void
         def classes: -> Array[singleton(Object)]
 
         private

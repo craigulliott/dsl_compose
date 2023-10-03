@@ -4,9 +4,10 @@ module DSLCompose
   class Parser
     class ForChildrenOfParser
       class Descendents
-        def initialize base_class, final_children_only
+        def initialize base_class, final_children_only, skip_classes = []
           @base_class = base_class
           @final_children_only = final_children_only
+          @skip_classes = skip_classes
         end
 
         def classes
@@ -17,6 +18,11 @@ module DSLCompose
           # by the presence of decendents and finally by their name
           extending_classes.sort_by! do |child_class|
             "#{child_class.name.split("::").count}_#{has_descendents(child_class) ? 0 : 1}_#{child_class.name}"
+          end
+
+          # reject any classes which we are skipping
+          extending_classes.reject! do |child_class|
+            @skip_classes.include? child_class
           end
 
           # if this is not a final child, but we are processing final children only, then skip it

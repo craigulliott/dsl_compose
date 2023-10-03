@@ -35,7 +35,7 @@ module DSLCompose
       # parser.for_children_of BaseClass do |child_class:|
       #    # this will yield for ChildClass and GrandchildClass
       # and
-      def initialize base_class, final_children_only, &block
+      def initialize base_class, final_children_only, skip_classes = [], &block
         # assert the provided class has the DSLCompose::Composer module installed
         unless base_class.respond_to? :dsls
           raise ClassDoesNotUseDSLComposeError, base_class
@@ -57,7 +57,7 @@ module DSLCompose
         end
 
         # yeild the block for all descendents of the provided base_class
-        Descendents.new(base_class, final_children_only).classes.each do |child_class|
+        Descendents.new(base_class, final_children_only, skip_classes).classes.each do |child_class|
           # determine which arguments to send to the block
           args = {}
           if BlockArguments.accepts_argument?(:child_class, &block)

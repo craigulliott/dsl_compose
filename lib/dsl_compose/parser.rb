@@ -30,27 +30,28 @@ module DSLCompose
     # If `final_children_only` is true, then this will cause the parser to only return
     # classes which are at the end of their class hierachy (meaning they dont have any
     # children of their own)
-    def self.for_children_of base_class, final_children_only: false, rerun: false, &block
+    def self.for_children_of base_class, final_children_only: false, skip_classes: [], rerun: false, &block
       unless rerun
         @runs ||= []
         @runs << {
           base_class: base_class,
           final_children_only: final_children_only,
+          skip_classes: skip_classes,
           block: block
         }
       end
 
       # we parse the provided block in the context of the ForChildrenOfParser class
       # to help make this code more readable, and to limit polluting the current namespace
-      ForChildrenOfParser.new(base_class, final_children_only, &block)
+      ForChildrenOfParser.new(base_class, final_children_only, skip_classes, &block)
     end
 
     # this is a wrapper for the `for_children_of` method, but it provides a value
     # of true for the `final_children_only` argument. This will cause the parser to only
     # return classes which are at the end of the class hierachy (meaning they dont have
     # any children of their own)
-    def self.for_final_children_of base_class, &block
-      for_children_of base_class, final_children_only: true, &block
+    def self.for_final_children_of base_class, skip_classes: [], &block
+      for_children_of base_class, final_children_only: true, skip_classes: skip_classes, &block
     end
 
     # this method is used to rerun the parser, this is most useful from within a test suite
@@ -61,7 +62,8 @@ module DSLCompose
         base_class = run[:base_class]
         block = run[:block]
         final_children_only = run[:final_children_only]
-        for_children_of base_class, rerun: true, final_children_only: final_children_only, &block
+        skip_classes = run[:skip_classes]
+        for_children_of base_class, rerun: true, final_children_only: final_children_only, skip_classes: skip_classes, &block
       end
     end
 
