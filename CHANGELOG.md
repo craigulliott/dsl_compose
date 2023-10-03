@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.15.0](https://github.com/craigulliott/dsl_compose/compare/v2.14.3...v2.15.0) (2023-10-03)
+
+
+### Features
+
+* added option to skip certain provided classes within dsl parsers ([c2be111](https://github.com/craigulliott/dsl_compose/commit/c2be111289f4ca0b84b95e641c18bdbd784b5b6f))
+* adding default values for dsl arguments ([b89bd69](https://github.com/craigulliott/dsl_compose/commit/b89bd697eb6598f5f723a28533bd3e67e4ab9207))
+
+
+### Bug Fixes
+
+* passing classes to skip to the parser as class names (strings) instead of the actual classes. This prevents this library holding a reference to those classes and preventing garbage collection of the classes when they are dynamically created/destroyed within a test suite. ([74b332a](https://github.com/craigulliott/dsl_compose/commit/74b332ab99b7cf96bb8468a06634ee217cd5c58b))
+
 ## [2.14.3](https://github.com/craigulliott/dsl_compose/compare/v2.14.2...v2.14.3) (2023-09-27)
 
 
