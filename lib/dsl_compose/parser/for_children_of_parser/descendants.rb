@@ -21,7 +21,7 @@ module DSLCompose
             "#{child_class.name.split("::").count}_#{has_descendants(child_class) ? 0 : 1}_#{child_class.name}"
           end
           # then by ansestory chain (i.e. ancestors before descendants)
-          extending_classes.sort do |a, b|
+          extending_classes.sort! do |a, b|
             if a < b
               1
             elsif a > b
