@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.15.4](https://github.com/craigulliott/dsl_compose/compare/v2.15.3...v2.15.4) (2023-10-04)
+
+
+### Bug Fixes
+
+* passing context along with where DSL's were defined, and then including this context in error messages ([5238a3d](https://github.com/craigulliott/dsl_compose/commit/5238a3daa8c1a32e77783d56c7c429b6335995bd))
+
 ## [2.15.3](https://github.com/craigulliott/dsl_compose/compare/v2.15.2...v2.15.3) (2023-10-03)
 
 
