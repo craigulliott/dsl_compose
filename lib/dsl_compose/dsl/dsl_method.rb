@@ -60,7 +60,7 @@ module DSLCompose
           Interpreter.new(self).instance_eval(&block)
         end
       rescue => e
-        raise e, "Error defining method #{name}: #{e.message}", e.backtrace
+        raise e, "Error while defining method #{name}\n#{e.message}", e.backtrace
       end
 
       # Set the description for this DSLMethod to the provided value.

@@ -26,7 +26,7 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when an excecution has occured" do
       before(:each) do
-        interpreter.execute_dsl TestClass, dsl
+        interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
       end
 
       it "returns an object representing all executions" do
@@ -75,7 +75,7 @@ RSpec.describe DSLCompose::Interpreter do
       before(:each) do
         create_class :DifferentTestClass
 
-        interpreter.execute_dsl DifferentTestClass, dsl
+        interpreter.execute_dsl DifferentTestClass, dsl, "%called_from string - line and line number%"
       end
 
       it "returns an empty array" do
@@ -85,7 +85,7 @@ RSpec.describe DSLCompose::Interpreter do
 
       describe "when an excecution has occured for this class" do
         before(:each) do
-          interpreter.execute_dsl TestClass, dsl
+          interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
         end
 
         it "returns an array with the expected executions" do
@@ -109,7 +109,7 @@ RSpec.describe DSLCompose::Interpreter do
       before(:each) do
         create_class :DifferentTestClass
 
-        interpreter.execute_dsl DifferentTestClass, different_dsl
+        interpreter.execute_dsl DifferentTestClass, different_dsl, "%called_from string - line and line number%"
       end
 
       it "returns an empty array" do
@@ -119,7 +119,7 @@ RSpec.describe DSLCompose::Interpreter do
 
       describe "when an excecution has occured for this dsl" do
         before(:each) do
-          interpreter.execute_dsl TestClass, dsl
+          interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
         end
 
         it "returns an array with the expected executions" do
@@ -144,7 +144,7 @@ RSpec.describe DSLCompose::Interpreter do
         before(:each) do
           create_class :DifferentTestClass
 
-          interpreter.execute_dsl DifferentTestClass, different_dsl
+          interpreter.execute_dsl DifferentTestClass, different_dsl, "%called_from string - line and line number%"
         end
 
         it "returns an empty array" do
@@ -154,7 +154,7 @@ RSpec.describe DSLCompose::Interpreter do
 
         describe "when an excecution has occured for this dsl" do
           before(:each) do
-            interpreter.execute_dsl TestClass, dsl
+            interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
           end
 
           it "returns an array with the expected executions" do
@@ -190,7 +190,7 @@ RSpec.describe DSLCompose::Interpreter do
         before(:each) do
           create_class :DifferentTestClass
 
-          interpreter.execute_dsl DifferentTestClass, different_dsl
+          interpreter.execute_dsl DifferentTestClass, different_dsl, "%called_from string - line and line number%"
         end
 
         it "returns an empty array" do
@@ -200,7 +200,7 @@ RSpec.describe DSLCompose::Interpreter do
 
         describe "when an excecution has occured for this dsl" do
           before(:each) do
-            interpreter.execute_dsl TestClass, dsl
+            interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
           end
 
           it "returns an empty array" do
@@ -235,7 +235,7 @@ RSpec.describe DSLCompose::Interpreter do
         before(:each) do
           create_class :DifferentTestClass
 
-          interpreter.execute_dsl DifferentTestClass, different_dsl
+          interpreter.execute_dsl DifferentTestClass, different_dsl, "%called_from string - line and line number%"
         end
 
         it "returns an empty array" do
@@ -245,7 +245,7 @@ RSpec.describe DSLCompose::Interpreter do
 
         describe "when an excecution has occured for this dsl" do
           before(:each) do
-            interpreter.execute_dsl TestClass, dsl
+            interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
           end
 
           it "returns an array with the expected executions" do
@@ -271,7 +271,7 @@ RSpec.describe DSLCompose::Interpreter do
 
   describe :get_last_dsl_execution do
     describe "when there is a single dsl execution on the provided class" do
-      let(:execution) { interpreter.execute_dsl TestClass, dsl }
+      let(:execution) { interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%" }
 
       before(:each) do
         execution
@@ -282,7 +282,7 @@ RSpec.describe DSLCompose::Interpreter do
       end
 
       describe "when there is a second dsl execution on the provided class" do
-        let(:second_execution) { interpreter.execute_dsl TestClass, dsl }
+        let(:second_execution) { interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%" }
 
         before(:each) do
           second_execution
@@ -295,7 +295,7 @@ RSpec.describe DSLCompose::Interpreter do
 
       describe "when there is a second execution from a different DSL on the provided class" do
         let(:different_dsl) { DSLCompose::DSL.new :different_dsl_name, TestClass }
-        let(:second_execution) { interpreter.execute_dsl TestClass, different_dsl }
+        let(:second_execution) { interpreter.execute_dsl TestClass, different_dsl, "%called_from string - line and line number%" }
 
         before(:each) do
           second_execution
@@ -315,7 +315,7 @@ RSpec.describe DSLCompose::Interpreter do
           end
 
           describe "when the child class has it's own execution of the DSL" do
-            let(:child_class_execution) { interpreter.execute_dsl ChildClass, dsl }
+            let(:child_class_execution) { interpreter.execute_dsl ChildClass, dsl, "%called_from string - line and line number%" }
 
             before(:each) do
               child_class_execution
@@ -339,7 +339,7 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when an excecution has occured for this class" do
       before(:each) do
-        interpreter.execute_dsl TestClass, dsl
+        interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
       end
 
       it "does not throw an error" do
@@ -381,7 +381,7 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when an excecution has occured for this class" do
       before(:each) do
-        interpreter.execute_dsl TestClass, dsl
+        interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
       end
 
       it "returns a object, keyed by class, with keys for arguments and method calls" do
@@ -404,7 +404,7 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when an excecution has occured for this class" do
       before(:each) do
-        interpreter.execute_dsl TestClass, dsl
+        interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%"
       end
 
       it "returns a object, keyed by class, with keys for arguments and method calls" do

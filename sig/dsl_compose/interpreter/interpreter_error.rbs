@@ -1,0 +1,11 @@
+
+# Classes
+module DSLCompose
+  class Interpreter
+    class InterpreterError < StandardError
+      attr_reader original_context: String
+      def initialize: (String message, String original_context) -> void
+      def to_s: -> String
+    end
+  end
+end

@@ -12,10 +12,7 @@ module DSLCompose
     def add_parser_usage_note: (singleton(Object) klass, String note) -> void
     def parser_usage_notes: (singleton(Object) klass) -> Array[String]
 
-    class InvalidDescriptionError < StandardError
-    end
-
-    class DSLExecutionNotFoundError < StandardError
+    class InvalidDescriptionError < InterpreterError
     end
   end
 end

@@ -4,25 +4,27 @@ module DSLCompose
   class Interpreter
     class Execution
       class Arguments
-        class MissingRequiredArgumentsError < StandardError
+        class MissingRequiredArgumentsError < InterpreterError
         end
 
-        class TooManyArgumentsError < StandardError
+        class TooManyArgumentsError < InterpreterError
         end
 
-        class OptionalArgumentsShouldBeHashError < StandardError
+        class OptionalArgumentsShouldBeHashError < InterpreterError
         end
 
-        class InvalidArgumentTypeError < StandardError
+        class InvalidArgumentTypeError < InterpreterError
         end
 
-        class ArrayNotValidError < StandardError
+        class ArrayNotValidError < InterpreterError
         end
 
         attr_reader :arguments
+        attr_reader :called_from
 
-        def initialize arguments, *args
+        def initialize arguments, called_from, *args
           @arguments = {}
+          @called_from = called_from
 
           required_argument_count = arguments.required_arguments.count
           required_non_kwarg_argument_count = arguments.required_arguments.count { |a| !a.kwarg }
@@ -40,7 +42,7 @@ module DSLCompose
           required_kwargs = arguments.required_arguments.filter { |a| a.kwarg }
 
           if required_kwargs.any? && !all_kwargs.is_a?(Hash)
-            raise MissingRequiredArgumentsError, "This has required keyword arguments, but no keyword arguments were provided"
+            raise MissingRequiredArgumentsError.new("This has required keyword arguments, but no keyword arguments were provided", called_from)
           end
 
           required_kwargs.each do |required_kwarg|
@@ -51,7 +53,7 @@ module DSLCompose
               # left with only the optional args
               all_kwargs.delete required_kwarg.name
             else
-              raise MissingRequiredArgumentsError, "The required kwarg `#{required_kwarg.name}` was not provided"
+              raise MissingRequiredArgumentsError.new("The required kwarg `#{required_kwarg.name}` was not provided", called_from)
             end
           end
 
@@ -61,12 +63,12 @@ module DSLCompose
 
           # assert that a value is provided for every required argument
           unless required_argument_count == required_args.count
-            raise MissingRequiredArgumentsError, "This requires #{required_non_kwarg_argument_count} arguments, but only #{required_args.count} were provided"
+            raise MissingRequiredArgumentsError.new("This requires #{required_non_kwarg_argument_count} arguments, but only #{required_args.count} were provided", called_from)
           end
 
           # assert that too many arguments have not been provided
           if args.count > required_argument_count + (has_optional_arguments ? 1 : 0)
-            raise TooManyArgumentsError, "Too many arguments provided"
+            raise TooManyArgumentsError.new("Too many arguments provided", called_from)
           end
 
           # Assume all optonal arguments are their defaults (except booleans, which default to false).
@@ -88,7 +90,7 @@ module DSLCompose
           # asset that, if provided, then the optional argument (always the last one) is a Hash
           if has_optional_arguments && !optional_arg.nil?
             unless optional_arg.is_a? Hash
-              raise OptionalArgumentsShouldBeHashError, "If provided, then the optional arguments must be last, and be represented as a Hash"
+              raise OptionalArgumentsShouldBeHashError.new("If provided, then the optional arguments must be last, and be represented as a Hash", called_from)
             end
 
             # assert the each provided optional argument is valid
@@ -110,7 +112,7 @@ module DSLCompose
               end
 
               if optional_arg_value.is_a?(Array) && !optional_argument.array
-                raise ArrayNotValidError, "An array was provided to an argument which does not accept an array of values"
+                raise ArrayNotValidError.new("An array was provided to an argument which does not accept an array of values", called_from)
               end
 
               # to simplify the code, we always process the reset of the validations as an array, even
@@ -121,38 +123,38 @@ module DSLCompose
                 case optional_argument.type
                 when :integer
                   unless value.is_a? Integer
-                    raise InvalidArgumentTypeError, "`#{value}` is not an Integer"
+                    raise InvalidArgumentTypeError.new("`#{value}` is not an Integer", called_from)
                   end
                   optional_argument.validate_integer! value
 
                 when :float
                   # float allows either floats or integers
                   unless value.is_a?(Float) || value.is_a?(Integer)
-                    raise InvalidArgumentTypeError, "`#{value}` is not an Float or Integer"
+                    raise InvalidArgumentTypeError.new("`#{value}` is not an Float or Integer", called_from)
                   end
                   optional_argument.validate_float! value
 
                 when :symbol
                   unless value.is_a? Symbol
-                    raise InvalidArgumentTypeError, "`#{value}` is not a Symbol"
+                    raise InvalidArgumentTypeError.new("`#{value}` is not a Symbol", called_from)
                   end
                   optional_argument.validate_symbol! value
 
                 when :string
                   unless value.is_a? String
-                    raise InvalidArgumentTypeError, "`#{value}` is not a String"
+                    raise InvalidArgumentTypeError.new("`#{value}` is not a String", called_from)
                   end
                   optional_argument.validate_string! value
 
                 when :boolean
                   unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
-                    raise InvalidArgumentTypeError, "`#{value}` is not a boolean"
+                    raise InvalidArgumentTypeError.new("`#{value}` is not a boolean", called_from)
                   end
                   optional_argument.validate_boolean! value
 
                 when :class
                   unless value.is_a?(ClassCoerce)
-                    raise InvalidArgumentTypeError, "`#{value}` is not a class coerce (String)"
+                    raise InvalidArgumentTypeError.new("`#{value}` is not a class coerce (String)", called_from)
                   end
                   optional_argument.validate_class! value
 
@@ -160,7 +162,7 @@ module DSLCompose
                   optional_argument.validate_object! value
 
                 else
-                  raise InvalidArgumentTypeError, "The argument value `#{value}` is not a supported type"
+                  raise InvalidArgumentTypeError.new("The argument value `#{value}` is not a supported type", called_from)
                 end
               end
 
@@ -174,7 +176,7 @@ module DSLCompose
                 optional_arg_value
               end
             rescue => e
-              raise e, "Error processing optional argument #{optional_argument_name}: #{e.message}", e.backtrace
+              raise e, "Error processing optional argument #{optional_argument_name}\n#{e.message}", e.backtrace
             end
 
           end
@@ -200,7 +202,7 @@ module DSLCompose
             end
 
             if required_arg_value.is_a?(Array) && !required_argument.array
-              raise ArrayNotValidError, "An array was provided to an argument which does not accept an array of values"
+              raise ArrayNotValidError.new("An array was provided to an argument which does not accept an array of values", called_from)
             end
 
             # to simplify the code, we always process the reset of the validations as an array, even
@@ -211,38 +213,38 @@ module DSLCompose
               case required_argument.type
               when :integer
                 unless value.is_a? Integer
-                  raise InvalidArgumentTypeError, "`#{value}` is not an Integer"
+                  raise InvalidArgumentTypeError.new("`#{value}` is not an Integer", called_from)
                 end
                 required_argument.validate_integer! value
 
               when :float
                 # float allows either floats or integers
                 unless value.is_a?(Float) || value.is_a?(Integer)
-                  raise InvalidArgumentTypeError, "`#{value}` is not an Float or Integer"
+                  raise InvalidArgumentTypeError.new("`#{value}` is not an Float or Integer", called_from)
                 end
                 required_argument.validate_float! value
 
               when :symbol
                 unless value.is_a? Symbol
-                  raise InvalidArgumentTypeError, "`#{value}` is not a Symbol"
+                  raise InvalidArgumentTypeError.new("`#{value}` is not a Symbol", called_from)
                 end
                 required_argument.validate_symbol! value
 
               when :string
                 unless value.is_a? String
-                  raise InvalidArgumentTypeError, "`#{value}` is not a String"
+                  raise InvalidArgumentTypeError.new("`#{value}` is not a String", called_from)
                 end
                 required_argument.validate_string! value
 
               when :boolean
                 unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
-                  raise InvalidArgumentTypeError, "`#{value}` is not a boolean"
+                  raise InvalidArgumentTypeError.new("`#{value}` is not a boolean", called_from)
                 end
                 required_argument.validate_boolean! value
 
               when :class
                 unless value.is_a?(ClassCoerce)
-                  raise InvalidArgumentTypeError, "`#{value}` is not a class coerce (String)"
+                  raise InvalidArgumentTypeError.new("`#{value}` is not a class coerce (String)", called_from)
                 end
                 required_argument.validate_class! value
 
@@ -250,7 +252,7 @@ module DSLCompose
                 required_argument.validate_object! value
 
               else
-                raise InvalidArgumentTypeError, "The argument `#{value}` is not a supported type"
+                raise InvalidArgumentTypeError.new("The argument `#{value}` is not a supported type", called_from)
               end
             end
 
@@ -264,7 +266,7 @@ module DSLCompose
               required_arg_value
             end
           rescue => e
-            raise e, "Error processing required argument #{argument_name}: #{e.message}", e.backtrace
+            raise e, "Error processing required argument #{argument_name}\n#{e.message}", e.backtrace
           end
         end
 

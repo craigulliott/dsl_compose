@@ -5,11 +5,12 @@ module DSLCompose
       @parser_usage_notes: Array[String]
 
       attr_reader dsl: DSL
+      attr_reader called_from: String
       attr_reader klass: Object
       attr_reader method_calls: MethodCalls
       attr_reader arguments: Arguments
 
-      def initialize: (Object klass, DSL dsl, *untyped args) -> void
+      def initialize: (Object klass, DSL dsl, String called_from, *untyped args) -> void
       def instance_eval: () -> void
       def add_parser_usage_note: (String note) -> void
       def parser_usage_notes: () -> Array[String]
@@ -18,11 +19,15 @@ module DSLCompose
       def method_missing: (Symbol method_name, *untyped args) -> untyped
       def respond_to_missing?: (Symbol method_name, *untyped args) -> untyped
 
-      class MethodIsUniqueError < StandardError
+      class MethodIsUniqueError < InterpreterError
       end
 
-      class RequiredMethodNotCalledError < StandardError
+      class RequiredMethodNotCalledError < InterpreterError
       end
+
+      class InvalidDescriptionError < InterpreterError
+      end
+
     end
   end
 end

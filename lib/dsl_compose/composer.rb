@@ -48,9 +48,11 @@ module DSLCompose
 
           # add a singleton method with the name of this new DSL onto our class, this is how our new DSL will be accessed
           define_singleton_method name do |*args, &block|
+            called_from = caller(1..1).first
+
             # when it is called, we process this new dynamic DSL with the interpreter
             # `self` here is the class in which the dsl is being used, not the class in which the DSL was defined
-            interpreter.execute_dsl self, dsl, *args, &block
+            interpreter.execute_dsl self, dsl, called_from, *args, &block
           end
 
         end

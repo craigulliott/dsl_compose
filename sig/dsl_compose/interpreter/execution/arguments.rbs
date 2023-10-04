@@ -4,23 +4,24 @@ module DSLCompose
     class Execution
       class Arguments
         attr_reader arguments: Hash[untyped, untyped]
-        def initialize: (untyped arguments, *untyped args) -> void
+        attr_reader called_from: String
+
+        def initialize: (untyped arguments, String called_from, *untyped args) -> void
         def to_h: -> Hash[untyped, untyped]
 
-        class MissingRequiredArgumentsError < StandardError
-          def initialize: (untyped required_count, untyped provided_count) -> void
+        class MissingRequiredArgumentsError < InterpreterError
         end
 
-        class TooManyArgumentsError < StandardError
+        class TooManyArgumentsError < InterpreterError
         end
 
-        class OptionalArgumentsShouldBeHashError < StandardError
+        class OptionalArgumentsShouldBeHashError < InterpreterError
         end
 
-        class InvalidArgumentTypeError < StandardError
+        class InvalidArgumentTypeError < InterpreterError
         end
 
-        class ArrayNotValidError < StandardError
+        class ArrayNotValidError < InterpreterError
         end
       end
     end

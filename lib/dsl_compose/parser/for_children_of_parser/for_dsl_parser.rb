@@ -108,6 +108,14 @@ module DSLCompose
               @dsl_execution = dsl_execution
               # yield the block in the context of this class
               instance_exec(**args, &block)
+            rescue => e
+              # if this is an InterpreterError, then it already has the called_from metadata
+              # just continue raising the original error
+              if e.is_a? Interpreter::InterpreterError
+                raise
+              end
+              # otherwise, decorate the error with where the DSL was defined
+              raise e, "#{e.message}\nparsing class: #{child_class.name}\ndsl name: #{dsl_name}\ndsl source: #{dsl_execution.called_from}", e.backtrace
             end
           end
         end

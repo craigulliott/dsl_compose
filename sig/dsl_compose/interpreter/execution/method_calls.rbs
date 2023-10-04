@@ -9,7 +9,7 @@ module DSLCompose
         def method_calls: () -> Array[MethodCall]
         def method_called?: (Symbol method_name) -> bool
         def method_calls_by_name: (Symbol method_name) -> Array[MethodCall]
-        def add_method_call: (DSL::DSLMethod dsl_method, *untyped args) -> MethodCall
+        def add_method_call: (DSL::DSLMethod dsl_method, String called_from, *untyped args) -> MethodCall
       end
     end
   end

@@ -127,7 +127,7 @@ module DSLCompose
             Interpreter.new(self).instance_eval(&block)
           end
         rescue => e
-          raise e, "Error defining argument #{name}: #{e.message}", e.backtrace
+          raise e, "Error while defining argument #{name}\n#{e.message}", e.backtrace
         end
 
         # Set the description for this Argument to the provided value.

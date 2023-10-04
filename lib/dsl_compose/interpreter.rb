@@ -4,10 +4,7 @@ module DSLCompose
   # The class is reponsible for parsing and executing a dynamic DSL (dynamic DSLs are
   # created using the DSLCompose::DSL class).
   class Interpreter
-    class DSLExecutionNotFoundError < StandardError
-    end
-
-    class InvalidDescriptionError < StandardError
+    class InvalidDescriptionError < InterpreterError
     end
 
     # A dynamic DSL can be used multiple times on the same class, each time the DSL is used
@@ -23,7 +20,7 @@ module DSLCompose
     # generate documentation
     def add_parser_usage_note child_class, note
       unless note.is_a?(String) && note.strip.length > 0
-        raise InvalidDescriptionError, "The parser usage description `#{note}` is invalid, it must be of type string and have length greater than 0"
+        raise InvalidDescriptionError.new("The parser usage description `#{note}` is invalid, it must be of type string and have length greater than 0", called_from)
       end
       @parser_usage_notes ||= {}
       @parser_usage_notes[child_class] ||= []
@@ -40,20 +37,23 @@ module DSLCompose
     # Execute/process a dynamically defined DSL on a class.
     # `klass` is the class in which the DSL is being used, not
     # the class in which the DSL was defined.
-    def execute_dsl(klass, dsl, ...)
+    def execute_dsl(klass, dsl, called_from, ...)
       # make sure we have these variables for the exception message below
+      # set to nil first, so that if we get an exception while setting them
+      # it wont break the error message generation
       class_name = nil
-      class_name = klass.name
       dsl_name = nil
+      class_name = klass.name
       dsl_name = dsl.name
 
-      execution = Execution.new(klass, dsl, ...)
+      execution = Execution.new(klass, dsl, called_from, ...)
       @executions << execution
       execution
     rescue => e
-      raise e, "Error processing dsl #{dsl_name} for class #{class_name}: #{e.message}", e.backtrace
+      raise e, "Error while defining DSL #{dsl_name} for class #{class_name}:\n#{e.message}", e.backtrace
     end
 
+    #
     # Returns an array of all executions for a given class.
     def class_executions klass
       @executions.filter { |e| e.klass == klass }

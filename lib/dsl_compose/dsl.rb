@@ -83,8 +83,6 @@ module DSLCompose
       else
         raise NoBlockProvidedError, "No block was provided for this DSL"
       end
-    rescue => e
-      raise e, "Error defining DSL #{@name} on #{@klass}: #{e.message}", e.backtrace
     end
 
     # Set the description for this DSL to the provided value.

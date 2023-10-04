@@ -5,15 +5,17 @@ module DSLCompose
     class Execution
       class MethodCalls
         class MethodCall
-          class InvalidDescriptionError < StandardError
+          class InvalidDescriptionError < InterpreterError
           end
 
           attr_reader :dsl_method
+          attr_reader :called_from
           attr_reader :arguments
 
-          def initialize dsl_method, *args, &block
+          def initialize dsl_method, called_from, *args, &block
             @dsl_method = dsl_method
-            @arguments = Arguments.new(dsl_method.arguments, *args)
+            @called_from = called_from
+            @arguments = Arguments.new(dsl_method.arguments, called_from, *args)
           end
 
           def method_name
@@ -30,7 +32,7 @@ module DSLCompose
           # generate documentation
           def add_parser_usage_note note
             unless note.is_a?(String) && note.strip.length > 0
-              raise InvalidDescriptionError, "The parser usage description `#{note}` is invalid, it must be of type string and have length greater than 0"
+              raise InvalidDescriptionError.new("The parser usage description `#{note}` is invalid, it must be of type string and have length greater than 0", @called_from)
             end
 
             @parser_usage_notes ||= []

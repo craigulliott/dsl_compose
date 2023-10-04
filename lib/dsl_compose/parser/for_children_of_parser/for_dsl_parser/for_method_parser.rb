@@ -28,6 +28,8 @@ module DSLCompose
             @dsl_execution = dsl_execution
             @method_names = method_names
 
+            dsl_name = dsl_execution.dsl.name
+
             # assert that a block was provided
             unless block
               raise NoBlockProvided
@@ -100,6 +102,14 @@ module DSLCompose
 
                 # yeild the block in the context of this class
                 instance_exec(**args, &block)
+              rescue => e
+                # if this is an InterpreterError, then it already has the called_from metadata
+                # just continue raising the original error
+                if e.is_a? Interpreter::InterpreterError
+                  raise
+                end
+                # otherwise, decorate the error with where the DSL was defined
+                raise e, "#{e.message}\nparsing class: #{child_class.name}\ndsl name: #{dsl_name}\ndsl method name: #{method_name}\ndsl source: #{method_call.called_from}", e.backtrace
               end
             end
           end
