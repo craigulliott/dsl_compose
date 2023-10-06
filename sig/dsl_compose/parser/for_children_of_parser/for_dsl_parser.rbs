@@ -8,7 +8,7 @@ module DSLCompose
         @dsl_names: Array[Symbol]
         @dsl_execution: Interpreter::Execution
 
-        def initialize: (singleton(Object) base_class, singleton(Object) child_class, Array[Symbol] dsl_names, bool on_current_class, bool on_ancestor_class) -> void
+        def initialize: (singleton(Object) base_class, singleton(Object) child_class, Array[Symbol] dsl_names, bool on_current_class, bool on_ancestor_class, bool first_use_only) -> void
 
         # overriding this method because steep doesn't
         # correctly infer that a block is being passed to this method

@@ -90,36 +90,42 @@ module DSLCompose
       # end
       #
       # If `on_current_class` is true, then the block will be yielded to for each DSL
-      # which was used directly on the current class. If `oncurrent_class` is false,
-      # then the block will not be yielded to for any DSL which was used directly on.
+      # which was used directly on the current class. If `on_current_class` is false,
+      # then the block will not be yielded to for any DSL which was used directly on it.
       # If `on_ancestor_class` is true, then the block will be yielded to for each DSL
       # which was used on any class in the current classes ancestry. If `on_ancestor_class`
       # is false, then the block will not be yielded to for any DSL which was used on
       # any class in the current classes ancestry.
-      def for_dsl dsl_names, on_current_class: true, on_ancestor_class: false, &block
+      #
+      # If `first_use_only` is true, then this block will only yeild once for each subject class
+      # which directly uses or inherits use of the provided DSL. The DSL execution which occurs
+      # first in the class will be selected, and if the class does not use the DSL then each of
+      # the classes ancestors will be tested until an execution is found (only the current class
+      # will be tested if skip_inherited_dsls has been set to true).
+      def for_dsl dsl_names, on_current_class: true, on_ancestor_class: false, first_use_only: false, &block
         child_class = @child_class
 
         unless child_class
           raise NoChildClassError, "No child_class was found, please call this method from within a `for_children_of` block"
         end
 
-        ForDSLParser.new(@base_class, child_class, dsl_names, on_current_class, on_ancestor_class, &block)
+        ForDSLParser.new(@base_class, child_class, dsl_names, on_current_class, on_ancestor_class, first_use_only, &block)
       end
 
       # this is a wrapper for the `for_dsl` method, but it provides a value of true
       # for the `on_ancestor_class` argument and a value of false for the `on_current_class`
       # argument. This will cause the parser to only yeild for dsls which were used on
       # a class which is in the current classes ancestry, but not on the current class
-      def for_inherited_dsl dsl_names, &block
-        for_dsl dsl_names, on_current_class: false, on_ancestor_class: true, &block
+      def for_inherited_dsl dsl_names, first_use_only: false, &block
+        for_dsl dsl_names, on_current_class: false, on_ancestor_class: true, first_use_only: first_use_only, &block
       end
 
       # this is a wrapper for the `for_dsl` method, but it provides a value of true
       # for the `on_ancestor_class` argument and a value of true for the `on_current_class`
       # argument. This will cause the parser to yeild for dsls which were used on either
       # the current class or any class in its ancestry
-      def for_dsl_or_inherited_dsl dsl_names, &block
-        for_dsl dsl_names, on_current_class: true, on_ancestor_class: true, &block
+      def for_dsl_or_inherited_dsl dsl_names, first_use_only: false, &block
+        for_dsl dsl_names, on_current_class: true, on_ancestor_class: true, first_use_only: first_use_only, &block
       end
 
       # takes a description of what this parser does and stores it against the DSL definition

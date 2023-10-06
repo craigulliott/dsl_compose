@@ -66,8 +66,15 @@ module DSLCompose
 
     # Returns an array of all executions for a given name and class. This includes
     # any ancestors of the provided class
-    def class_dsl_executions klass, dsl_name, on_current_class, on_ancestor_class
-      @executions.filter { |e| e.dsl.name == dsl_name && ((on_current_class && e.klass == klass) || (on_ancestor_class && klass < e.klass)) }
+    def class_dsl_executions klass, dsl_name, on_current_class, on_ancestor_class, first_use_only
+      filtered_executions = @executions.filter { |e| e.dsl.name == dsl_name && ((on_current_class && e.klass == klass) || (on_ancestor_class && klass < e.klass)) }
+      # Because the classes were evaluated in order, we can just return the
+      # last execution
+      if first_use_only && filtered_executions.length > 0
+        [filtered_executions.last]
+      else
+        filtered_executions
+      end
     end
 
     # returns the most recent, closest single execution of a dsl with the
@@ -83,7 +90,7 @@ module DSLCompose
       # note that this method does not need to do any special sorting, the required
       # order for getting the most recent execution is already guaranteed because
       # parent classes in ruby always have to be evaluated before their descendants
-      class_dsl_executions(klass, dsl_name, true, true).last
+      class_dsl_executions(klass, dsl_name, true, true, false).last
     end
 
     # removes all executions from the interpreter, and any parser_usage_notes

@@ -14,10 +14,12 @@ module DSLCompose
       ) -> void
 
       private
-      def for_dsl: (Array[Symbol] dsl_names, ?on_current_class: bool, ?on_ancestor_class: bool) -> untyped
+      def for_dsl: (Array[Symbol] dsl_names, ?on_current_class: bool, ?on_ancestor_class: bool, ?first_use_only: bool) -> untyped
+      def for_inherited_dsl: (Array[Symbol] dsl_names, ?first_use_only: bool) -> untyped
+      def for_dsl_or_inherited_dsl: (Array[Symbol] dsl_names, ?first_use_only: bool) -> untyped
 
       class AllBlockParametersMustBeKeywordParametersError < StandardError
-        end
+      end
 
       class ClassDoesNotUseDSLComposeError < StandardError
       end
@@ -26,7 +28,7 @@ module DSLCompose
       end
 
       class NoChildClassError < StandardError
-        end
+      end
     end
   end
 end
