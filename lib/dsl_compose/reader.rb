@@ -89,7 +89,7 @@ module DSLCompose
     # Returns an array of ExecutionReaders to represent each time the DSL was used
     # on the provided class.
     def executions
-      @dsl_defining_class.dsls.class_dsl_executions(@klass, @dsl_name, true, false).map do |execution|
+      @dsl_defining_class.dsls.class_dsl_executions(@klass, @dsl_name, true, false, false).map do |execution|
         ExecutionReader.new execution
       end
     end
@@ -100,7 +100,7 @@ module DSLCompose
     # earliest ancestor first and if the DSL was used more than once on a class then
     # the order they were used.
     def ancestor_executions
-      @dsl_defining_class.dsls.class_dsl_executions(@klass, @dsl_name, false, true).map do |execution|
+      @dsl_defining_class.dsls.class_dsl_executions(@klass, @dsl_name, false, true, false).map do |execution|
         ExecutionReader.new execution
       end
     end
@@ -110,7 +110,7 @@ module DSLCompose
     # be returned in the order they were executed, which is the earliest ancestor first
     # and if the DSL was used more than once on a class then the order they were used.
     def all_executions
-      @dsl_defining_class.dsls.class_dsl_executions(@klass, @dsl_name, true, true).map do |execution|
+      @dsl_defining_class.dsls.class_dsl_executions(@klass, @dsl_name, true, true, false).map do |execution|
         ExecutionReader.new execution
       end
     end

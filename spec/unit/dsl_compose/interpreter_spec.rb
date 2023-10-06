@@ -134,8 +134,8 @@ RSpec.describe DSLCompose::Interpreter do
   describe :class_dsl_executions do
     describe "when on_current_class is true and on_ancestor_class is true" do
       it "returns an empty array" do
-        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_kind_of Array
-        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_empty
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false)).to be_kind_of Array
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false)).to be_empty
       end
 
       describe "when an excecution has occured for a different dsl" do
@@ -148,8 +148,8 @@ RSpec.describe DSLCompose::Interpreter do
         end
 
         it "returns an empty array" do
-          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_kind_of Array
-          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_empty
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false)).to be_kind_of Array
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false)).to be_empty
         end
 
         describe "when an excecution has occured for this dsl" do
@@ -158,9 +158,9 @@ RSpec.describe DSLCompose::Interpreter do
           end
 
           it "returns an array with the expected executions" do
-            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true)).to be_kind_of Array
-            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true).count).to eq 1
-            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true).first).to be_kind_of DSLCompose::Interpreter::Execution
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false)).to be_kind_of Array
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false).count).to eq 1
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false).first).to be_kind_of DSLCompose::Interpreter::Execution
           end
 
           describe "when an excecution has occured for this dsl on a class which is an ancestor of the provided class" do
@@ -169,9 +169,32 @@ RSpec.describe DSLCompose::Interpreter do
             end
 
             it "returns an array with the expected executions" do
-              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true)).to be_kind_of Array
-              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true).count).to eq 1
-              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true).first).to be_kind_of DSLCompose::Interpreter::Execution
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true, false)).to be_kind_of Array
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true, false).count).to eq 1
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true, false).first).to be_kind_of DSLCompose::Interpreter::Execution
+            end
+          end
+
+          describe "when another excecution has occured for this dsl" do
+            let(:most_recent_execution) { interpreter.execute_dsl TestClass, dsl, "%called_from string - line and line number%" }
+
+            before(:each) do
+              most_recent_execution
+            end
+
+            it "returns an array with the expected executions" do
+              expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false)).to be_kind_of Array
+              expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false).count).to eq 2
+              expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false).first).to be_kind_of DSLCompose::Interpreter::Execution
+              expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, false).last).to be_kind_of DSLCompose::Interpreter::Execution
+            end
+
+            describe "when first_use_only is true" do
+              it "returns the most recent execution only" do
+                expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, true)).to be_kind_of Array
+                expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, true).count).to eq 1
+                expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, true, true).first).to be most_recent_execution
+              end
             end
           end
         end
@@ -180,8 +203,8 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when on_current_class is false and on_ancestor_class is true" do
       it "returns an empty array" do
-        expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_kind_of Array
-        expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_empty
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true, false)).to be_kind_of Array
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true, false)).to be_empty
       end
 
       describe "when an excecution has occured for a different dsl" do
@@ -194,8 +217,8 @@ RSpec.describe DSLCompose::Interpreter do
         end
 
         it "returns an empty array" do
-          expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_kind_of Array
-          expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_empty
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true, false)).to be_kind_of Array
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true, false)).to be_empty
         end
 
         describe "when an excecution has occured for this dsl" do
@@ -204,8 +227,8 @@ RSpec.describe DSLCompose::Interpreter do
           end
 
           it "returns an empty array" do
-            expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_kind_of Array
-            expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true)).to be_empty
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true, false)).to be_kind_of Array
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, false, true, false)).to be_empty
           end
 
           describe "when an excecution has occured for this dsl on a class which is an ancestor of the provided class" do
@@ -214,9 +237,9 @@ RSpec.describe DSLCompose::Interpreter do
             end
 
             it "returns an array with the expected executions" do
-              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true)).to be_kind_of Array
-              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true).count).to eq 1
-              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true).first).to be_kind_of DSLCompose::Interpreter::Execution
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true, false)).to be_kind_of Array
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true, false).count).to eq 1
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, false, true, false).first).to be_kind_of DSLCompose::Interpreter::Execution
             end
           end
         end
@@ -225,8 +248,8 @@ RSpec.describe DSLCompose::Interpreter do
 
     describe "when on_current_class is true and on_ancestor_class is false" do
       it "returns an empty array" do
-        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_kind_of Array
-        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_empty
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false, false)).to be_kind_of Array
+        expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false, false)).to be_empty
       end
 
       describe "when an excecution has occured for a different dsl" do
@@ -239,8 +262,8 @@ RSpec.describe DSLCompose::Interpreter do
         end
 
         it "returns an empty array" do
-          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_kind_of Array
-          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_empty
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false, false)).to be_kind_of Array
+          expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false, false)).to be_empty
         end
 
         describe "when an excecution has occured for this dsl" do
@@ -249,9 +272,9 @@ RSpec.describe DSLCompose::Interpreter do
           end
 
           it "returns an array with the expected executions" do
-            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false)).to be_kind_of Array
-            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false).count).to eq 1
-            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false).first).to be_kind_of DSLCompose::Interpreter::Execution
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false, false)).to be_kind_of Array
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false, false).count).to eq 1
+            expect(interpreter.class_dsl_executions(TestClass, dsl.name, true, false, false).first).to be_kind_of DSLCompose::Interpreter::Execution
           end
 
           describe "when an excecution has occured for this dsl on a class which is an ancestor of the provided class" do
@@ -260,8 +283,8 @@ RSpec.describe DSLCompose::Interpreter do
             end
 
             it "returns an empty array" do
-              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, true, false)).to be_kind_of Array
-              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, true, false)).to be_empty
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, true, false, false)).to be_kind_of Array
+              expect(interpreter.class_dsl_executions(ChildClass, dsl.name, true, false, false)).to be_empty
             end
           end
         end

@@ -21,7 +21,7 @@ RSpec.describe DSLCompose::Parser::ForChildrenOfParser::ForDSLParser::ForMethodP
     end
   end
 
-  let(:dsl_execution) { BaseClass.dsls.class_dsl_executions(ChildClass, :dsl_name, true, true).first }
+  let(:dsl_execution) { BaseClass.dsls.class_dsl_executions(ChildClass, :dsl_name, true, true, false).first }
 
   describe :initialize do
     it "initializes the class without error" do
