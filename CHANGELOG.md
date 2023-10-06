@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.15.5](https://github.com/craigulliott/dsl_compose/compare/v2.15.4...v2.15.5) (2023-10-06)
+
+
+### Bug Fixes
+
+* added a first_use_only option to the parser so that only the most recent execution of a DSL will be used ([717293d](https://github.com/craigulliott/dsl_compose/commit/717293d906a183d8a13ffa1c4ae47e901de428a0))
+* specs and fixes for `first_use_only` option on parser ([a7dc087](https://github.com/craigulliott/dsl_compose/commit/a7dc0878ffef9a104c25d4f43d5796f939cb7567))
+
 ## [2.15.4](https://github.com/craigulliott/dsl_compose/compare/v2.15.3...v2.15.4) (2023-10-04)
 
 
